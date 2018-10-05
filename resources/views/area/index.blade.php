@@ -100,7 +100,7 @@
                                     <label class="col-md-3 label-control" for="projectinput1">Nombre del area *</label>
                                         <div class="col-md-9">                                            
                                             <input type="text" class="hidden">
-                                                {!! Form::text('NombreArea', null, ['id'=>'NombreArea', 'placeholder'=>'Ingrese el nombre de area', 'class'=> 'form-control']) !!}
+                                                {!! Form::text('NombreArea', null, ['id'=>'NombreArea', 'placeholder'=>'Ingrese el nombre de area', 'class'=> 'form-control', 'pattern'=>'[A-Za-z]{4-50}']) !!}
                                                 {!! Form::text('IdArea', null, ['id'=>'IdArea', 'placeholder'=>'Ingrese el nombre de area', 'class'=> 'form-control hidden']) !!}
                                                 {!! Form::text('EstadoArea', 1, ['class'=>'hidden']) !!}
                                             </div>

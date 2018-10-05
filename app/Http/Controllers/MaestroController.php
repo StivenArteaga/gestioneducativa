@@ -52,21 +52,21 @@ class MaestroController extends Controller
 
             request()->validate([
                 'IdAsignatura'=>'required|int',
-                'PrimerNombreMaes'=> ['required', 'string'],             
-                'PrimerApellidoMaes'=>['required', 'string'],
-                'SegundoApellidoMaes'=>['required', 'string'], 
+                'PrimerNombreMaes'=> ['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
+                'PrimerApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
+                'SegundoApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
                 'IdTipoDocumento'=>'required|int',            
-                'NumeroDocumento'=>'required|string|unique:maestros,NumeroDocumento|max:12',
+                'NumeroDocumento'=>'required|string|unique:maestros,NumeroDocumento|max:12|regex:/^[0-9]+$/',
                 'FechaNacimiento'=>'required|date',
                 'IdGenero'=>'required|int',
                 'IdTipoSangre'=>'required|int',                
-                'Correo'=>'required|email|unique:maestros,Correo',
-                'Direccion'=>'required',
-                'Telefono'=>'required',
+                'Correo'=>'required|email|unique:maestros,Correo|max:200',
+                'Direccion'=>'required|string|max:200',
+                'Telefono'=>'required|string|max:50',
                 'IdCiudad'=>'required|int',
-                'Especializacion'=>'required',
-                'Escalafon'=>'required',
-                'Coordinador'=>'required',
+                'Especializacion'=>'required|string|max:100',
+                'Escalafon'=>'required|string|max:50',
+                'Coordinador'=>'required|string|max:20',
                 'EstadoMaestro'=>'required|int'
             ]); 
                    
@@ -94,25 +94,26 @@ class MaestroController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
+    {              
         request()->validate([
             'IdAsignatura'=>'required|int',
-            'PrimerNombreMaes'=> 'string|required',             
-            'PrimerApellidoMaes'=>'string|required',
-            'SegundoApellidoMaes'=>'string|required', 
-            'IdTipoDocumento'=>'int|required',
-            'NumeroDocumento'=>'required','string','unique:maestros,NumeroDocumento','max:12,'.$id.',IdMaestro',
-            'FechaNacimiento'=>'string|required',
-            'IdGenero'=>'int|required',
-            'IdTipoSangre'=>'int|required',
-            'Correo'=>'required','email','unique:maestros,Correo,'.$id.',IdMaestro',
-            'Direccion'=>'string|required',
-            'Telefono'=>'string|required',
-            'IdCiudad'=>'int|required',
-            'Especializacion'=>'string|required',
-            'Escalafon'=>'string|required',
-            'Coordinador'=>'string|required',
-        ]);        
+            'PrimerNombreMaes'=> ['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
+            'PrimerApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
+            'SegundoApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
+            'IdTipoDocumento'=>'required|int',            
+            'NumeroDocumento'=>'required|string|regex:/^[0-9]+$/||max:12|unique:maestros,NumeroDocumento,'.$id.',IdMaestro',
+            'FechaNacimiento'=>'required|date',
+            'IdGenero'=>'required|int',
+            'IdTipoSangre'=>'required|int',                
+            'Correo'=>'required|email|max:200|unique:maestros,Correo,'.$id.',IdMaestro',
+            'Direccion'=>'required|string|max:200',
+            'Telefono'=>'required|string|max:50',
+            'IdCiudad'=>'required|int',
+            'Especializacion'=>'required|string|max:100',
+            'Escalafon'=>'required|string|max:50',
+            'Coordinador'=>'required|string|max:20',
+            'EstadoMaestro'=>'required|int'
+        ]); 
         
         Maestro::find($id)->update($request->all());
         return redirect()->route('maestro.index')->with('success','El registro del maestro se actualizo con exito');

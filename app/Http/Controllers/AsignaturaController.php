@@ -56,11 +56,11 @@ class AsignaturaController extends Controller
         } else {                        
                 
             $materias = request()->validate([                
-                'NombreAsignatura'=>'required|unique:asignaturas,NombreAsignatura',
+                'NombreAsignatura'=>'required|max:90|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u|unique:asignaturas,NombreAsignatura',
                 'IdMateria'=>'required|int',                                         
                 'IdTipoAsignatura'=>'required|int',           
                 'EstadoAsignatura'=>'required|int',
-                'Intensidad'=>'required|int'           
+                'Intensidad'=>'required|int|max:6'           
             ]);
 
             Asignatura::create($request->all());
@@ -102,11 +102,11 @@ class AsignaturaController extends Controller
     public function update(Request $request, $id)
     {
         $materias = request()->validate([                
-            'NombreAsignatura'=>'required|unique:asignaturas,NombreAsignatura,'.$id.',IdAsignatura',
+            'NombreAsignatura'=>'required|max:90|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u|unique:asignaturas,NombreAsignatura,'.$id.',IdAsignatura',
             'IdMateria'=>'required|int',                                         
             'IdTipoAsignatura'=>'required|int',           
             'EstadoAsignatura'=>'required|int',
-            'Intensidad'=>'required|int'           
+            'Intensidad'=>'required|int|max:6'           
         ]);
 
         $asignatura = Asignatura::findOrFail($id);

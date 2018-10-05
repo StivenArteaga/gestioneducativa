@@ -52,7 +52,7 @@ class LogroController extends Controller
         } else {            
             
             $logros = request()->validate([
-                'DescripcionLogro'=>'required',               
+                'DescripcionLogro'=>'required|regex:/^[A-Za-z[:space:]]*$/',               
                 'IdAsignatura'=>'required|int',
                 'IdPeriodo'=>'required|int',    
                 'EstadoLogro'=>'required|int'           
@@ -106,7 +106,7 @@ class LogroController extends Controller
     public function update(Request $request, $id)
     {
         $logros = request()->validate([
-            'DescripcionLogro'=>'required',               
+            'DescripcionLogro'=>'required|regex:/^[A-Za-z[:space:]]*$/',               
             'IdAsignatura'=>'required',
             'IdPeriodo'=>'required',
             'EstadoLogro'=>'required|int'           

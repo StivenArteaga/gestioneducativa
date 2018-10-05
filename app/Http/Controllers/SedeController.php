@@ -42,16 +42,16 @@ class SedeController extends Controller
         if ($request['IdSede'] != 0) {
             $this->update($request, $request['IdSede']);            
             return redirect()->route('sede.index')->with('success','La sede se actualizo con exito');
-        } else {            
-            
-            $logros = request()->validate([
-                'NombreSede'=>'required|unique:sedes,NombreSede',               
+        } else {                        
+            $input = $request->only(['NombreSede', 'IdInstitucion', 'EstadoSede']);
+            $sede = request()->validate([
+                'NombreSede'=>'required|unique:sedes,NombreSede|regex:/^[A-Za-z[:space:]]*$/',               
                 'IdInstitucion'=>'required|int',                
                 'EstadoSede'=>'required|int',                
             ]);
-                          
+            $request->flash();
             Sede::create($request->all());
-                return redirect()->route('sede.index')->with('success','La sede se registro con exito');                
+            return redirect()->route('sede.index')->with('success','La sede ha sido creada correctamente');                                                                 
         }
     }
 
@@ -88,7 +88,7 @@ class SedeController extends Controller
     public function update(Request $request, $id)
     {
         $logros = request()->validate([
-            'NombreSede'=>'required|unique:sedes,NombreSede,'.$id.',IdSede',
+            'NombreSede'=>'required|regex:/^[A-Za-z[:space:]]*$/|unique:sedes,NombreSede,'.$id.',IdSede',
             'IdInstitucion'=>'required|int',                
             'EstadoSede'=>'required|int',                
         ]);

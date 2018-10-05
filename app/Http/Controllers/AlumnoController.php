@@ -134,6 +134,17 @@ class AlumnoController extends Controller
             
         $request->Usuaurio = 1;
         $request->IdUsuaurio = 1;
+        $input = $request->only([
+            'PrimerNombre','PrimerApellido','SegundoApellido','Correo','IdTipoDocumento','NumeroDocumento',
+            'IdMunicipioExpedido', 'IdGenero','FechaNacimiento', 'IdCiudadNacimiento', 'IdCiudadResidencia',
+            'Direccion','Zona','Telefono','EstadoAlumno','IdEps','IdTipoSangre','Ips','Ars','CarnetSisben',
+            'PuntajeSisben','Estrato','PrimerNombreAcu','PrimerApellidoAcu','SegundoApellidoAcu','IdTipoDocumento', 
+            'IdMunicipioExpedicion','IdParentesco','DireccionHogar','TelefonoHogar','DireccionTrabajo', 
+            'TelefonoTrabajo','TelefonoCelular','Ocupacion','NumeroDocumentoAcu','CorreoAcu','IdGrado', 
+            'valorPension','valorMatricula','Numerolista','Estado','FechaEstado','CodigoInterno','NumeroMatricula', 
+            'InstitucionOrigen','EstadoAcademicoAnterior','EstadoMatriculaFinal','CausaTraslado','CondicionFinAno',
+            'IdAlumno','IdGrado','ValorMatricula','IdEstadoMatricula'
+        ]);
 
         $alumno =  request()->validate([
             'PrimerNombre'=> 'required',            
@@ -204,18 +215,23 @@ class AlumnoController extends Controller
             'IdEstadoMatricula'
         ]);        
         
-
+        $request->flash();
+        
         Alumno::create($request->all());
         $IdAl = $request['NumeroDocumento'];
         $gu = Alumno::where('NumeroDocumento', $IdAl)->firstOrFail();                           
         $request['IdAlumno'] = $gu['IdAlumno'];                                                                               
 
         
-        Salud::create($request->all());
+        Salud::create($request->all());        
         Acudiente::create($request->all());
         Academica::create($request->all());
 
         
+        $acudiente = Acudiente::all();
+        $IdAcudiente = $acudiente->last();
+        $request['IdAcudiente'] = $IdAcudiente['IdAcudiente'];
+
         DetalleAlumnoAcudiente::create($request->all());
         
         $request['valorMatricula'] = $academica['valorMatricula'];

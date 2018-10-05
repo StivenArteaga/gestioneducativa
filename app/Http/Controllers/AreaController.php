@@ -44,7 +44,7 @@ class AreaController extends Controller
         } else {
 
             $areas = request()->validate([
-                'NombreArea'=>'required|unique:areas,NombreArea',
+                'NombreArea'=>'required|unique:areas,NombreArea|max:50|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u',
                 'EstadoArea'=>'required|int'
             ]);            
     
@@ -89,7 +89,7 @@ class AreaController extends Controller
     public function update(Request $request, $id)
     {
         $areas = request()->validate([
-            'NombreArea'=>'required|unique:areas,NombreArea,'.$id.',IdArea',
+            'NombreArea'=>'required|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u|unique:areas,NombreArea,'.$id.',IdArea',
             'EstadoArea'=>'required|int'
         ]);   
 
