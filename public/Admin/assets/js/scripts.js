@@ -84,12 +84,12 @@ function Mostrar(id)
 
               /*Detalle alumno acudiente */
                $("#IdTipoAcudiente").val(data.detallealumacu.IdTipoAcudiente);
-
+            
               /*Datos de la información academica del alumno */
               $("#IdGradoIfAca").val(data.academica.IdGrado);
-              $("#IdSalonIfAca").val(data.aulas[0].IdSalon);
+              
               $("#ValPensIfAca").val(data.academica.valorPension);
-              $("#ValMatAca").val(data.academica.valorMatricula);
+              $("#valorMatricula").val(data.academica.valorMatricula);
               $("#NumLisAca").val(data.academica.Numerolista);
               $("#EstadoAca").val(data.academica.Estado);
               $("#FechEstaAca").val(data.academica.FechaEstado);
@@ -367,7 +367,7 @@ function listAlumMatr(id){
             $("#IdMatricula").val(data[0].IdMatricula);
             $("#IdAlumnoName").val(data[0].IdAlumno);
             $("#IdGradoName").val(data[0].IdGrado);
-            $("#ValorMatricula").val(data[0].ValorMatricula);
+            $("#valorMatricula").val(data[0].valorMatricula);
         } else {
             alert('Error al cargar los datos, verifica el proceso de listar los datos de la matricula');
         }

@@ -134,17 +134,7 @@ class AlumnoController extends Controller
             
         $request->Usuaurio = 1;
         $request->IdUsuaurio = 1;
-        $input = $request->only([
-            'PrimerNombre','PrimerApellido','SegundoApellido','Correo','IdTipoDocumento','NumeroDocumento',
-            'IdMunicipioExpedido', 'IdGenero','FechaNacimiento', 'IdCiudadNacimiento', 'IdCiudadResidencia',
-            'Direccion','Zona','Telefono','EstadoAlumno','IdEps','IdTipoSangre','Ips','Ars','CarnetSisben',
-            'PuntajeSisben','Estrato','PrimerNombreAcu','PrimerApellidoAcu','SegundoApellidoAcu','IdTipoDocumento', 
-            'IdMunicipioExpedicion','IdParentesco','DireccionHogar','TelefonoHogar','DireccionTrabajo', 
-            'TelefonoTrabajo','TelefonoCelular','Ocupacion','NumeroDocumentoAcu','CorreoAcu','IdGrado', 
-            'valorPension','valorMatricula','Numerolista','Estado','FechaEstado','CodigoInterno','NumeroMatricula', 
-            'InstitucionOrigen','EstadoAcademicoAnterior','EstadoMatriculaFinal','CausaTraslado','CondicionFinAno',
-            'IdAlumno','IdGrado','ValorMatricula','IdEstadoMatricula'
-        ]);
+        
 
         $alumno =  request()->validate([
             'PrimerNombre'=> 'required',            
@@ -164,7 +154,7 @@ class AlumnoController extends Controller
             'EstadoAlumno'=>'required|int'         
         ]);
 
-
+            
         $salud = request()->validate([
             'IdEps'=> 'required',
             'IdTipoSangre'=> 'required', 
@@ -182,20 +172,14 @@ class AlumnoController extends Controller
             'IdTipoDocumento'=> 'required', 
             'IdMunicipioExpedicion'=> 'required', 
             'IdParentesco'=> 'required', 
-            'DireccionHogar'=> 'required', 
-            'TelefonoHogar'=> 'required',
-            'DireccionTrabajo'=> 'required', 
-            'TelefonoTrabajo'=> 'required', 
-            'TelefonoCelular'=> 'required', 
-            'Ocupacion'=> 'required',             
+            'DireccionHogar'=> 'required',             
+            'TelefonoCelular'=> 'required',                        
             'NumeroDocumentoAcu'=> 'required', 
             'CorreoAcu'=> 'required',
         ]);
 
         $academica = request()->validate([
-            'IdGrado'=> 'required', 
-            'valorPension'=> 'required', 
-            'valorMatricula'=> 'required', 
+            'IdGrado'=> 'required',             
             'Numerolista'=> 'required', 
             'Estado'=> 'required', 
             'FechaEstado'=> 'required', 
@@ -203,9 +187,7 @@ class AlumnoController extends Controller
             'NumeroMatricula'=> 'required', 
             'InstitucionOrigen'=> 'required', 
             'EstadoAcademicoAnterior'=> 'required', 
-            'EstadoMatriculaFinal'=> 'required', 
-            'CausaTraslado'=> 'required',
-            'CondicionFinAno'=> 'required',
+            'EstadoMatriculaFinal'=> 'required',                     
         ]);                
 
         $matricula = request()->validate([
@@ -234,7 +216,11 @@ class AlumnoController extends Controller
 
         DetalleAlumnoAcudiente::create($request->all());
         
-        $request['valorMatricula'] = $academica['valorMatricula'];
+        if ($matricula != []) {
+            $request['valorMatricula'] = $matricula['valorMatricula'];
+        }
+        
+        $request['IdGrado'] = $academica['IdGrado'];
         $request['IdEstadoMatricula'] = 1;
         
         Matricula::create($request->all());

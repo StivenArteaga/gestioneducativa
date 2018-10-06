@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Matricula;
 use App\Grado;
 use App\Alumno;
+use App\Academica;
 
 class MatriculaController extends Controller
 {
@@ -32,10 +33,11 @@ class MatriculaController extends Controller
                                     ->join('grados', 'matriculas.IdGrado', '=', 'grados.IdGrado')
                                     ->where('alumnos.EstadoAlumno', true)
                                     ->where('matriculas.IdEstadoMatricula', '=', 1)
-                                    ->select('matriculas.*', 'informacionesacademicas.valorMatricula', 'grados.NombreGrado','alumnos.*')
+                                    ->select('matriculas.IdMatricula', 'informacionesacademicas.valorMatricula', 'grados.NombreGrado','alumnos.*')
                                     ->getQuery()
-                                    ->get();
-                                    
+                                    ->distinct()
+                                    ->get(['alumnos.NumeroDocumento']);
+            
         return view('matricula.index', compact('alumnosmatriculados', 'grados', 'alumnossinmatricular', 'alumnos'));
     }
 
@@ -47,7 +49,7 @@ class MatriculaController extends Controller
         $dat = Matricula::join('alumnos', 'matriculas.IdAlumno', '=', 'alumnos.IdAlumno')
                         ->join('informacionesacademicas', 'alumnos.IdAlumno', '=', 'informacionesacademicas.IdAlumno')
                         ->where('matriculas.IdAlumno', '=', $id)
-                        ->select('matriculas.*', 'informacionesacademicas.*')
+                        ->select('matriculas.*', 'informacionesacademicas.valorMatricula')
                         ->getQuery()
                         ->get();
         
@@ -73,15 +75,20 @@ class MatriculaController extends Controller
     public function store(Request $request)
     {   
         $matricula = request()->validate([
-            'ValorMatricula'=>'required'                      
+            'IdGradoName'=>'required',
+            'valorMatricula'=>'required'                      
         ]);
         
         $matri = Matricula::find($request['IdMatricula']);
         $matri->IdGrado = $request['IdGradoName'];
-        $matri->ValorMatricula = $request['ValorMatricula'];
-        $matri->IdEstadoMatricula = 2;
-        
+        $matri->valorMatricula = $request['valorMatricula'];
+        $matri->IdEstadoMatricula = 2;        
         $matri->save();
+        
+        $academica = Academica::where('IdAlumno', '=', $matri['IdAlumno'])->firstOrFail();
+        $academica->IdGrado = $request['IdGradoName'];        
+        $academica->valorMatricula = $request['valorMatricula'];      
+        $academica->save();
 
         return redirect()->route('matricula.index')->with('success','La matricula del alumno se actualizo con exito');
     }

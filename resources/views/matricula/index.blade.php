@@ -61,7 +61,7 @@
                       @foreach($alumnosmatriculados as $alumnosmatriculado)
                             <tr>                                
                                 <td>{{ $alumnosmatriculado->NumeroDocumento }}</td>
-                                <td>{{ $alumnosmatriculado->PrimerNombre}}  {{$alumnosmatriculado->SegundoNombre}}   {{$alumnosmatriculado->PrimerApellido}}  {{$alumnosmatriculado->SegundoApellido}}</td>                                   
+                                <td>{{ $alumnosmatriculado->PrimerNombre}}  {{$alumnosmatriculado->SegundoNombre}}   {{$alumnosmatriculado->PrimerApellido}}  {{$alumnosmatriculado->SegundoApellido}}</td>                                    
                                 <td>{{ $alumnosmatriculado->NombreGrado }}</td>
                                 <td>                                                                        
                                 <button type="button" class="btn icon-table" data-toggle="modal" data-target="#matricularAlum" onclick="listAlumMatr({{$alumnosmatriculado->IdAlumno}})"><i class="far far fa-edit"></i></button>
@@ -193,7 +193,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 label-control" for="projectinput2">Valor Matricula *</label>
                                         <div class="col-md-9">                            
-                                            {!! Form::text('ValorMatricula', null, ['id'=>'ValorMatricula','placeholder'=>'Ingrese el valor de su matricula', 'class'=> 'form-control']) !!}
+                                            {!! Form::text('valorMatricula', null, ['id'=>'valorMatricula','placeholder'=>'Ingrese el valor de su matricula', 'class'=> 'form-control']) !!}
                                         </div>
                                 </div>
                                 <div class="form-actions">

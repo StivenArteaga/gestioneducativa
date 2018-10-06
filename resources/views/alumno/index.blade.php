@@ -565,19 +565,19 @@
                               </div>
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput4">Telefono hogar *</label>
+                              <label class="col-md-3 label-control" for="projectinput4">Telefono hogar (opcional)</label>
                               <div class="col-md-9">                            
                                 {!! Form::text('TelefonoHogar', null, ['id'=>'TelHogAcu', 'placeholder'=>'Ingrese su numero de telefono del hogar', 'class'=> 'form-control']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row last">
-                              <label class="col-md-3 label-control" for="projectinput9">Dirección trabajo *</label>
+                              <label class="col-md-3 label-control" for="projectinput9">Dirección trabajo (opcional)</label>
                               <div class="col-md-9">                            
                                 {!! Form::textarea('DireccionTrabajo', null, ['id'=>'DirTraAcu','placeholder'=>'Ingrese la dirección de su trabajo', 'class'=> 'form-control', 'style'=>'height:150px']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput4">Telefono trabajo *</label>
+                              <label class="col-md-3 label-control" for="projectinput4">Telefono trabajo (opcional)</label>
                               <div class="col-md-9">                            
                                 {!! Form::text('TelefonoTrabajo', null, ['id'=>'TelTraAcu','placeholder'=>'Ingrese su numero de telefono del trabajo', 'class'=> 'form-control']) !!}
                               </div>                          
@@ -589,7 +589,7 @@
                               </div>                          
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput4">Ocupación *</label>
+                              <label class="col-md-3 label-control" for="projectinput4">Ocupación (opcional)</label>
                               <div class="col-md-9">                            
                                 {!! Form::text('Ocupacion', null, ['id'=>'OcupAcu','placeholder'=>'Ingrese su ocupación laboral', 'class'=> 'form-control']) !!}
                               </div>                          
@@ -664,15 +664,15 @@
                               </div>
                             </div>                            
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput1">Valor pension *</label>
+                              <label class="col-md-3 label-control" for="projectinput1">Valor pension (opcional)</label>
                               <div class="col-md-9">
                               {!! Form::text('valorPension', null, ['id'=>'ValPensIfAca','placeholder'=>'Ingrese el valor de la pensión', 'class'=> 'form-control']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput1">Valor matrícula *</label>
+                              <label class="col-md-3 label-control" for="projectinput1">Valor matrícula (opcional)</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('valorMatricula', null, ['id'=>'ValMatAca','placeholder'=>'Ingrese el valor de la matrícula', 'class'=> 'form-control']) !!}
+                                {!! Form::text('valorMatricula', null, ['id'=>'valorMatricula','placeholder'=>'Ingrese el valor de la matrícula', 'class'=> 'form-control']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
@@ -735,13 +735,13 @@
                               </div>
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput4">Condición fin de año *</label>
+                              <label class="col-md-3 label-control" for="projectinput4">Condición fin de año (opcional)</label>
                               <div class="col-md-9">                            
                                 {!! Form::text('CondicionFinAno', null, ['id'=>'CondiFinAnoAca','placeholder'=>'Ingrese su condición', 'class'=> 'form-control']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput4">Causa traslado *</label>
+                              <label class="col-md-3 label-control" for="projectinput4">Causa traslado (opcional)</label>
                               <div class="col-md-9">                            
                                 {!! Form::text('CausaTraslado', null, ['id'=>'CausTrasAca','placeholder'=>'Ingrese su motivo de traslado', 'class'=> 'form-control']) !!}
                               </div>                          
