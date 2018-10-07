@@ -159,7 +159,8 @@
                               </div>
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput6">Tipo documento *</label>
-                                <div class="col-md-9">                                                        
+                                <div class="col-md-9">
+                                                                                          
                                   <select class="form-control m-bot15" id="TipoDocumenAlum" name="IdTipoDocumento">
                                   @if($tipodocumentos->count())
                                           <option class="hidden">Selecciona una opción</option>
