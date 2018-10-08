@@ -105,8 +105,7 @@
                                 <th>N° lista</th>                                                  
                                 <th>Nombre</th>
                                 <th>1° Periodo
-                                    <th>Nota</th>
-                                    <th>F</th>
+                                  
                                 </th>
                                 <th with="300px">Evaluar</th>
                               </tr>
