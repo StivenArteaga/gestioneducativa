@@ -129,5 +129,9 @@ Route::resource('sede', 'SedeController');
 
 
 
+Route::get('evaluaciones', 'EvaluacionController@index')->name('evaluaciones');
+
+Route::get('listasig/listasig/{id}', 'EvaluacionController@listasig');
+
 
 

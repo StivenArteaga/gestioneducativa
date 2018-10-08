@@ -397,3 +397,44 @@ $("#IdGradoIfAca").change(function(){
         }
     });
 });
+
+
+
+$("#IdGradoEv").change(function (){
+    var IdGrado = $("#IdGradoEv").val();
+    $.get('listasig/listasig/'+IdGrado, function(data){
+        if (data != null) {
+            var valor4 = ''
+            data.forEach(data => {
+                valor4 += "<tr>"+               
+               "<td class='hidden'>" + data.IdAsignatura + "</td>"+               
+               "<td class='hidden'>" + "<input type='checkbox' name="+data.IdAlumno+" id='acheckbox' class='form-check-input check'></input>" + "</td>" +  
+               "<td>" + data.NombreAsignatura + "</td>"+               
+               "<td>" + "<button type='button' onclick='ListAlum("+data.IdAsignatura+")' class='btn btn-primary' data-toggle='modal' data-target='.bd-example-modal-lg'><i class='fas fa-chalkboard-teacher'></i></button>" + "</td>"+               
+               "<tr>";
+            })
+            $("#TblAsignaturaEvaluBody").html(valor4);            
+        } else {
+            alert('Error al cargar las asignaturas que estan asociada a este grupo con este grado');
+        }
+    });
+});
+
+
+function ListAlum(id){    
+    $.get('listalumasig/listalumasig/'+id, function(data){
+        if (data != null) {
+            var valor5 = ''
+            data.forEach(data => {
+                valor5 += "<tr>"+                                  
+               "<td>" + data.NumeroLista + "</td>"+                                     
+               "<td>" + data.PrimerNombre +" "+ data.SegundoNombre+" "+data.PrimerApellido+" "+data.SegundoApellido+"</td>"+               
+               "<td>" + "<button type='button' onclick='ListAlum("+data.IdAsignatura+")' class='btn btn-primary' data-toggle='modal' data-target='.bd-example-modal-lg'><i class='fas fa-chalkboard-teacher'></i></button>" + "</td>"+               
+               "<tr>";
+            })
+            $("#TblAsignaturaEvaluBody").html(valor5);            
+        } else {
+            alert('Error al cargar las asignaturas que estan asociada a este grupo con este grado');
+        }
+    });
+}

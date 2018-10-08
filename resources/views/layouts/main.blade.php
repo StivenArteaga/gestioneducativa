@@ -388,7 +388,7 @@
         </li>
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-check-circle-o"></i><span class="menu-title" data-i18n="nav.dash.main">Evaluaciones</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="{{ route('cons') }}" data-i18n="nav.dash.ecommerce">Gestionar Evaluación</a>
+            <li><a class="menu-item" href="{{ route('evaluaciones') }}" data-i18n="nav.dash.ecommerce">Gestionar Evaluación</a>
             </li>            
             <li><a class="menu-item" href="{{ route('cons') }}" data-i18n="nav.dash.sales">Reportes Evaluación</a>
             </li>
