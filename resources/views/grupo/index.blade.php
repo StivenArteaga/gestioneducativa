@@ -281,7 +281,7 @@
                           <th>Intencidad Horaria</th>
                         </tr>
                       </thead>
-                      <tbody id="TAsign">                      
+                      <tbody id="TAsign">                     
                       @foreach($asignaturas as $asignatura)
                             <tr>                                
                                 <td class="hidden">{{ $asignatura->IdAsignatura }}</td>

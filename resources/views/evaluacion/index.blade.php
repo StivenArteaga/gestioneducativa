@@ -56,7 +56,7 @@
                         </tr>
                       </thead>
                       <tbody id="TblAsignaturaEvaluBody">                      
-
+                            
                       </tbody>
                       <tfoot>
                         <tr>                        
@@ -74,7 +74,7 @@
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 130%;">
 
             
               <div class="card">                  
@@ -102,22 +102,28 @@
                           <table class="table table-striped table-bordered dom-jQuery-events">
                             <thead>
                               <tr>                          
-                                <th>N° lista</th>                                                  
+                                <th with="30px">N° lista</th>                                                  
                                 <th>Nombre</th>
-                                <th>1° Periodo
-                                  
-                                </th>
-                                <th with="300px">Evaluar</th>
-                              </tr>
+                                <th with="700px">1° Periodo</th>
+                                <th with="700px"v>2° Periodo</th>
+                                <th with="700px">3° Periodo</th>
+                                <th with="700px">4° Periodo</th>
+                                <th with="300px">Acción</th>
+                              </tr>                              
                             </thead>
-                            <tbody id="TblListAlumEval">                      
-
+                            <tbody id="TblListAlumEval">                                                                                    
+                                                                
                             </tbody>
                             <tfoot>
-                              <tr>                        
-                                <th>Asignatura</th>                                                                             
-                                <th>Evaluar</th>
-                              </tr>
+                            <tr>                          
+                                <th>N° lista</th>                                                  
+                                <th>Nombre</th>
+                                <th>1° Periodo</th>
+                                <th>2° Periodo</th>
+                                <th>3° Periodo</th>
+                                <th>4° Periodo</th>
+                                <th>Acción</th>
+                              </tr>                              
                             </tfoot>
                           </table>
                         </div>
@@ -134,3 +140,5 @@
 </div>
 
 @endsection
+
+

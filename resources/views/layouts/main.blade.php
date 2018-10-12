@@ -33,6 +33,7 @@
   <!-- BEGIN Custom CSS-->
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/assets/css/style.css') }}" />
   <!-- END Custom CSS-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 </head>
 <body class="vertical-layout vertical-menu 2-columns menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu" data-col="2-columns">
   <!-- fixed-top-->
@@ -511,6 +512,8 @@
 
   <script type="text/javascript" src="{{ URL::asset('Admin/assets/js/scripts.js') }}"></script>
 
+  <!-- Swwet alert -->  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
   
 </body>
 </html>

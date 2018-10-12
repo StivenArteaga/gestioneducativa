@@ -137,5 +137,11 @@ Route::get('evaluaciones', 'EvaluacionController@index')->name('evaluaciones');
 
 Route::get('listasig/listasig/{id}', 'EvaluacionController@listasig');
 
+Route::get('listalumasig/listalumasig/{id}/{idasig}', 'EvaluacionController@listalumasig');
+
+Route::get('evalalum/evalalum/{id}', 'EvaluacionController@evalalum');
+
+
+
 
 

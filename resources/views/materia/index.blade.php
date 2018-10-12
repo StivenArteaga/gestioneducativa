@@ -115,11 +115,11 @@
                                   <div class="col-md-9">                                                        
                                     <select class="form-control m-bot15" id="IdAreaMat" name="IdArea">
                                     @if($areas->count())
-                                      <option class="hidden">Selecciona una opción</option>
-                                    @foreach($areas as $area)
-                                      <option value="{{ $area->IdArea }}">{{ $area->NombreArea }}</option>
-                                    @endforeach
-                                  @endif
+                                        <option class="hidden">Selecciona una opción</option>
+                                      @foreach($areas as $area)
+                                        <option value="{{ $area->IdArea }}">{{ $area->NombreArea }}</option>
+                                      @endforeach
+                                    @endif
                                     </select>
                                   </div>
                                 </div>     

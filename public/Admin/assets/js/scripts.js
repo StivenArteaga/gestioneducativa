@@ -410,7 +410,7 @@ $("#IdGradoEv").change(function (){
                "<td class='hidden'>" + data.IdAsignatura + "</td>"+               
                "<td class='hidden'>" + "<input type='checkbox' name="+data.IdAlumno+" id='acheckbox' class='form-check-input check'></input>" + "</td>" +  
                "<td>" + data.NombreAsignatura + "</td>"+               
-               "<td>" + "<button type='button' onclick='ListAlum("+data.IdAsignatura+")' class='btn btn-primary' data-toggle='modal' data-target='.bd-example-modal-lg'><i class='fas fa-chalkboard-teacher'></i></button>" + "</td>"+               
+               "<td>" + "<button type='button' onclick='ListAlum("+data.IdGrupo+","+data.IdAsignatura+")' class='btn btn-primary' data-toggle='modal' data-target='.bd-example-modal-lg'><i class='fas fa-chalkboard-teacher'></i></button>" + "</td>"+               
                "<tr>";
             })
             $("#TblAsignaturaEvaluBody").html(valor4);            
@@ -421,20 +421,155 @@ $("#IdGradoEv").change(function (){
 });
 
 
-function ListAlum(id){    
-    $.get('listalumasig/listalumasig/'+id, function(data){
-        if (data != null) {
+function ListAlum(id,idAsignatura){  
+    
+    $.get('listalumasig/listalumasig/'+id+'/'+idAsignatura, function(data){
+
+        if (data != null) {            
             var valor5 = ''
-            data.forEach(data => {
-                valor5 += "<tr>"+                                  
-               "<td>" + data.NumeroLista + "</td>"+                                     
-               "<td>" + data.PrimerNombre +" "+ data.SegundoNombre+" "+data.PrimerApellido+" "+data.SegundoApellido+"</td>"+               
-               "<td>" + "<button type='button' onclick='ListAlum("+data.IdAsignatura+")' class='btn btn-primary' data-toggle='modal' data-target='.bd-example-modal-lg'><i class='fas fa-chalkboard-teacher'></i></button>" + "</td>"+               
+            data.alumnos.forEach(alumnos => {
+                valor5 += "<tr>"+    
+                "<td class='hidden'>" + alumnos.IdAlumno + "</td>"+                                                                    
+               "<td>" + alumnos.Numerolista + "</td>"+                                     
+               "<td>" + alumnos.PrimerNombre +" "+ alumnos.SegundoNombre+" "+alumnos.PrimerApellido+" "+alumnos.SegundoApellido+"</td>"+                              
+               "<td class='numero'>" + "<select name='IdNota[]' id='IdNotaPeri1' class='form-control asigarnota' style='height:25px;'>"+
+                            "<option disabled='disabled' selected>Selecciona una opción...</option>"+                            
+                        "</select>" +
+                        "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+1+")' style='height:35px;' >Evaluar</button>"+
+                "</td>"+               
+                "<td class='numero'>" + "<select name='IdNota[]' id='IdNotaPeri2' class='form-control asigarnota2' style='height:25px;'>"+
+                            "<option disabled='disabled' selected>Selecciona una opcion...</option>"+                                                    
+                        "</select>" +
+                        "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+2+")' style='height:35px;' >Evaluar</button>"+
+                "</td>"+               
+                "<td class='numero'>" + "<select name='IdNota[]' id='IdNotaPeri3'class='form-control asigarnota3' style='height:25px;'>"+
+                            "<option disabled='disabled' selected>Selecciona una opcion...</option>"+                                                    
+                        "</select>" +
+                        "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+3+")' style='height:35px;' >Evaluar</button>"+
+                "</td>"+               
+                "<td class='numero'>" + "<select name='IdNota[]' id='IdNotaPeri4' class='form-control asigarnota4' style='height:25px;'>"+
+                            "<option disabled='disabled' selected>Selecciona una opcion...</option>"+                                                
+                        "</select>" +
+                        "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+4+")' style='height:35px;' >Evaluar</button>"+
+                "</td>"+   
+                "<td>"+  
+                        "<button class='btn btn-info' style='height:35px;' title='Descargar boletín'><i class='fas fa-file-download'></i></button>"+
+                        "<button class='btn btn-warning' style='height:35px;' title='Asignar logros'><i class='fas fa-star-half-alt'></i></button>"+
+                "</td>"+            
                "<tr>";
-            })
-            $("#TblAsignaturaEvaluBody").html(valor5);            
+            });          
+
+            $("#TblListAlumEval").html(valor5);                                           
+            var array = [];                                        
+            $("#TblListAlumEval select").each(function(){                
+                $.each(data.notas,function(index,nota) {                                        
+                    if (array.indexOf(nota.IdNota) == -1) {
+                        $('select[name*=IdNota]').append('<option value='+nota.IdNota+'>'+nota.NombreNota+'</option>')                                                                     
+                        array += nota.IdNota;                        
+                    }                    
+                });                                                                                                                  
+            });            
+
+            var array1 = [];            
+            console.log(data.evaluaciones);
+            $.each(data.evaluaciones, function(index, value){                             
+                $("#TblListAlumEval select").each(function(val){
+                    var selected = new Array();                              
+                    selected.push($(this).parent().parent().find('td').eq(0).html());                 
+                    if(value.IdAlumno == selected){
+                        for (let index = 0; index < 1; index++) {
+                            switch (value.IdPeriodo) {
+                                case 1:
+                                        $("#IdNotaPeri1").val(value.NotaFinal);
+                                    break;
+                                case 2:
+                                        $("#IdNotaPeri2").val(value.NotaFinal);
+                                    break;
+                                case 3:
+                                        $("#IdNotaPeri3").val(value.NotaFinal);
+                                    break;                                    
+                                case 4:
+                                        $("#IdNotaPeri4").val(value.NotaFinal); 
+                                    break;                            
+                            }                            
+                        }                              
+                    }                                                                                                             
+                });                
+            });
+
+            $(".asigarnota").on('change', function(){
+                $("#notaFinal").val(this.value);               
+            });
+
+            $(".asigarnota2").on('change', function(){
+                $("#notaFinal").val(this.value);               
+            });
+
+            $(".asigarnota3").on('change', function(){
+                $("#notaFinal").val(this.value);               
+            });
+
+            $(".asigarnota4").on('change', function(){
+                $("#notaFinal").val(this.value);               
+            });
+
         } else {
             alert('Error al cargar las asignaturas que estan asociada a este grupo con este grado');
         }
     });
+}
+
+
+function evalAumno(IdAsignatura, IdAlumno, IdPeriodo){            
+    if($("#notaFinal").val() == ""){
+        swal({
+            type:'warning',
+            title: 'Upsss',
+            animation: true,
+            customClass: 'animated tada',
+            text: 'No le has asignado una nota a este alumno. Si lo vas a evaluar por favor asignele una calificación'
+          });        
+    }else{
+        var NotaFinal = $("#notaFinal").val();    
+        var request = {
+            IdAsignatura,
+            IdAlumno,
+            IdPeriodo,
+            NotaFinal
+        }               
+
+        var valParam = JSON.stringify(request);         
+        $.get('evalalum/evalalum/'+valParam, function(data){
+            if(data != null){
+                if (data.status == "success") {
+                    swal({
+                        type:'success',
+                        title: 'Exito',
+                        animation: true,
+                        customClass: 'animated tada',
+                        text: data.message
+                      });                
+                    $("#notaFinal").val(null);                           
+                } else {
+                    swal({
+                        type:'error',
+                        title: 'Upsss',
+                        animation: true,
+                        customClass: 'animated tada',
+                        text: data.message
+                      });                
+                    $("#notaFinal").val(null);                        
+                }                
+            }else{
+                swal({
+                    type:'warning',
+                    title: 'Upsss',
+                    animation: true,
+                    customClass: 'animated tada',
+                    text: 'La evaluación del alumno no se pudo realizar, por favor recarga la pagina y vuelve a intentar!'
+                  });                                
+                  $("#notaFinal").val(null);                        
+            }
+        });        
+    }          
 }
