@@ -43,7 +43,7 @@ class GradoController extends Controller
         } else {                        
 
             $grados = request()->validate([
-                'NombreGrado'=>'required|unique:grados,NombreGrado|regex:/^[A-Za-z[:space:]]*$/',               
+                'NombreGrado'=>'required|unique:grados,NombreGrado|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/',               
                 'EstadoGrado'=>'required|int'           
             ]);
             
@@ -85,7 +85,7 @@ class GradoController extends Controller
     public function update(Request $request, $id)
     {
         $grados = request()->validate([
-            'NombreGrado'=>'required|regex:/^[A-Za-z[:space:]]*$/|unique:grados,NombreGrado,'.$id.',IdGrado',
+            'NombreGrado'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:grados,NombreGrado,'.$id.',IdGrado',
             'EstadoGrado'=>'required|int'           
         ]);
 

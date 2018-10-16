@@ -56,7 +56,7 @@ class AsignaturaController extends Controller
         } else {                        
                 
             $materias = request()->validate([                
-                'NombreAsignatura'=>'required|max:90|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u|unique:asignaturas,NombreAsignatura',
+                'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:asignaturas,NombreAsignatura',
                 'IdMateria'=>'required|int',                                         
                 'IdTipoAsignatura'=>'required|int',           
                 'EstadoAsignatura'=>'required|int',
@@ -102,7 +102,7 @@ class AsignaturaController extends Controller
     public function update(Request $request, $id)
     {
         $materias = request()->validate([                
-            'NombreAsignatura'=>'required|max:90|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u|unique:asignaturas,NombreAsignatura,'.$id.',IdAsignatura',
+            'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:asignaturas,NombreAsignatura,'.$id.',IdAsignatura',
             'IdMateria'=>'required|int',                                         
             'IdTipoAsignatura'=>'required|int',           
             'EstadoAsignatura'=>'required|int',

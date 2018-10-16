@@ -50,7 +50,7 @@ class SalonController extends Controller
     public function store(Request $request)
     {
         $logros = request()->validate([
-            'NombreSalon'=>'required',
+            'NombreSalon'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|max:50',
             'IdSede'=>'required|int',                   
             'EstadoSalon'=>'required|int'           
         ]);
