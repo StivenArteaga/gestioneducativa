@@ -442,7 +442,7 @@
             <li><a class="menu-item" href="{{ route('sedes') }}" data-i18n="nav.templates.horz.classic">Sedes</a>
           </ul>
         </li>        
-        <li class=" nav-item"><a href="{{ route('main') }}"><i class="la la-key"></i><span class="menu-title" data-i18n="nav.templates.main">Administración</span></a>
+        <li class="nav-item hidden"><a href="{{ route('main') }}"><i class="la la-key"></i><span class="menu-title" data-i18n="nav.templates.main">Administración</span></a>
           <ul class="menu-content">
             <li><a class="menu-item" href="{{ route('main') }}" data-i18n="nav.templates.vert.main">Instituciones</a>
               <ul class="menu-content">
@@ -465,7 +465,7 @@
       <div class="content-header row">
       </div>
       <div class="content-body">
-        @yield('content')
+        @yield('content')        
       </div>
     </div>
   </div>
@@ -514,6 +514,6 @@
 
   <!-- Swwet alert -->  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-  
+  @yield('script')
 </body>
 </html>

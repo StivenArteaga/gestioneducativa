@@ -45,7 +45,7 @@ class SedeController extends Controller
         } else {                        
             $input = $request->only(['NombreSede', 'IdInstitucion', 'EstadoSede']);
             $sede = request()->validate([
-                'NombreSede'=>'required|unique:sedes,NombreSede|regex:/^[A-Za-z[:space:]]*$/',               
+                'NombreSede'=>'required|unique:sedes,NombreSede|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|max:50',               
                 'IdInstitucion'=>'required|int',                
                 'EstadoSede'=>'required|int',                
             ]);
@@ -88,7 +88,7 @@ class SedeController extends Controller
     public function update(Request $request, $id)
     {
         $logros = request()->validate([
-            'NombreSede'=>'required|regex:/^[A-Za-z[:space:]]*$/|unique:sedes,NombreSede,'.$id.',IdSede',
+            'NombreSede'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|max:50|unique:sedes,NombreSede,'.$id.',IdSede',
             'IdInstitucion'=>'required|int',                
             'EstadoSede'=>'required|int',                
         ]);

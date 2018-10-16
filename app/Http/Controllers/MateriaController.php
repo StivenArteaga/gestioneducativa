@@ -51,7 +51,7 @@ class MateriaController extends Controller
         } else {  
             
             $materias = request()->validate([
-                'NombreMateria'=>'required|unique:materias,NombreMateria|max:50|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u',
+                'NombreMateria'=>'required|unique:materias,NombreMateria|max:50|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/',
                 'IdArea'=>'required|int',                
                 'EstadoMateria'=>'required|int'           
             ]);
@@ -95,7 +95,7 @@ class MateriaController extends Controller
     public function update(Request $request, $id)
     {        
         $materias = request()->validate([
-            'NombreMateria'=>'required|max:50|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u|unique:materias,NombreMateria,'.$id.',IdMateria',
+            'NombreMateria'=>'required|max:50|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:materias,NombreMateria,'.$id.',IdMateria',
             'IdArea'=>'required|int',                
             'EstadoMateria'=>'required|int'           
         ]);

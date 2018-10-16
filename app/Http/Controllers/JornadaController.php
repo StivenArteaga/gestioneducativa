@@ -43,7 +43,7 @@ class JornadaController extends Controller
             return redirect()->route('jornada.index')->with('success','La jornada se actualizo con exito');
         } else {       
             $logros = request()->validate([
-                'NombreJornada'=>'required|unique:jornadas,NombreJornada|regex:/^[A-Za-z[:space:]]*$/',               
+                'NombreJornada'=>'required|unique:jornadas,NombreJornada|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/',               
                 'HoraInicio'=>'required',     
                 'HoraFin'=>'required',     
                 'EstadoJornada'=>'required|int',    
@@ -112,7 +112,7 @@ class JornadaController extends Controller
     public function update(Request $request, $id)
     {                        
         $logros = request()->validate([
-            'NombreJornada'=>'required|regex:/^[A-Za-z[:space:]]*$/|unique:jornadas,NombreJornada,'.$id.',IdJornada',
+            'NombreJornada'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:jornadas,NombreJornada,'.$id.',IdJornada',
             'HoraInicio'=>'required|unique:jornadas,HoraInicio,'.$id.',IdJornada',
             'HoraFin'=>'required|unique:jornadas,HoraFin,'.$id.',IdJornada',
             'EstadoJornada'=>'required|int',    

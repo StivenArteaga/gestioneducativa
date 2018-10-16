@@ -44,7 +44,7 @@ class AreaController extends Controller
         } else {
 
             $areas = request()->validate([
-                'NombreArea'=>'required|unique:areas,NombreArea|max:50|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u',
+                'NombreArea'=>'required|unique:areas,NombreArea|max:50|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/',
                 'EstadoArea'=>'required|int'
             ]);            
     
@@ -89,7 +89,7 @@ class AreaController extends Controller
     public function update(Request $request, $id)
     {
         $areas = request()->validate([
-            'NombreArea'=>'required|regex:/^[A-Za-z]*\s()[A-Za-z]*$/u|unique:areas,NombreArea,'.$id.',IdArea',
+            'NombreArea'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:areas,NombreArea,'.$id.',IdArea',
             'EstadoArea'=>'required|int'
         ]);   
 
@@ -98,7 +98,7 @@ class AreaController extends Controller
         $area->DescripcionArea = $request['DescripcionArea'];
         $area->save();
 
-        return redirect()->route('area.index')->with('success','El area se registro con exito');
+        return redirect()->route('area.index')->with('success','El area se actualizo con exito');
     }
 
     /**

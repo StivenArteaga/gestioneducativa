@@ -97,6 +97,7 @@
                           </ul>
                         </div>
                       </div>
+                      
                       <div class="card-content collapse show">
                         <div class="card-body card-dashboard">                    
                           <table class="table table-striped table-bordered dom-jQuery-events">
@@ -105,14 +106,50 @@
                                 <th with="30px">N° lista</th>                                                  
                                 <th>Nombre</th>
                                 <th with="700px">1° Periodo</th>
-                                <th with="700px"v>2° Periodo</th>
+                                <th with="700px">2° Periodo</th>
                                 <th with="700px">3° Periodo</th>
                                 <th with="700px">4° Periodo</th>
                                 <th with="300px">Acción</th>
                               </tr>                              
                             </thead>
-                            <tbody id="TblListAlumEval">                                                                                    
-                                                                
+                            <tbody id="TblListAlumEval">                                                             
+                            @if($grados->count())                                    
+                                @foreach($alumnos as $alumnos)
+                                <tr>
+                                    <td class='hidden'>{{$alumnos.IdAlumno}}</td>                                       
+                                    <td>{{$alumnos.Numerolista}}  </td>                                     
+                                    <td>{{$alumnos.PrimerNombre }}   {{$alumnos.SegundoNombre}} {{$alumnos.PrimerApellido}} {{$alumnos.SegundoApellido}}</td>                              
+                                    <td class='numero'>  
+                                        <select name='IdNota[]' id='IdNotaPeri1' class='form-control asigarnota' style='height:25px;'>
+                                              <option disabled='disabled' selected>Selecciona una opción...</option>                            
+                                        </select> 
+                                        <button class='btn btn-success' id='notaFinal' onclick='evalAumno(idAsignatura,alumnos.IdAlumno,1)' style='height:35px;' >Evaluar</button>
+                                  </td>               
+                                  <td class='numero'>  
+                                        <select name='IdNota[]' id='IdNotaPeri2' class='form-control asigarnota2' style='height:25px;'>
+                                              <option disabled='disabled' selected>Selecciona una opcion...</option>                                                    
+                                        </select> 
+                                        <button class='btn btn-success' id='notaFinal' onclick='evalAumno(idAsignatura,alumnos.IdAlumno,2)' style='height:35px;' >Evaluar</button>
+                                  </td>               
+                                  <td class='numero'>  
+                                        <select name='IdNota[]' id='IdNotaPeri3'class='form-control asigarnota3' style='height:25px;'>
+                                              <option disabled='disabled' selected>Selecciona una opcion...</option>                                                    
+                                        </select> 
+                                        <button class='btn btn-success' id='notaFinal' onclick='evalAumno(idAsignatura,alumnos.IdAlumno,3)' style='height:35px;' >Evaluar</button>
+                                  </td>               
+                                  <td class='numero'>  
+                                        <select name='IdNota[]' id='IdNotaPeri4' class='form-control asigarnota4' style='height:25px;'>
+                                              <option disabled='disabled' selected>Selecciona una opcion...</option>                                                
+                                        </select> 
+                                        <button class='btn btn-success' id='notaFinal' onclick='evalAumno(idAsignatura,alumnos.IdAlumno,4)' style='height:35px;' >Evaluar</button>
+                                  </td>   
+                                  <td>  
+                                          <button class='btn btn-info' style='height:35px;' title='Descargar boletín'><i class='fas fa-file-download'></i></button>
+                                          <button class='btn btn-warning' style='height:35px;' title='Asignar logros'><i class='fas fa-star-half-alt'></i></button>
+                                  </td>            
+                                </tr>   
+                                @endforeach
+                           @endif                                                           
                             </tbody>
                             <tfoot>
                             <tr>                          
@@ -142,3 +179,107 @@
 @endsection
 
 
+@section('script')
+  <script>  
+      
+function ListAlum(id,idAsignatura){  
+    
+    $.get('listalumasig/listalumasig/'+id+'/'+idAsignatura, function(data){
+
+        if (data != null) {                  
+            
+            var valor5 = ''
+            data.alumnos.forEach(alumnos => {
+                valor5 += "<tr id='auto[]'>"+    
+                "<td class='hidden'>" + alumnos.IdAlumno + "</td>"+                                                                    
+               "<td>" + alumnos.Numerolista + "</td>"+                                     
+               "<td>" + alumnos.PrimerNombre +" "+ alumnos.SegundoNombre+" "+alumnos.PrimerApellido+" "+alumnos.SegundoApellido+"</td>"+                              
+               "<td class='numero'>" + 
+                        "<select name='IdNota[]' id='IdNotaPeri1[]' class='form-control asigarnota' style='height:25px;'>"+
+                            "<option disabled='disabled' selected>Selecciona una opción...</option>"+                            
+                        "</select>" +
+                        "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+1+")' style='height:35px;' >Evaluar</button>"+
+                "</td>"+               
+                "<td class='numero'>" + "<select name='IdNota[]' id='IdNotaPeri2[]' class='form-control asigarnota2' style='height:25px;'>"+
+                            "<option disabled='disabled' selected>Selecciona una opcion...</option>"+                                                    
+                        "</select>" +
+                        "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+2+")' style='height:35px;' >Evaluar</button>"+
+                "</td>"+               
+                "<td class='numero'>" + "<select name='IdNota[]' id='IdNotaPeri3[]'class='form-control asigarnota3' style='height:25px;'>"+
+                            "<option disabled='disabled' selected>Selecciona una opcion...</option>"+                                                    
+                        "</select>" +
+                        "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+3+")' style='height:35px;' >Evaluar</button>"+
+                "</td>"+               
+                "<td class='numero'>" + "<select name='IdNota[]' id='IdNotaPeri4[]' class='form-control asigarnota4' style='height:25px;'>"+
+                            "<option disabled='disabled' selected>Selecciona una opcion...</option>"+                                                
+                        "</select>" +
+                        "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+4+")' style='height:35px;' >Evaluar</button>"+
+                "</td>"+   
+                "<td>"+  
+                        "<button class='btn btn-info' style='height:35px;' title='Descargar boletín'><i class='fas fa-file-download'></i></button>"+
+                        "<button class='btn btn-warning' style='height:35px;' title='Asignar logros'><i class='fas fa-star-half-alt'></i></button>"+
+                "</td>"+            
+               "<tr>";
+            });          
+
+            $("#TblListAlumEval").html(valor5);                                        
+            var array = [];                                        
+            $("#TblListAlumEval select").each(function(){                
+                $.each(data.notas,function(index,nota) {                                        
+                    if (array.indexOf(nota.IdNota) == -1) {
+                        $('select[name*=IdNota]').append('<option value='+nota.IdNota+'>'+nota.NombreNota+'</option>')                                                                     
+                        array += nota.IdNota;                        
+                    }                    
+                });                                                                                                                  
+            });            
+                     
+
+            console.log(data.evaluaciones);
+            $.each(data.evaluaciones, function(index, value){                      
+                var selected = new Array();                                     
+                 $("#TblListAlumEval select").each(function(val){                          
+                    selected.push($(this).parent().parent().find('td').eq(0).html());   
+                    if(intent.indexOf(value.IdAlumno) == -1){
+                            switch (value.IdPeriodo) {
+                                case 1:                                
+                                      $('select[id*=IdNotaPeri1]').val(value.NotaFinal);
+                                    break;
+                                case 2:
+                                      $('select[id*=IdNotaPeri2]').val(value.NotaFinal);                                        
+                                    break;
+                                case 3:
+                                      $('select[id*=IdNotaPeri3]').val(value.NotaFinal);                                        
+                                    break;                                    
+                                case 4:
+                                      $('select[id*=IdNotaPeri4]').val(value.NotaFinal);                                         
+                                    break;                            
+                            }                            
+                        }else{
+
+                        }
+                });                                                                  
+            });
+
+            $(".asigarnota").on('change', function(){
+                $("#notaFinal").val(this.value);               
+            });
+
+            $(".asigarnota2").on('change', function(){
+                $("#notaFinal").val(this.value);               
+            });
+
+            $(".asigarnota3").on('change', function(){
+                $("#notaFinal").val(this.value);               
+            });
+
+            $(".asigarnota4").on('change', function(){
+                $("#notaFinal").val(this.value);               
+            });
+
+        } else {
+            alert('Error al cargar las asignaturas que estan asociada a este grupo con este grado');
+        }
+    });
+}
+  </script>
+@endsection
