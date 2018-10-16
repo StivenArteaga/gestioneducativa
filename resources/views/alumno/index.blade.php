@@ -23,11 +23,11 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  @if(Auth::user()->IdTipoUsuario == 1 || Auth::user()->IdTipoUsuario == 3)
+                  {{-- @if(Auth::user()->IdTipoUsuario == 1 || Auth::user()->IdTipoUsuario == 3) --}}
                   <button class="btn btn-success">
                      <a data-toggle="modal" data-target=".bd-example-modal-lg" onclick="AsignaNumerAuto()">Nuevo alumno</a>
                   </button>
-                  @endif
+                  {{-- @endif --}}
                   
                   <div class="text-center">
                     <h1 class="card-title">Listado de alumnos</h1>

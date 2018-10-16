@@ -21,7 +21,8 @@ Route::group(['middleware' => ['auth']], function() {
 
 
 
-
+    Route::get('/alumnos/ciudades/{id}', 'AlumnoContoller@getCiudad');
+    Route::get('/alumnos/municipios/{id}', 'AlumnoContoller@getMunicipio');
     Route::get('alumnos', 'AlumnoController@index')->name('alumno');
 
     Route::get('editalum/editalum/{id}', 'AlumnoController@edit');
