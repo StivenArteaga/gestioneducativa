@@ -12,7 +12,7 @@ class Municipio extends Model
 
     public $timestamps = false;
 
-    public static function getMunicipio($id) 
+    public static function municipios($id) 
     {
         return Municipio::where('IdMunicipio', $id)->get();        
     }

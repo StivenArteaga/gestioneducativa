@@ -3,22 +3,22 @@
 
 })(window);
 
-$("#DeparExpAlum").change(event => {
-    $.get(`ciudades/${event.target.value}`, function(res, sta) {
+$(".dpto").change(event => {
+    $.get(`/alumnos/ciudades/${event.target.value}`, function(res, sta) {
         $("#CiudNaciAlum").empty();
-        $("#CiudNaciAlum").append(`<option hidden value=""> </option>`);
+        $("#CiudNaciAlum").append(`<option hidden value="">Seleccionar Ciudad </option>`);
         res.forEach(element => {
             $("#CiudNaciAlum").append(`<option value=${element.IdCiudad}> ${element.NombreCiudad} </option>`);
         });
     });
 });
 
-$("#DeparExpAlum").change(event => {
-    $.get(`municipios/${event.target.value}`, function(res, sta) {
-        $("#IdMunicipioExpedido").empty();
-        $("#IdMunicipioExpedido").append(`<option hidden value=""> </option>`);
+$(".dpto").change(event => {
+    $.get(`/alumnos/municipios/${event.target.value}`, function(res, sta) {
+        $(".mpio").empty();
+        $(".mpio").append(`<option hidden value="">Seleccionar Municipio </option>`);
         res.forEach(element => {
-            $("#IdMunicipioExpedido").append(`<option value=${element.IdMunicipio}> ${element.NombreMunicipio} </option>`);
+            $(".mpio").append(`<option value=${element.IdMunicipio}> ${element.NombreMunicipio} </option>`);
         });
     });
 });
