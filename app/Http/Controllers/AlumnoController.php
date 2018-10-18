@@ -140,9 +140,9 @@ class AlumnoController extends Controller
             'PrimerNombre'=> 'required',            
             'PrimerApellido'=> 'required',
             'SegundoApellido'=> 'required',
-            'Correo'=> 'required|unique:alumnos,Correo',
+            'Correo'=> 'required|email|unique:alumnos,Correo',
             'IdTipoDocumento'=> 'required',
-            'NumeroDocumento'=> 'required|unique:alumnos,NumeroDocumento',
+            'NumeroDocumento'=> 'required|numeric|min:0|unique:alumnos,NumeroDocumento',
             'IdMunicipioExpedido'=> 'required', 
             'IdGenero'=> 'required',
             'FechaNacimiento'=> 'required', 
@@ -161,7 +161,7 @@ class AlumnoController extends Controller
             'Ips'=> 'required', 
             'Ars'=> 'required', 
             'CarnetSisben'=> 'required', 
-            'PuntajeSisben'=> 'required', 
+            'PuntajeSisben'=> 'required|numeric|min:0', 
             'Estrato'=> 'required'                       
         ]);
         
