@@ -138,6 +138,9 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('evalalum/evalalum/{id}', 'EvaluacionController@evalalum');
 
+    Route::get('listalog/listalog/{id}/{idalumno}', 'EvaluacionController@listalog');
+
+    Route::get('savelog/savelog/{resquest}/{id}', 'EvaluacionController@savelog');
 });
 
 

@@ -2,20 +2,17 @@
 
 @section('content')
 
+
 @if ($message = Session::get('success'))
-  <div class="alert alert-success">
+  <div class="alert alert-success alert-dismissable custom-success-box" style="margin: 15px;">
     <p>{{ $message }}</p>
   </div>
 @endif
 
-
-@if(count($errors) > 0)
-    <div class="alert alerrt">  
-        <strong>Whoooops!!</strong> ha ocurrido un error con tu registro.<br>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </div>
+@if ($message = Session::get('errors'))
+  <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
+    <p>{{ $message }}</p>
+  </div>
 @endif
 
 <section id="dom">
@@ -179,7 +176,7 @@
                                 </div>                          
                               </div>
                               <div class="form-group row">
-                                <label class="col-md-3 label-control" for="projectinput6">Departamento expedición</label>
+                                <label class="col-md-3 label-control" for="projectinput6">Departamento expedición *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15" id="DeparExpAlum" name="IdDepartamento">
                                   @if ($departamentos->count())
@@ -192,7 +189,7 @@
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label class="col-md-3 label-control" for="projectinput6">Municipio expedición</label>
+                                <label class="col-md-3 label-control" for="projectinput6">Municipio expedición *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15"  id="IdMunicipioExpedido" name="IdMunicipioExpedido">
                                   @if ($municipios->count())
@@ -229,7 +226,7 @@
                                 </div>
                               </div>          
                               <div class="form-group row">
-                                <label class="col-md-3 label-control" for="projectinput6">Departamento nacimiento</label>
+                                <label class="col-md-3 label-control" for="projectinput6">Departamento nacimiento *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15" id="DeparNacAlum" name="IdDepartamento">
                                   @if ($departamentos->count())
@@ -242,7 +239,7 @@
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label class="col-md-3 label-control" for="projectinput6">Ciudad nacimiento</label>
+                                <label class="col-md-3 label-control" for="projectinput6">Ciudad nacimiento *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15" id="CiudNaciAlum" name="IdCiudadNacimiento">
                                   @if ($ciudades->count())
@@ -277,7 +274,7 @@
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label class="col-md-3 label-control" for="projectinput6">Departamento residencia</label>
+                                <label class="col-md-3 label-control" for="projectinput6">Departamento residencia *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15" id="DeparResidAlum" name="IdDepartamento">
                                   @if ($departamentos->count())
@@ -290,7 +287,7 @@
                                 </div>
                               </div>
                               <div class="form-group row">
-                                <label class="col-md-3 label-control" for="projectinput6">Ciudad residencia</label>
+                                <label class="col-md-3 label-control" for="projectinput6">Ciudad residencia *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15" id="CiudResAlum" name="IdCiudadResidencia">
                                   @if ($ciudades->count())
@@ -311,7 +308,7 @@
                           <div class="form-body">
                             <h4 class="form-section"><i class="la la-user"></i> Información salud</h4>                            
                               <div class="form-group row">
-                                <label class="col-md-3 label-control" for="projectinput6">Eps</label>
+                                <label class="col-md-3 label-control" for="projectinput6">Eps *</label>
                                   <div class="col-md-9">                                                        
                                     <select class="form-control m-bot15" id="IdEps" name="IdEps">
                                     @if($eps->count())
@@ -351,7 +348,7 @@
                               </div>
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput2">Numero carnet sisben *</label>
+                              <label class="col-md-3 label-control" for="projectinput2">Numero de ficha del sisben *</label>
                               <div class="col-md-9">                            
                                 {!! Form::text('CarnetSisben', null, ['id'=>'NumCarnetAlum','placeholder'=>'Ingrese el numero de su carnet del sisben', 'class'=> 'form-control']) !!}
                               </div>
@@ -616,7 +613,7 @@
                               </div>                          
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput6">Departamento expedición</label>
+                              <label class="col-md-3 label-control" for="projectinput6">Departamento expedición *</label>
                               <div class="col-md-9">                                                        
                                 <select class="form-control m-bot15" id="IdDepartamentoExpAcu" name="IdDepartamento">
                                 @if ($departamentos->count())
@@ -629,7 +626,7 @@
                               </div>
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput6">Municipio expedición</label>
+                              <label class="col-md-3 label-control" for="projectinput6">Municipio expedición *</label>
                               <div class="col-md-9">                                                        
                                 <select class="form-control m-bot15" id="IdMunicipioExpedicionAcu" name="IdMunicipioExpedicion">
                                 @if ($municipios->count())

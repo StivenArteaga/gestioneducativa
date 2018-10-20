@@ -45,13 +45,23 @@ class SedeController extends Controller
         } else {                        
             $input = $request->only(['NombreSede', 'IdInstitucion', 'EstadoSede']);
             $sede = request()->validate([
-                'NombreSede'=>'required|unique:sedes,NombreSede|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|max:50',               
+                'NombreSede'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:50',               
                 'IdInstitucion'=>'required|int',                
                 'EstadoSede'=>'required|int',                
             ]);
-            $request->flash();
-            Sede::create($request->all());
-            return redirect()->route('sede.index')->with('success','La sede ha sido creada correctamente');                                                                 
+            
+            $existesede = Sede::where('NombreSede', '=', $request['NombreSede'])
+                              ->where('EstadoSede', '=', true)
+                              ->first();
+
+            
+            if($existesede != null){
+                return redirect()->route('sede.index')->with('errors','Esta sede ya se encuentra registrada');                                                                 
+            }else{
+                $request->flash();                    
+                Sede::create($request->all());
+                return redirect()->route('sede.index')->with('success','La sede ha sido creada correctamente');                                                                 
+            }                                
         }
     }
 
@@ -88,7 +98,7 @@ class SedeController extends Controller
     public function update(Request $request, $id)
     {
         $logros = request()->validate([
-            'NombreSede'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|max:50|unique:sedes,NombreSede,'.$id.',IdSede',
+            'NombreSede'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:50|unique:sedes,NombreSede,'.$id.',IdSede,EstadoSede,'.true,
             'IdInstitucion'=>'required|int',                
             'EstadoSede'=>'required|int',                
         ]);

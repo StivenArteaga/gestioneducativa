@@ -22,7 +22,7 @@ class MateriaController extends Controller
                 ->getQuery() // Optional: downgrade to non-eloquent builder so we don't build invalid User objects.
                 ->get();
             
-        $areas = Area::all();
+        $areas = Area::where('EstadoArea','=', true)->get();
         $materias = Materia::where('EstadoMateria', true)->get();
         return view('materia.index', compact('result','materias','areas'));
     }
@@ -51,13 +51,21 @@ class MateriaController extends Controller
         } else {  
             
             $materias = request()->validate([
-                'NombreMateria'=>'required|unique:materias,NombreMateria|max:50|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/',
+                'NombreMateria'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',
                 'IdArea'=>'required|int',                
                 'EstadoMateria'=>'required|int'           
             ]);
 
-            Materia::create($request->all());
-            return redirect()->route('materias.index')->with('success','La materia se registro con exito');    
+            $existesede = Materia::where('NombreMateria', '=', $request['NombreMateria'])
+            ->where('EstadoMateria', '=', true)
+            ->first();
+
+            if($existesede != null){
+                return redirect()->route('materias.index')->with('errors','Esta materia ya se encuentra registrada');                                                                 
+            }else{
+                Materia::create($request->all());
+                return redirect()->route('materias.index')->with('success','La materia se registro con exito');    
+            }            
         }
     }
 
@@ -95,7 +103,7 @@ class MateriaController extends Controller
     public function update(Request $request, $id)
     {        
         $materias = request()->validate([
-            'NombreMateria'=>'required|max:50|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:materias,NombreMateria,'.$id.',IdMateria',
+            'NombreMateria'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:materias,NombreMateria,'.$id.',IdMateria,EstadoMateria,'.true,
             'IdArea'=>'required|int',                
             'EstadoMateria'=>'required|int'           
         ]);

@@ -47,11 +47,12 @@ class AlumnoController extends Controller
        $resguardos = Resguardo::all();
        $etnias = Etnia::all();
        $parentescos = Paretesco::all();
-       $grados = Grado::all();
-       $salones = Salon::all();
        $tipoacudiente = TipoAcudiente::all();
 
-        $alumnos = Alumno::where('EstadoAlumno', true)->get();        
+       $grados = Grado::where('EstadoGrado','=', true)->get();
+       $salones = Salon::where('EstadoSalon','=', true)->get();
+        $alumnos = Alumno::where('EstadoAlumno', true)->get(); 
+
         return view('alumno.index', compact('alumnos', 'tipodocumentos', 'departamentos', 'ciudades', 'generos', 
                                             'eps', 'tiposangres', 'tipovictimas', 'resguardos', 'etnias',
                                              'parentescos','municipios', 'grados', 'salones','tipoacudiente'));
@@ -137,96 +138,132 @@ class AlumnoController extends Controller
         
 
         $alumno =  request()->validate([
-            'PrimerNombre'=> 'required',            
-            'PrimerApellido'=> 'required',
-            'SegundoApellido'=> 'required',
-            'Correo'=> 'required|unique:alumnos,Correo',
-            'IdTipoDocumento'=> 'required',
-            'NumeroDocumento'=> 'required|unique:alumnos,NumeroDocumento',
-            'IdMunicipioExpedido'=> 'required', 
-            'IdGenero'=> 'required',
+            'PrimerNombre'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+            'PrimerApellido'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u',
+            'SegundoApellido'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u',
+            'Correo'=> 'required',
+            'IdTipoDocumento'=> 'required|int',
+            'NumeroDocumento'=> 'required|max:12|regex:/^[0-9]+$/',
+            'IdMunicipioExpedido'=> 'required|int', 
+            'IdGenero'=> 'required|int',
             'FechaNacimiento'=> 'required', 
-            'IdCiudadNacimiento'=> 'required', 
-            'IdCiudadResidencia'=> 'required',
-            'Direccion'=> 'required',
+            'IdCiudadNacimiento'=> 'required|int', 
+            'IdCiudadResidencia'=> 'required|int',
+            'Direccion'=> 'required|max:60',
             'Zona'=> 'required',
-            'Telefono'=> 'required',   
+            'Telefono'=> 'required|max:50',   
             'EstadoAlumno'=>'required|int'         
         ]);
+        
 
+        $existe = Alumno::where('NumeroDocumento', '=', $request['NumeroDocumento'])
+                              ->where('EstadoAlumno', '=', true)
+                              ->first();
+                                                            
+            if($existe != null){
+                return redirect()->route('alumno.index')->with('errors','El documento de este alumno ya se encuentra registrado en el sistema');                                                                 
+            }else{
+
+                $existe1 = Alumno::where('Correo', '=', $request['Correo'])
+                              ->where('EstadoAlumno', '=', true)
+                              ->first();
+
+                if($existe1 != null){
+                    return redirect()->route('alumno.index')->with('errors','El documento de este alumno ya se encuentra registrado en el sistema');                                                                 
+                }else{
+                    $salud = request()->validate([
+                        'IdEps'=> 'required|int',
+                        'IdTipoSangre'=> 'required|int', 
+                        'Ips'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+                        'Ars'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+                        'CarnetSisben'=> 'required|regex:/^[0-9]+$/', 
+                        'PuntajeSisben'=> 'required|regex:/^[0-9-,]+$/', 
+                        'Estrato'=> 'required|max:10|regex:/^[0-9]+$/'                    
+                    ]);
+                    
+                    $acudiente = request()->validate([
+                        'PrimerNombreAcu'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+                        'PrimerApellidoAcu'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u',
+                        'SegundoApellidoAcu'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u',
+                        'IdTipoDocumento'=> 'required|int', 
+                        'IdMunicipioExpedicion'=> 'required|int', 
+                        'IdParentesco'=> 'required|int', 
+                        'TelefonoCelular'=> 'required|required|string|max:50',
+                        'NumeroDocumentoAcu'=> 'required|max:12|regex:/^[0-9]+$/', 
+                        'CorreoAcu'=> 'required' 
+                    ]);
             
-        $salud = request()->validate([
-            'IdEps'=> 'required',
-            'IdTipoSangre'=> 'required', 
-            'Ips'=> 'required', 
-            'Ars'=> 'required', 
-            'CarnetSisben'=> 'required', 
-            'PuntajeSisben'=> 'required', 
-            'Estrato'=> 'required'                       
-        ]);
-        
-        $acudiente = request()->validate([
-            'PrimerNombreAcu'=> 'required',             
-            'PrimerApellidoAcu'=> 'required', 
-            'SegundoApellidoAcu'=> 'required', 
-            'IdTipoDocumento'=> 'required', 
-            'IdMunicipioExpedicion'=> 'required', 
-            'IdParentesco'=> 'required', 
-            'DireccionHogar'=> 'required',             
-            'TelefonoCelular'=> 'required',                        
-            'NumeroDocumentoAcu'=> 'required', 
-            'CorreoAcu'=> 'required',
-        ]);
+                    $academica = request()->validate([
+                        'IdGrado'=> 'required|int',             
+                        'Numerolista'=> 'required', 
+                        'Estado'=> 'required', 
+                        'FechaEstado'=> 'required', 
+                        'CodigoInterno'=> 'required', 
+                        'NumeroMatricula'=> 'required', 
+                        'InstitucionOrigen'=> 'required|max:100', 
+                        'EstadoAcademicoAnterior'=> 'required|max:20', 
+                        'EstadoMatriculaFinal'=> 'required|max:20'                               
+                    ]);                
+            
+                    $matricula = request()->validate([
+                        'IdAlumno',
+                        'IdGrado',
+                        'ValorMatricula',
+                        'IdEstadoMatricula'
+                    ]);        
+                    
+                    $request->flash();
+                    
+                    Alumno::create($request->all());
+                    $IdAl = $request['NumeroDocumento'];
+                    $gu = Alumno::where('NumeroDocumento', $IdAl)->firstOrFail();                           
+                    $request['IdAlumno'] = $gu['IdAlumno'];                                                                               
+            
+                    
+                    //Salud::create($request->all());        
+                    $saludsave = new Salud();
+                    $saludsave->IdEps = $request['IdEps'];
+                    $saludsave->IdTipoSangre = $request['IdTipoSangre'];
+                    $saludsave->Ips = $request['Ips'];
+                    $saludsave->Ars = $request['Ars'];
+                    $saludsave->CarnetSisben = $request['CarnetSisben'];
+                    $saludsave->PuntajeSisben = $request['PuntajeSisben'];
+                    $saludsave->Estrato = $request['Estrato'];
+                    $saludsave->FuenteRecursos = $request['FuenteRecursos'];
+                    $saludsave->MadreCabFamilia = $request['MadreCabFamilia'];
+                    $saludsave->HijoDeMadreCabFamilia = $request['HijoDeMadreCabFamilia'];
+                    $saludsave->BeneVeteranoMilitar = $request['BeneVeteranoMilitar'];
+                    $saludsave->BeneHeroeNacional = $request['BeneHeroeNacional'];
+                    $saludsave->IdVictima = $request['IdVictima'];
+                    $saludsave->FechaExpulsion = $request['FechaExpulsion'];
+                    $saludsave->IdMunicipio = $request['IdMunicipio'];
+                    $saludsave->IdResguardo = $request['IdResguardo'];
+                    $saludsave->IdEtnia = $request['IdEtnia'];
+                    $saludsave->IdAlumno = $request['IdAlumno'];
+                    $saludsave->save();
 
-        $academica = request()->validate([
-            'IdGrado'=> 'required',             
-            'Numerolista'=> 'required', 
-            'Estado'=> 'required', 
-            'FechaEstado'=> 'required', 
-            'CodigoInterno'=> 'required', 
-            'NumeroMatricula'=> 'required', 
-            'InstitucionOrigen'=> 'required', 
-            'EstadoAcademicoAnterior'=> 'required', 
-            'EstadoMatriculaFinal'=> 'required',                     
-        ]);                
-
-        $matricula = request()->validate([
-            'IdAlumno',
-            'IdGrado',
-            'ValorMatricula',
-            'IdEstadoMatricula'
-        ]);        
-        
-        $request->flash();
-        
-        Alumno::create($request->all());
-        $IdAl = $request['NumeroDocumento'];
-        $gu = Alumno::where('NumeroDocumento', $IdAl)->firstOrFail();                           
-        $request['IdAlumno'] = $gu['IdAlumno'];                                                                               
-
-        
-        Salud::create($request->all());        
-        Acudiente::create($request->all());
-        Academica::create($request->all());
-
-        
-        $acudiente = Acudiente::all();
-        $IdAcudiente = $acudiente->last();
-        $request['IdAcudiente'] = $IdAcudiente['IdAcudiente'];
-
-        DetalleAlumnoAcudiente::create($request->all());
-        
-        if ($matricula != []) {
-            $request['valorMatricula'] = $matricula['valorMatricula'];
-        }
-        
-        $request['IdGrado'] = $academica['IdGrado'];
-        $request['IdEstadoMatricula'] = 1;
-        
-        Matricula::create($request->all());
-        
-        return redirect()->route('alumno.index')->with('success','El registro de la matricula del alumno se registro con exito');
-
+                    Acudiente::create($request->all());
+                    Academica::create($request->all());
+            
+                    
+                    $acudiente = Acudiente::all();
+                    $IdAcudiente = $acudiente->last();
+                    $request['IdAcudiente'] = $IdAcudiente['IdAcudiente'];
+            
+                    DetalleAlumnoAcudiente::create($request->all());
+                    
+                    if ($matricula != []) {
+                        $request['valorMatricula'] = $matricula['valorMatricula'];
+                    }
+                    
+                    $request['IdGrado'] = $academica['IdGrado'];
+                    $request['IdEstadoMatricula'] = 1;
+                    
+                    Matricula::create($request->all());
+                    
+                    return redirect()->route('alumno.index')->with('success','El registro de la matricula del alumno se registro con exito');
+                }                   
+            }                              
         }
     }
 
@@ -311,68 +348,60 @@ class AlumnoController extends Controller
         
         //validar los datos del alumno
         $alumno =  request()->validate([
-            'PrimerNombre'=> 'required',            
-            'PrimerApellido'=> 'required',
-            'SegundoApellido'=> 'required',
-            'Correo'=> 'required','unique:alumnos,Correo,'.$id.',IdAlumno',
+            'PrimerNombre'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+            'PrimerApellido'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u',
+            'SegundoApellido'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u',
+            'Correo'=> 'required|unique:alumnos,Correo,'.$id.',IdAlumno,EstadoAlumno,'.true,
             'IdTipoDocumento'=> 'required',
-            'NumeroDocumento'=> 'required','unique:alumnos,NumeroDocumento,'.$id.',IdAlumno',
+            'NumeroDocumento'=> 'required|max:12|regex:/^[0-9]+$/|unique:alumnos,NumeroDocumento,'.$id.',IdAlumno,EstadoAlumno,'.true,
             'IdMunicipioExpedido'=> 'required', 
             'IdGenero'=> 'required',
             'FechaNacimiento'=> 'required', 
             'IdCiudadNacimiento'=> 'required', 
             'IdCiudadResidencia'=> 'required',
-            'Direccion'=> 'required',
+            'Direccion'=> 'required|max:250', 
             'Zona'=> 'required',
-            'Telefono'=> 'required',            
+            'Telefono'=> 'required|string|max:50'
         ]);
 
         //validar los datos de la salud
         $salud = request()->validate([
             'IdEps'=> 'required',
             'IdTipoSangre'=> 'required', 
-            'Ips'=> 'required', 
-            'Ars'=> 'required', 
-            'CarnetSisben'=> 'required', 
-            'PuntajeSisben'=> 'required', 
-            'Estrato'=> 'required' 
+            'Ips'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+            'Ars'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+            'CarnetSisben'=> 'required|regex:/^[0-9]+$/', 
+            'PuntajeSisben'=> 'required|regex:/^[0-9-,]+$/', 
+            'Estrato'=> 'required|max:10|regex:/^[0-9]+$/' 
         ]);
 
         //validar los datos de el acudiente
         $acudiente = request()->validate([
-            'PrimerNombreAcu'=> 'required',             
-            'PrimerApellidoAcu'=> 'required', 
-            'SegundoApellidoAcu'=> 'required', 
+            'PrimerNombreAcu'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+            'PrimerApellidoAcu'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u',
+            'SegundoApellidoAcu'=> 'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u',
             'IdTipoDocumento'=> 'required', 
             'IdMunicipioExpedicion'=> 'required', 
             'IdParentesco'=> 'required', 
-            'DireccionHogar'=> 'required', 
-            'TelefonoHogar'=> 'required',
-            'DireccionTrabajo'=> 'required', 
-            'TelefonoTrabajo'=> 'required', 
-            'TelefonoCelular'=> 'required', 
-            'Ocupacion'=> 'required',             
-            'NumeroDocumentoAcu'=> 'required', 
-            'CorreoAcu'=> 'required',
+            'TelefonoCelular'=> 'required|required|string|max:50',
+            'NumeroDocumentoAcu'=> 'required|max:12|regex:/^[0-9]+$/', 
+            'CorreoAcu'=> 'required'          
         ]);
 
         //validar los datos de la información académica
         $academica = request()->validate([
-            'IdGrado'=> 'required', 
-            'valorPension'=> 'required', 
-            'valorMatricula'=> 'required', 
+            'IdGrado'=> 'required',             
             'Numerolista'=> 'required', 
             'Estado'=> 'required', 
             'FechaEstado'=> 'required', 
             'CodigoInterno'=> 'required', 
             'NumeroMatricula'=> 'required', 
-            'InstitucionOrigen'=> 'required', 
-            'EstadoAcademicoAnterior'=> 'required', 
-            'EstadoMatriculaFinal'=> 'required', 
-            'CausaTraslado'=> 'required',
-            'CondicionFinAno'=> 'required',
+            'InstitucionOrigen'=> 'required|max:100', 
+            'EstadoAcademicoAnterior'=> 'required|max:20', 
+            'EstadoMatriculaFinal'=> 'required|max:20'
         ]);
-        
+
+
         //Consultar al aprendiz
         $ediAlum = Alumno::find($request['IdAlumno']);
         //Asignar los nuevos datos para el alumno
@@ -394,8 +423,9 @@ class AlumnoController extends Controller
         //Actualizar asignación en la BD
         $ediAlum->save();
 
+        $IdSaludvl = Salud::where('IdAlumno', '=', $id)->first();
         //Consultar datos de la salud del alumno
-        $editSalud = Salud::find($id);
+        $editSalud = Salud::find($IdSaludvl['IdSalud']);
         //Ingresar los nuevs registros de saud del alumno
         $editSalud->IdEps = $request['IdEps'];
         $editSalud->IdTipoSangre = $request['IdTipoSangre'];
@@ -451,8 +481,9 @@ class AlumnoController extends Controller
         $editDetalleAlumAcu->save();
 
         
-        //Consultar la 
-        $editAcademica = Academica::find($id);
+        $academicavl = Academica::where('IdAlumno', '=', $id)->first();
+        //Consultar la informacion academica del alumno
+        $editAcademica = Academica::find($academicavl['IdInformacionAcademica']);
         //Ingresar los nuevos registros de la informacion academica del alumno
         $editAcademica->IdGrado = $request['IdGrado'];
         $editAcademica->valorPension = $request['valorPension'];

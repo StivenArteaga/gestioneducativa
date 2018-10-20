@@ -89,29 +89,70 @@ class GrupoController extends Controller
                     'FechaGrupo',
                     'EstadoGrupo'
                 ]);
-                $grupExi =  Grupo::where('IdGrado', '=',$grupos['IdGrado'])
-                ->where('grupos.IdTipoCalendario', '=', $grupos['IdTipoCalendario']) 
-                ->where('EstadoGrupo', true)                                                               
-                ->get();
 
-                if (isset($grupExi)) {
-                    Grupo::create($grupos);
-                    $All = Grupo::all();
-                    $IdGrup =$All->last();            
+                $grupoexiste =  Grupo::where('IdGrado', '=',$request['IdGrado'])
+                                 ->where('IdTipoCalendario', '=', $request['IdTipoCalendario']) 
+                                 ->where('IdJornada', '=', $request['IdJornada'])
+                                 ->where('EstadoGrupo', true)                                                               
+                                 ->first();
+                
+                if (isset($grupoexiste) == false) {
 
-                    foreach ($request['IdAsignatura'] as $key => $value) {                                
-                        $detall = ([
-                            'IdGrupo',
-                            'IdAsignatura'
-                        ]);       
-                        $detall['IdGrupo'] = $IdGrup['IdGrupo'];
-                        $detall['IdAsignatura'] = $value;
-                        DetalleAsignaturaGrupo::create($detall);
-                    }            
+                    $cuposalon = Grupo::join('jornadas', 'grupos.IdJornada', '=', 'jornadas.IdJornada')  
+                                        ->join('salones', 'grupos.IdSalon', '=', 'salones.IdSalon')
+                                        ->join('detallegruposasignaturas', 'detallegruposasignaturas.IdGrupo', '=', 'grupos.IdGrupo')
+                                        ->join('asignaturas', 'detallegruposasignaturas.IdAsignatura', '=', 'asignaturas.IdAsignatura')
+                                        ->where('grupos.IdSalon', '=', $request['IdSalon'])
+                                        ->where('grupos.IdJornada', '=', $request['IdJornada'])
+                                        ->select('jornadas.*', 'asignaturas.*')
+                                        ->get();
+                    
+                    if(isset($cuposalon)){
+                            /*$horas =0;
+                            $jornada;
 
-                    return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
+                            foreach ($cuposalon as $key => $value) {
+                                $horas = $horas + $value['Intensidad'];
+                                $horainicio = (new Carbon($value['HoraInicio']))->format('h');
+                                $horafin = (new Carbon($value['HoraFin']))->format('h');
+                                    
+                            }*/
+
+                            Grupo::create($grupos);
+                            $All = Grupo::all();
+                            $IdGrup =$All->last();            
+        
+                            foreach ($request['IdAsignatura'] as $key => $value) {                                
+                                $detall = ([
+                                    'IdGrupo',
+                                    'IdAsignatura'
+                                ]);       
+                                $detall['IdGrupo'] = $IdGrup['IdGrupo'];
+                                $detall['IdAsignatura'] = $value;
+                                DetalleAsignaturaGrupo::create($detall);
+                            }            
+        
+                            return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
+
+                    }else{
+                        Grupo::create($grupos);
+                        $All = Grupo::all();
+                        $IdGrup =$All->last();            
+    
+                        foreach ($request['IdAsignatura'] as $key => $value) {                                
+                            $detall = ([
+                                'IdGrupo',
+                                'IdAsignatura'
+                            ]);       
+                            $detall['IdGrupo'] = $IdGrup['IdGrupo'];
+                            $detall['IdAsignatura'] = $value;
+                            DetalleAsignaturaGrupo::create($detall);
+                        }            
+    
+                        return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
+                    }
                 } else {
-                    return redirect()->route('grupo.index')->with('danger','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo');    
+                    return redirect()->route('grupo.index')->with('danger','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo con el mismo calendario y la misma jornada');    
                 }                       
             }
         } else {

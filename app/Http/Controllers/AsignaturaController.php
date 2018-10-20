@@ -26,6 +26,7 @@ class AsignaturaController extends Controller
                                             'tipoasignaturas.NombreTipoAsignatura')
                                     ->getQuery()
                                     ->get();        
+
         $materias = Materia::where('EstadoMateria', true)->get();        
         $tipoasignaturas = TipoAsignatura::where('EstadoTipoAsignatura', true)->get();                                    
         return view('asignaturas.index', compact('asignaturas','materias','tipoasignaturas'));
@@ -56,15 +57,23 @@ class AsignaturaController extends Controller
         } else {                        
                 
             $materias = request()->validate([                
-                'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:asignaturas,NombreAsignatura',
+                'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/',
                 'IdMateria'=>'required|int',                                         
                 'IdTipoAsignatura'=>'required|int',           
                 'EstadoAsignatura'=>'required|int',
                 'Intensidad'=>'required|int|max:6'           
             ]);
 
-            Asignatura::create($request->all());
-            return redirect()->route('asignatura.index')->with('success','La asignatura se registro con exito');    
+            $existesede = Asignatura::where('NombreAsignatura', '=', $request['NombreAsignatura'])
+                                ->where('EstadoAsignatura', '=', true)
+                                ->first();
+    
+            if($existesede != null){
+                return redirect()->route('asignatura.index')->with('errors','Esta asignatura ya se encuentra registrada');                                                                 
+            }else{
+                Asignatura::create($request->all());
+                return redirect()->route('asignatura.index')->with('success','La asignatura se registro con exito');    
+            }
         }
     }
 
@@ -102,7 +111,7 @@ class AsignaturaController extends Controller
     public function update(Request $request, $id)
     {
         $materias = request()->validate([                
-            'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:asignaturas,NombreAsignatura,'.$id.',IdAsignatura',
+            'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:asignaturas,NombreAsignatura,'.$id.',IdAsignatura,EstadoAsignatura,'.true ,
             'IdMateria'=>'required|int',                                         
             'IdTipoAsignatura'=>'required|int',           
             'EstadoAsignatura'=>'required|int',

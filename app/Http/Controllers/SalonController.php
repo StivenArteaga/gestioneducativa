@@ -49,19 +49,28 @@ class SalonController extends Controller
      */
     public function store(Request $request)
     {
-        $logros = request()->validate([
-            'NombreSalon'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|max:50',
-            'IdSede'=>'required|int',                   
-            'EstadoSalon'=>'required|int'           
-        ]);
-        
         if ($request['IdSalon'] != 0) {
             $this->update($request, $request['IdSalon']);
             return redirect()->route('aula.index')->with('success','El aula se actualizo con exito');
         } else {                                    
 
-            Salon::create($request->all());
-            return redirect()->route('aula.index')->with('success','El aula se registro con exito');    
+            $logros = request()->validate([
+                'NombreSalon'=>'required|regex:/^[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z]*)*[0-9-a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/|max:50',
+                'IdSede'=>'required|int',                   
+                'EstadoSalon'=>'required|int'           
+            ]);
+
+            $existe = Salon::where('NombreSalon', '=', $request['NombreSalon'])
+                      ->where('IdSede', '=', $request['IdSede'])
+                      ->where('EstadoSalon','=', true)
+                      ->first();
+            
+            if($existe != null){
+                return redirect()->route('aula.index')->with('errors','Esta aula ya se encuentra registrada en esta sede');    
+            }else{
+                Salon::create($request->all());
+                return redirect()->route('aula.index')->with('success','El aula se registro con exito');    
+            }                           
         }
     }
 
@@ -97,10 +106,25 @@ class SalonController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $aula = Salon::findOrFail($id);
-        $aula->NombreSalon = $request['NombreSalon'];
-        $aula->IdSede = $request['IdSede'];
-        $aula->save();
+        $logros = request()->validate([
+            'NombreSalon'=>'required|regex:/^[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z]*)*[0-9-a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/|max:50',
+            'IdSede'=>'required|int',                   
+            'EstadoSalon'=>'required|int'           
+        ]);
+        
+        $existe = Salon::where('NombreSalon', '=', $request['NombreSalon'])
+                      ->where('IdSede', '=', $request['IdSede'])
+                      ->where('EstadoSalon','=', true)
+                      ->first();
+            
+            if($existe != null){
+                return redirect()->route('aula.index')->with('errors','Esta aula ya se encuentra registrada en la sede que le asigno');    
+            }else{
+                $aula = Salon::findOrFail($id);
+                $aula->NombreSalon = $request['NombreSalon'];
+                $aula->IdSede = $request['IdSede'];
+                $aula->save();
+            }
     }
 
     /**

@@ -180,8 +180,8 @@
                                             </div>
                                         </div>                                         
                                 </div>                
-                            <div class="form-actions">
-                                <a href="{{ route('logros') }}" class="btn btn-warning mr-1">
+                            <div class="form-actions"> 
+                                <a href="{{ route('grupos') }}" class="btn btn-warning mr-1">
                                     <i class="la la-remove"></i> Cancelar
                                 </a>
                                 <button type="submit" class="btn btn-primary">

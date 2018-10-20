@@ -3,19 +3,15 @@
 @section('content')
 
 @if ($message = Session::get('success'))
-  <div class="alert alert-success">
+  <div class="alert alert-success alert-dismissable custom-success-box" style="margin: 15px;">
     <p>{{ $message }}</p>
   </div>
 @endif
 
-
-@if(count($errors) > 0)
-    <div class="alert alerrt">  
-        <strong>Whoooops!!</strong> ha ocurrido un error con tu registro.<br>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </div>
+@if ($message = Session::get('errors'))
+  <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
+    <p>{{ $message }}</p>
+  </div>
 @endif
 
 

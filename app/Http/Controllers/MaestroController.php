@@ -52,11 +52,11 @@ class MaestroController extends Controller
 
             request()->validate([
                 'IdAsignatura'=>'required|int',
-                'PrimerNombreMaes'=> ['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
-                'PrimerApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
-                'SegundoApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
+                'PrimerNombreMaes'=> ['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)+$/'],             
+                'PrimerApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u'],             
+                'SegundoApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u'],             
                 'IdTipoDocumento'=>'required|int',            
-                'NumeroDocumento'=>'required|string|unique:maestros,NumeroDocumento|max:12|regex:/^[0-9]+$/',
+                'NumeroDocumento'=>'required|string|max:12|regex:/^[0-9]+$/',
                 'FechaNacimiento'=>'required|date',
                 'IdGenero'=>'required|int',
                 'IdTipoSangre'=>'required|int',                
@@ -69,10 +69,17 @@ class MaestroController extends Controller
                 'Coordinador'=>'required|string|max:20',
                 'EstadoMaestro'=>'required|int'
             ]); 
-                   
             
-            Maestro::create($request->all());
-            return redirect()->route('maestro.index')->with('success','El registro del docente se realizo con exito');
+            $existesede = Maestro::where('NumeroDocumento', '=', $request['NumeroDocumento'])
+                              ->where('EstadoMaestro', '=', true)
+                              ->first();
+
+            if($existesede != null){
+                  return redirect()->route('maestro.index')->with('errors','Ya existe un docente con este número de documento');                                                                 
+            }else{
+                Maestro::create($request->all());
+                return redirect()->route('maestro.index')->with('success','El registro del docente se realizo con exito');
+            }
         }        
     }
 
@@ -97,15 +104,15 @@ class MaestroController extends Controller
     {              
         request()->validate([
             'IdAsignatura'=>'required|int',
-            'PrimerNombreMaes'=> ['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
-            'PrimerApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
-            'SegundoApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[A-Za-z]*$/u'],             
+            'PrimerNombreMaes'=> ['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)+$/'],             
+            'PrimerApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u'],             
+            'SegundoApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u'],             
             'IdTipoDocumento'=>'required|int',            
-            'NumeroDocumento'=>'required|string|regex:/^[0-9]+$/||max:12|unique:maestros,NumeroDocumento,'.$id.',IdMaestro',
+            'NumeroDocumento'=>'required|string|regex:/^[0-9]+$/|max:12|unique:maestros,NumeroDocumento,'.$id.',IdMaestro,EstadoMaestro,'.true,
             'FechaNacimiento'=>'required|date',
             'IdGenero'=>'required|int',
             'IdTipoSangre'=>'required|int',                
-            'Correo'=>'required|email|max:200|unique:maestros,Correo,'.$id.',IdMaestro',
+            'Correo'=>'required|email|max:200|unique:maestros,Correo,'.$id.',IdMaestro,EstadoMaestro,'.true,
             'Direccion'=>'required|string|max:200',
             'Telefono'=>'required|string|max:50',
             'IdCiudad'=>'required|int',

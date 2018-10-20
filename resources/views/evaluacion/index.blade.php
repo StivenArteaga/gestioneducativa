@@ -176,8 +176,66 @@
   </div>
 </div>
 
-@endsection
+<div class="modal fade" id="listadoLogro">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Listado de logros por asignatura y periodo</h4>          
+          <button type="button" class="close" data-dismiss="modal">&times;</button>          
+        </div>
+        <div style="">
+            <h4>Maestro: {{$maestro}} </h4>
+            <h4>Periodo: {{$periodoactual}}</h4>
+            <h4>Asignatura: {{$asignaturalogro}}</h4>
+        </div>
+        <div id="data3"></div>
+        <!-- Modal body -->
+        <div class="modal-body">
+        <div class="card-content collapse show">
+                  <div class="card-body card-dashboard">                    
+                    <table class="table table-striped table-bordered dom-jQuery-events" id="MyTableAlumn">
+                      <thead>
+                        <tr>                                                
+                          <th>Logro</th>                          
+                          <th>Descripción del logro</th>                   
+                        </tr>
+                      </thead>
+                      <tbody id="IdBodyLogroEvaluacion">                                                                               
+                        @foreach($logros as $logro)
+                          <tr>
+                            <td>                                
+                                <input type="checkbox" class="form-check-input" value="{{ $logro->IdLogro }}" name="checkLogro" id="checkLogro_{{$logro->IdLogro}}">
+                            </td>
+                            <td>
+                                {{$logro.DescripcionLogro}}
+                            </td>                          
+                          </tr>
+                        @endforeach                                 
+                      </tbody>
+                      <tfoot>
+                        <tr>                                                    
+                          <th>Logro</th>                          
+                          <th>Descripción del logro</th>                    
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="SelectLogro()" data-dismiss="modal">Agregar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+        
+      </div>
+    </div>
+</div>
 
+@endsection
 
 @section('script')
   <script>  
@@ -217,7 +275,7 @@ function ListAlum(id,idAsignatura){
                 "</td>"+   
                 "<td>"+  
                         "<button class='btn btn-info' style='height:35px;' title='Descargar boletín'><i class='fas fa-file-download'></i></button>"+
-                        "<button class='btn btn-warning' style='height:35px;' title='Asignar logros'><i class='fas fa-star-half-alt'></i></button>"+
+                        "<button class='btn btn-warning' style='height:35px;' title='Asignar logros' data-toggle='modal' data-target='#listadoLogro' onclick='listalogro("+idAsignatura+','+alumnos.IdAlumno+")' ><i class='fas fa-star-half-alt'></i></button>"+
                 "</td>"+            
                "<tr>";
             });          
@@ -233,7 +291,7 @@ function ListAlum(id,idAsignatura){
                 });                                                                                                                  
             });            
                      
-
+/*
             console.log(data.evaluaciones);
             $.each(data.evaluaciones, function(index, value){                      
                 var selected = new Array();                                     
@@ -258,7 +316,7 @@ function ListAlum(id,idAsignatura){
 
                         }
                 });                                                                  
-            });
+            });*/
 
             $(".asigarnota").on('change', function(){
                 $("#notaFinal").val(this.value);               
@@ -281,5 +339,90 @@ function ListAlum(id,idAsignatura){
         }
     });
 }
-  </script>
+
+function listalogro(IdAsignatura, IdAlumno)
+{
+  $.get("listalog/listalog/"+IdAsignatura+'/'+IdAlumno, function(data, eval){
+      if(data != null){
+        debugger;
+        if(data.status == "success"){
+          var valor8 = ''
+          var i=0;
+            data.logros.forEach(data => {              
+              valor8 += "<tr>"+    
+               "<td class='hidden'>"+ data.IdLogro+ "</td>"+               
+               "<td class='hidden'>"+ data.EstadoLogro+ "</td>"+     
+               "<td>" + "<input type='checkbox' name="+data.IdLogro+" id='acheckbox' class='form-check-input check'></input>" + "</td>" +  
+               "<td>" + data.DescripcionLogro + "</td>"+                              
+               "<tr>";               
+            })
+            $("#IdBodyLogroEvaluacion").html(valor8); 
+        }else{
+          swal({
+                type:'error',
+                title: 'Upsss',
+                animation: true,
+                customClass: 'animated tada',
+                text: data.message
+              });                                                           
+        }
+        
+      }else{
+        alert('Error al cargar los logros que estan asociada a esta asignatura o periodo. Ho no tiene registros asociados');
+      }
+  });
+}
+
+function SelectLogro(){
+  debugger;    
+    SelectLogros();
+}
+
+function SelectLogros(){
+  debugger;
+  var IdEvaluacion;
+  var selectedAsig = new Array();                              
+  $("#IdBodyLogroEvaluacion input:checkbox:checked").each(function() {                
+        selectedAsig.push($(this).parent().parent().find('td').eq(0).html());  
+        IdEvaluacion = $(this).parent().parent().find('td').eq(1).html()
+        $("#data3").append(
+            '<input type="hidden" name="IdLogro[]" value="'+selectedAsig+'">'
+        )
+    }); 
+
+    var logros = JSON.stringify(selectedAsig);
+    var eval = JSON.stringify(IdEvaluacion);     
+    
+    $.get("savelog/savelog/"+logros+"/"+eval, function (data){
+      if(data != null){
+        if (data.status == "success") {
+                    swal({
+                        type:'success',
+                        title: 'Exito',
+                        animation: true,
+                        customClass: 'animated tada',
+                        text: data.message
+                      });                                                              
+                } else {
+                    swal({
+                        type:'error',
+                        title: 'Upsss',
+                        animation: true,
+                        customClass: 'animated tada',
+                        text: data.message
+                      });                                                           
+                }                
+      }else{
+        swal({
+                    type:'warning',
+                    title: 'Upsss',
+                    animation: true,
+                    customClass: 'animated tada',
+                    text: 'Upsss algo salio mal, verifica en proceso, recarga la pagina y vuelve a asignar los logros!'
+                  });                                        
+      }
+    });
+}
+
+  </script>  
 @endsection

@@ -52,7 +52,7 @@ class LogroController extends Controller
         } else {            
             
             $logros = request()->validate([
-                'DescripcionLogro'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|max:200',               
+                'DescripcionLogro'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:200',               
                 'IdAsignatura'=>'required|int',
                 'IdPeriodo'=>'required|int',    
                 'EstadoLogro'=>'required|int'           

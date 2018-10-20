@@ -76,7 +76,7 @@ class MatriculaController extends Controller
     {   
         $matricula = request()->validate([
             'IdGradoName'=>'required',
-            'valorMatricula'=>'required'                      
+            'valorMatricula'=>'required|regex:/^[$-,-.0-9]+$/'                      
         ]);
         
         $matri = Matricula::find($request['IdMatricula']);

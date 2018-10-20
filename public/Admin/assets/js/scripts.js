@@ -396,7 +396,7 @@ $("#IdGradoIfAca").change(function(){
             alert('Error al cargar los datos del numero del numero de lista del alumno');
         }
     });
-});
+});  
 
 
 

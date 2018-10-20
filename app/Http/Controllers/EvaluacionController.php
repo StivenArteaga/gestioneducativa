@@ -8,6 +8,9 @@ use App\Asignatura;
 use App\Alumno;
 use App\Calificacion;
 use App\Evaluacion;
+use App\Logro;
+use App\Maestro;
+use App\DetalleLogroEvaluacion;
 use Exception;
 
 class EvaluacionController extends Controller
@@ -22,8 +25,12 @@ class EvaluacionController extends Controller
         $grados = Grado::where('EstadoGrado', true)->get();
         $asignaturas = [];
         $alumnos=[];
+        $maestro= "";
+        $periodoactual ="";
+        $asignaturalogro ="";
+        $logros =[];
         $notas = Calificacion::where('EstadoNota', true)->get();
-        return view('evaluacion.index', compact('grados','asignaturas', 'alumnos', 'notas'));
+        return view('evaluacion.index', compact('grados','asignaturas', 'alumnos', 'notas', 'maestro', 'periodoactual','asignaturalogro','logros'));
     }
 
 
@@ -150,11 +157,7 @@ class EvaluacionController extends Controller
                             }else{
                                 return response()->json(['status'=>'error','message' => 'No puedes evaluar a un alumno sin haber evaluado los periodos anteriores']);        
                             }                                             
-                        }
-                        
-                        
-                            
-                        
+                        }                        
                     }                        
                 }else{
                     return response()->json(['status'=>'error','message' => 'Ha ocurrido un error con tu proceso. Recarga la pagina y vuelve hacer el proceso']);        
@@ -167,11 +170,72 @@ class EvaluacionController extends Controller
           }    
         
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function listalog($IdAsignatura, $IdAlumno)
+    {
+        try{
+            
+            $evaluacion = Evaluacion::where('IdAsignatura', '=', $IdAsignatura)
+                                   ->where('IdAlumno', '=', $IdAlumno)
+                                   ->get();
+                                   
+            $dteval = $evaluacion->last();                       
+            
+            $logros = Logro::join('asignaturas','logros.IdAsignatura', '=', 'asignaturas.IdAsignatura')
+                           ->join('maestros','asignaturas.IdAsignatura', '=', 'maestros.IdAsignatura' )
+                           ->where('logros.IdAsignatura', '=', $IdAsignatura)
+                           ->where('logros.IdPeriodo','=',$dteval['IdPeriodo'])
+                           ->select('logros.*', 'maestros.*')
+                           ->get();
+
+            foreach ($logros as $key => $value) {
+                $value['EstadoLogro'] = $dteval['IdEvaluacion'];
+            }
+
+            if(count($logros) > 0) {
+                return response()->json(['status'=>'success','logros'=>$logros]);
+            }else{
+                return response()->json(['status'=>'error','message' => 'Esta asignatura no tiene un docente asignado, por favor dirigete a la opcion docente y asignele esta asignatura a un maestro']);           
+            }
+        }catch(\Exception $e){
+            return response()->json([$e->getMessage()]);        
+        }
+    }
+
+    public function savelog($request, $IdEvaluacion){
+        try
+        {            
+            $mi_array = json_decode($request);      
+            $mi_id = json_decode($IdEvaluacion);      
+            if($mi_array != []){                
+                $guardo = false;
+                foreach ($mi_array as $key => $value) {
+
+                    $existe = DetalleLogroEvaluacion::where('IdLogro', '=', $value)
+                                                    ->where('IdEvaluacion', '=', $mi_id)
+                                                    ->get();                    
+                    if(count($existe) <= 0){
+                        $detalleevaluacionlogro = new DetalleLogroEvaluacion();
+                        $detalleevaluacionlogro->IdLogro = $value;
+                        $detalleevaluacionlogro->IdEvaluacion = $mi_id;
+                        $detalleevaluacionlogro->save();                               
+                    }                                   
+                    $guardar = true;                                     
+                }
+
+                if($guardar == true){
+                    return response()->json(['status'=>'success','message' => 'La asignación de logros se realizo satisfactoriamente']);                           
+                }else{
+                    return response()->json(['status'=>'error','message' => 'Ocurrio un error con tu asignacion de logros a la evaluación, recarga la pagina y vuelve a intentarlo']);                           
+                }
+            }else{
+                return response()->json(['status'=>'error','message' => 'Esta asignatura no tiene un docente asignado, por favor dirigete a la opcion docente y asignele esta asignatura a un maestro']);                           
+            }
+        }catch(\Exception $e){
+            return response()->json([$e->getMessage()]);        
+        }
+    }
+
     public function create()
     {
         //

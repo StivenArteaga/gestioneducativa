@@ -35,20 +35,27 @@ class GradoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        
+    {        
         if ($request['IdGrado'] != 0) {
             $this->update($request, $request['IdGrado']);
             return redirect()->route('grado.index')->with('success','El grado se actualizo con exito');
         } else {                        
 
             $grados = request()->validate([
-                'NombreGrado'=>'required|unique:grados,NombreGrado|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/',               
+                'NombreGrado'=>'required|regex:/^[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z]*)*[0-9-a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',               
                 'EstadoGrado'=>'required|int'           
             ]);
             
-            Grado::create($request->all());
-            return redirect()->route('grado.index')->with('success','El grado se registro con exito');  
+            $existe = Grado::where('NombreGrado', '=', $request['NombreGrado'])
+            ->where('EstadoGrado', '=', true)
+            ->first();
+
+            if($existe != null){
+                return redirect()->route('grado.index')->with('errors','Este grado ya se encuentra registrado');                                                                 
+            }else{
+                Grado::create($request->all());
+                return redirect()->route('grado.index')->with('success','El grado se registro con exito');     
+            }            
         }  
     }
 
@@ -85,7 +92,7 @@ class GradoController extends Controller
     public function update(Request $request, $id)
     {
         $grados = request()->validate([
-            'NombreGrado'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|unique:grados,NombreGrado,'.$id.',IdGrado',
+            'NombreGrado'=>'required|regex:/^[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z]*)*[0-9-a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:grados,NombreGrado,'.$id.',IdGrado,EstadoGrado,'.true,
             'EstadoGrado'=>'required|int'           
         ]);
 
