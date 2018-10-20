@@ -11,4 +11,9 @@ class Municipio extends Model
     protected $fillable=['NombreMunicipio'];
 
     public $timestamps = false;
+
+    public static function municipios($id) 
+    {
+        return Municipio::where('IdMunicipio', $id)->get();        
+    }
 }

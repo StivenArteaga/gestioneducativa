@@ -20,11 +20,11 @@
             <div class="col-12">
               <div class="card">
                 <div class="card-header">
-                  @if(Auth::user()->IdTipoUsuario == 1 || Auth::user()->IdTipoUsuario == 3)
+                  {{-- @if(Auth::user()->IdTipoUsuario == 1 || Auth::user()->IdTipoUsuario == 3) --}}
                   <button class="btn btn-success">
                      <a data-toggle="modal" data-target=".bd-example-modal-lg" onclick="AsignaNumerAuto()">Nuevo alumno</a>
                   </button>
-                  @endif
+                  {{-- @endif --}}
                   
                   <div class="text-center">
                     <h1 class="card-title">Listado de alumnos</h1>
@@ -178,7 +178,7 @@
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput6">Departamento expedición *</label>
                                 <div class="col-md-9">                                                        
-                                  <select class="form-control m-bot15" id="DeparExpAlum" name="IdDepartamento">
+                                  <select class="form-control m-bot15 dpto" id="DeparExpAlum" name="IdDepartamento">
                                   @if ($departamentos->count())
                                           <option class="hidden">Selecciona una opción</option>
                                       @foreach($departamentos as $departamento)
@@ -191,13 +191,7 @@
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput6">Municipio expedición *</label>
                                 <div class="col-md-9">                                                        
-                                  <select class="form-control m-bot15"  id="IdMunicipioExpedido" name="IdMunicipioExpedido">
-                                  @if ($municipios->count())
-                                          <option class="hidden">Selecciona una opción</option>
-                                      @foreach($municipios as $municipio)
-                                          <option value="{{ $municipio->IdMunicipio }}">{{ $municipio->NombreMunicipio }}</option>
-                                      @endforeach
-                                    @endif
+                                  <select class="form-control m-bot15 mpio"  id="IdMunicipioExpedido" name="IdMunicipioExpedido">
                                   </select>
                                 </div>
                               </div>
@@ -242,12 +236,6 @@
                                 <label class="col-md-3 label-control" for="projectinput6">Ciudad nacimiento *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15" id="CiudNaciAlum" name="IdCiudadNacimiento">
-                                  @if ($ciudades->count())
-                                          <option class="hidden">Selecciona una opción</option>
-                                      @foreach($ciudades as $ciudade)
-                                          <option value="{{ $ciudade->IdCiudad }}">{{ $ciudade->NombreCiudad }}</option>
-                                      @endforeach
-                                    @endif
                                   </select>
                                 </div>
                               </div>
@@ -276,7 +264,7 @@
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput6">Departamento residencia *</label>
                                 <div class="col-md-9">                                                        
-                                  <select class="form-control m-bot15" id="DeparResidAlum" name="IdDepartamento">
+                                  <select class="form-control m-bot15 dpto" id="DeparResidAlum" name="IdDepartamento">
                                   @if ($departamentos->count())
                                           <option class="hidden">Selecciona una opción</option>
                                       @foreach($departamentos as $departamento)

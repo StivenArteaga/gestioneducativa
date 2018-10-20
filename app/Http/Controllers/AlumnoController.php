@@ -154,7 +154,6 @@ class AlumnoController extends Controller
             'Telefono'=> 'required|max:50',   
             'EstadoAlumno'=>'required|int'         
         ]);
-        
 
         $existe = Alumno::where('NumeroDocumento', '=', $request['NumeroDocumento'])
                               ->where('EstadoAlumno', '=', true)
@@ -506,12 +505,23 @@ class AlumnoController extends Controller
             
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function getCiudad(Request $request, $id)
+    {
+        if ($request->ajax()) {
+        $ciudades = Ciudad::ciudades($id);
+        return response()->json($ciudades);
+        }
+    }
+
+    public function getMunicipio(Request $request, $id)
+    {
+        if ($request->ajax()) {
+        $municipios = Municipio::municipios($id);
+        return response()->json($municipios);
+        }
+    }
+
+
     public function destroy($id)
     {          
         $user = Alumno::findOrfail($id);
