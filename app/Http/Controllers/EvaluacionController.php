@@ -36,11 +36,12 @@ class EvaluacionController extends Controller
 
     public function listasig($id)
     {
-        $asignaturas = Asignatura::join('detallegruposasignaturas', 'asignaturas.IdAsignatura', '=', 'detallegruposasignaturas.IdAsignatura')
-                                 ->join('grupos', 'detallegruposasignaturas.IdGrupo', '=', 'grupos.IdGrupo')                                 
-                                 ->where('EstadoAsignatura', true)
+        $asignaturas = Asignatura::join('detalletipogrupoasignaturas', 'asignaturas.IdAsignatura', '=', 'detalletipogrupoasignaturas.IdAsignaturaDetalleTipoGrupoAsignatura')
+                                 ->join('tipogrupos', 'detalletipogrupoasignaturas.IdTipoGrupoDetalleTipoGrupoAsignatura', '=', 'tipogrupos.IdTipoGrupo')
+                                 ->join('grupos', 'tipogrupos.IdTipoGrupo', '=', 'grupos.IdTipoGrupo')                                 
+                                 ->where('asignaturas.EstadoAsignatura', true)
                                  ->where('grupos.IdGrado', '=', $id)
-                                 ->where('EstadoGrupo', true)
+                                 ->where('grupos.EstadoGrupo', true)
                                  ->select('asignaturas.*','grupos.IdGrupo')
                                  ->getQuery()
                                  ->distinct()
@@ -178,25 +179,51 @@ class EvaluacionController extends Controller
             $evaluacion = Evaluacion::where('IdAsignatura', '=', $IdAsignatura)
                                    ->where('IdAlumno', '=', $IdAlumno)
                                    ->get();
-                                   
+                    
             $dteval = $evaluacion->last();                       
             
-            $logros = Logro::join('asignaturas','logros.IdAsignatura', '=', 'asignaturas.IdAsignatura')
-                           ->join('maestros','asignaturas.IdAsignatura', '=', 'maestros.IdAsignatura' )
-                           ->where('logros.IdAsignatura', '=', $IdAsignatura)
-                           ->where('logros.IdPeriodo','=',$dteval['IdPeriodo'])
-                           ->select('logros.*', 'maestros.*')
-                           ->get();
+            if($dteval != null){                
+                $logros = Logro::join('asignaturas','logros.IdAsignatura', '=', 'asignaturas.IdAsignatura')
+                                ->join('periodos','logros.IdPeriodo','=','periodos.IdPeriodo')
+                                ->join('detalleasignaturadocente', 'asignaturas.IdAsignatura', '=', 'detalleasignaturadocente.IdAsignaturaDetalleAsignaturaDocente')
+                                ->join('maestros','detalleasignaturadocente.IdDocenteDetalleAsignaturaDocente', '=', 'maestros.IdMaestro' )
+                                ->where('logros.IdAsignatura', '=', $IdAsignatura)
+                                ->where('logros.IdPeriodo','=',$dteval['IdPeriodo'])
+                                ->select('logros.*', 'maestros.*','periodos.*','asignaturas.*')
+                                ->get();
+                 
 
-            foreach ($logros as $key => $value) {
-                $value['EstadoLogro'] = $dteval['IdEvaluacion'];
-            }
-
-            if(count($logros) > 0) {
-                return response()->json(['status'=>'success','logros'=>$logros]);
+                foreach ($logros as $key => $value) {
+                    $value['EstadoLogro'] = $dteval['IdEvaluacion'];
+                }
+                
+                if(count($logros) > 0) {
+                    return response()->json(['status'=>'success','logros'=>$logros]);
+                }else{
+                    return response()->json(['status'=>'error','message' => 'Esta asignatura no tiene logros asignados en este periodo o la asignatura no esa ligada a un docente, por favor dirigete a la opcion logros y asignele a esta asignatura un logro para el periodo actual','logros'=>$logros]);           
+                }
             }else{
-                return response()->json(['status'=>'error','message' => 'Esta asignatura no tiene un docente asignado, por favor dirigete a la opcion docente y asignele esta asignatura a un maestro']);           
-            }
+                
+                $logros = Logro::join('asignaturas','logros.IdAsignatura', '=', 'asignaturas.IdAsignatura')
+                        ->join('periodos','logros.IdPeriodo','=','periodos.IdPeriodo')
+                        ->join('detalleasignaturadocente', 'asignaturas.IdAsignatura', '=', 'detalleasignaturadocente.IdAsignaturaDetalleAsignaturaDocente')
+                        ->join('maestros','detalleasignaturadocente.IdDocenteDetalleAsignaturaDocente', '=', 'maestros.IdMaestro' )
+                        ->where('logros.IdAsignatura', '=', $IdAsignatura)
+                        ->where('logros.IdPeriodo','=',1)
+                        ->where('logros.EstadoLogro','=', true)
+                        ->select('logros.*', 'maestros.*','periodos.*','asignaturas.*')
+                        ->get();
+
+                        foreach ($logros as $key => $value) {
+                            $value['EstadoLogro'] = $dteval['IdEvaluacion'];
+                        }
+                
+                if(count($logros) > 0) {
+                    return response()->json(['status'=>'success','logros'=>$logros]);
+                }else{
+                    return response()->json(['status'=>'error','message' => 'Esta asignatura no tiene logros asignado en este periodo o no le has asignado un docente  a esta asignatura, por favor dirigete a la opcion asignatura y asignele logros a esta asignatura','logros'=>$logros]);           
+                }        
+            }            
         }catch(\Exception $e){
             return response()->json([$e->getMessage()]);        
         }

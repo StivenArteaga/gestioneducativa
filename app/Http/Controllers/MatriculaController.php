@@ -88,7 +88,7 @@ class MatriculaController extends Controller
         $academica = Academica::where('IdAlumno', '=', $matri['IdAlumno'])->firstOrFail();
         $academica->IdGrado = $request['IdGradoName'];        
         $academica->valorMatricula = $request['valorMatricula'];      
-        $academica->save();
+        $academica->save(); 
 
         return redirect()->route('matricula.index')->with('success','La matricula del alumno se actualizo con exito');
     }

@@ -440,6 +440,7 @@
             <li><a class="menu-item" href="{{ route('jornadas') }}" data-i18n="nav.templates.horz.classic">Jornadas</a>
             <li><a class="menu-item" href="{{ route('grados') }}" data-i18n="nav.templates.horz.classic">Grados</a>
             <li><a class="menu-item" href="{{ route('sedes') }}" data-i18n="nav.templates.horz.classic">Sedes</a>
+            <li><a class="menu-item" href="{{ route('tgrupos') }}" data-i18n="nav.templates.horz.classic">Tipo Grupo</a>
           </ul>
         </li>        
         <li class="nav-item hidden"><a href="{{ route('main') }}"><i class="la la-key"></i><span class="menu-title" data-i18n="nav.templates.main">Administración</span></a>

@@ -186,9 +186,9 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>          
         </div>
         <div style="">
-            <h4>Maestro: {{$maestro}} </h4>
-            <h4>Periodo: {{$periodoactual}}</h4>
-            <h4>Asignatura: {{$asignaturalogro}}</h4>
+            <h4>Maestro:  <label id="NombreMaestroEvaluador"></label></h4>
+            <h4>Periodo:  <label id="PeriodoActual"></label></h4>
+            <h4>Asignatura: <label id="AsignaturaEvaluada"></label></h4>
         </div>
         <div id="data3"></div>
         <!-- Modal body -->
@@ -357,6 +357,8 @@ function listalogro(IdAsignatura, IdAlumno)
                "<tr>";               
             })
             $("#IdBodyLogroEvaluacion").html(valor8); 
+
+            $("#NombreMaestroEvaluador").val();
         }else{
           swal({
                 type:'error',
@@ -365,8 +367,19 @@ function listalogro(IdAsignatura, IdAlumno)
                 customClass: 'animated tada',
                 text: data.message
               });                                                           
-        }
-        
+
+              var valor8 = ''
+          var i=0;
+            data.logros.forEach(data => {              
+              valor8 += "<tr>"+    
+               "<td class='hidden'>"+ data.IdLogro+ "</td>"+               
+               "<td class='hidden'>"+ data.EstadoLogro+ "</td>"+     
+               "<td>" + "<input type='checkbox' name="+data.IdLogro+" id='acheckbox' class='form-check-input check'></input>" + "</td>" +  
+               "<td>" + data.DescripcionLogro + "</td>"+                              
+               "<tr>";               
+            })
+            $("#IdBodyLogroEvaluacion").html(valor8);             
+        }        
       }else{
         alert('Error al cargar los logros que estan asociada a esta asignatura o periodo. Ho no tiene registros asociados');
       }
@@ -376,7 +389,7 @@ function listalogro(IdAsignatura, IdAlumno)
 function SelectLogro(){
   debugger;    
     SelectLogros();
-}
+} 
 
 function SelectLogros(){
   debugger;

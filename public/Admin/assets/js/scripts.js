@@ -13,7 +13,7 @@ $(".dpto").change(event => {
     });
 });
 
-$(".dpto").change(event => {
+$(".dpto").change(event => { 
     $.get(`/alumnos/municipios/${event.target.value}`, function(res, sta) {
         $(".mpio").empty();
         $(".mpio").append(`<option hidden value="">Seleccionar Municipio </option>`);
@@ -140,25 +140,43 @@ function MostrarArea(id) {
 
 function MostrarMaestro(id) {
     $.get('updmae/updmae/' + id, function(data) {
-        if (data != null) {
-            $("#IdAsignatura").val(data.IdAsignatura);
-            $("#PNombreMaes").val(data.PrimerNombreMaes);
-            $("#SNombreMaes").val(data.SegundoNombreMaes);
-            $("#PApellidoMaes").val(data.PrimerApellidoMaes);
-            $("#SApellidoMaes").val(data.SegundoApellidoMaes);
-            $("#IdTipoDocumentoMaes").val(data.IdTipoDocumento);
-            $("#NumeDocumenMaes").val(data.NumeroDocumento);
-            $("#FechaNaciMaes").val(data.FechaNacimiento);
-            $("#IdGeneroMaes").val(data.IdGenero);
-            $("#IdTipoSangMaes").val(data.IdTipoSangre);
-            $("#CorreoMaes").val(data.Correo);
-            $("#DireccionMaes").val(data.Direccion);
-            $("#NumerContactMaes").val(data.Telefono);
-            $("#IdCiudadOrigMaes").val(data.IdCiudad);
-            $("#EspeciaMaes").val(data.Especializacion);
-            $("#EscalafonMaes").val(data.Escalafon);
-            $("#CoordinadorMaes").val(data.Coordinador);
-            $("#IdMaestro").val(data.IdMaestro);
+        if (data != null) {            
+            $("#PNombreMaes").val(data.maestros.PrimerNombreMaes);
+            $("#SNombreMaes").val(data.maestros.SegundoNombreMaes);
+            $("#PApellidoMaes").val(data.maestros.PrimerApellidoMaes);
+            $("#SApellidoMaes").val(data.maestros.SegundoApellidoMaes);
+            $("#IdTipoDocumentoMaes").val(data.maestros.IdTipoDocumento);
+            $("#NumeDocumenMaes").val(data.maestros.NumeroDocumento);
+            $("#FechaNaciMaes").val(data.maestros.FechaNacimiento);
+            $("#IdGeneroMaes").val(data.maestros.IdGenero);
+            $("#IdTipoSangMaes").val(data.maestros.IdTipoSangre);
+            $("#CorreoMaes").val(data.maestros.Correo);
+            $("#DireccionMaes").val(data.maestros.Direccion);
+            $("#NumerContactMaes").val(data.maestros.Telefono);
+            $("#IdCiudadOrigMaes").val(data.maestros.IdCiudad);
+            $("#EspeciaMaes").val(data.maestros.Especializacion);
+            $("#EscalafonMaes").val(data.maestros.Escalafon);
+            $("#CoordinadorMaes").val(data.maestros.Coordinador);
+            $("#IdMaestro").val(data.maestros.IdMaestro);
+
+            $('#TAsign1 td').each(function() {
+                //console.log(index)
+                var valores = '';
+                valores = $(this).parents("tr").find("td").eq(0).html();
+                //console.log(data.Asignaturas.IdAsignatura,valores );
+
+                data.asignaturas.forEach(function(e) {
+                    var parametro = $("input[name='checkAignatura']");
+                    for (let index = 0; index < parametro.length; index++) {
+                        if (e.IdAsignaturaDetalleAsignaturaDocente == valores) {
+                            $('#checkAignatura_' + e.IdAsignaturaDetalleAsignaturaDocente).attr('checked', true);
+                            break;
+                        }
+                    }
+                });
+
+            });
+            SelectAsig3();
         } else {
             alert('Error al cargar los datos, verifica el proceso de editar');
         }
@@ -247,7 +265,7 @@ function MostrarAula(id) {
 function MostrarGrupo(id) {
     $.get('updgrup/updgrup/' + id, function(data) {
         if (data != null) {
-
+            $("#IdTipoGrupo").val(data.grupos.IdTipoGrupo);
             $("#IdGrupo").val(data.grupos.IdGrupo);
             $("#IdTipoCalendario").val(data.grupos.IdTipoCalendario);
             $("#IdSalon").val(data.grupos.IdSalon);
@@ -257,7 +275,7 @@ function MostrarGrupo(id) {
             $select.trigger('change');
             listarAlum();
 
-            $('#TAsign td').each(function() {
+           /* $('#TAsign td').each(function() {
                 //console.log(index)
                 var valores = '';
                 valores = $(this).parents("tr").find("td").eq(0).html();
@@ -273,9 +291,9 @@ function MostrarGrupo(id) {
                     }
                 });
 
-            });
+            });            
+            SelectAsig();*/
             SelectAlum();
-            SelectAsig();
         } else {
             alert('Error al cargar los datos, verifica el proceso de editar');
         }
@@ -493,4 +511,58 @@ function evalAumno(IdAsignatura, IdAlumno, IdPeriodo) {
             }
         });
     }
+}
+
+
+function SelectAsig3() {
+    $("#TAsign1 input:checkbox:checked").each(function() {
+        var selectedAsig = new Array();
+        selectedAsig.push($(this).parent().parent().find('td').eq(0).html());
+        $("#datasig1").append(
+            '<input type="hidden" name="IdAsignatura[]" value="' + selectedAsig + '">'
+        )
+    });
+}
+
+
+function SelectAsig2() {
+    $("#datasig1").empty();
+    console.log($('#datasig1').val());
+    SelectAsig3();
+}
+
+
+
+function MostrarTipoGrupo(id) {
+    $.get('updtipgrup/updtipgrup/' + id, function(data) {
+        if (data != null) {
+
+            $("#IdTipoGrupo").val(data.tipogrupo.IdTipoGrupo);
+            $("#NombreTipoGrupo").val(data.tipogrupo.NombreTipoGrupo);
+            $("#EstadoTipoGrupo").val(data.tipogrupo.EstadoTipoGrupo);
+
+
+            $('#TAsign td').each(function() {
+                //console.log(index)
+                var valores = '';
+                valores = $(this).parents("tr").find("td").eq(0).html();
+                //console.log(data.Asignaturas.IdAsignatura,valores );
+
+                data.asignaturas.forEach(function(e) {
+                    var parametro = $("input[name='checkAignatura']");
+                    for (let index = 0; index < parametro.length; index++) {
+                        if (e.IdAsignaturaDetalleTipoGrupoAsignatura == valores) {
+                            $('#checkAignatura_' + e.IdAsignaturaDetalleTipoGrupoAsignatura).attr('checked', true);
+                            break;
+                        }
+                    }
+                });
+
+            });
+
+            SelectAsig();
+        } else {
+            alert('Error al cargar los datos, verifica el proceso de editar');
+        }
+    });
 }

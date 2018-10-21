@@ -46,7 +46,7 @@ class AlumnoController extends Controller
        $tipovictimas = TipoVictima::all();
        $resguardos = Resguardo::all();
        $etnias = Etnia::all();
-       $parentescos = Paretesco::all();
+       $parentescos = Paretesco::all(); 
        $tipoacudiente = TipoAcudiente::all();
 
        $grados = Grado::where('EstadoGrado','=', true)->get();
@@ -72,7 +72,8 @@ class AlumnoController extends Controller
         return response()->json(['codigo'=>$numCodigo, 'numMatricula'=>$numMatricula]);
     }
 
-    public function listalum($IdGrado){
+    public function listalum($IdGrado)
+    {
         
         $infoacad = Academica::where('IdGrado', '=', $IdGrado)->get();
         $fininfo = $infoacad->last();
@@ -158,7 +159,7 @@ class AlumnoController extends Controller
         $existe = Alumno::where('NumeroDocumento', '=', $request['NumeroDocumento'])
                               ->where('EstadoAlumno', '=', true)
                               ->first();
-                                                            
+                                                             
             if($existe != null){
                 return redirect()->route('alumno.index')->with('errors','El documento de este alumno ya se encuentra registrado en el sistema');                                                                 
             }else{
@@ -189,7 +190,8 @@ class AlumnoController extends Controller
                         'IdParentesco'=> 'required|int', 
                         'TelefonoCelular'=> 'required|required|string|max:50',
                         'NumeroDocumentoAcu'=> 'required|max:12|regex:/^[0-9]+$/', 
-                        'CorreoAcu'=> 'required' 
+                        'CorreoAcu'=> 'required',
+                        'IdTipoAcudiente'=>'required|int'
                     ]);
             
                     $academica = request()->validate([

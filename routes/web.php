@@ -142,7 +142,17 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('listalog/listalog/{id}/{idalumno}', 'EvaluacionController@listalog');
 
     Route::get('savelog/savelog/{resquest}/{id}', 'EvaluacionController@savelog');
+
+
+
+    Route::get('tgrupos', 'TipoGrupoController@index')->name('tgrupos');
+
+    Route::get('updtipgrup/updtipgrup/{id}', 'TipoGrupoController@updtipgrup');
+
+    Route::resource('tgrupo', 'TipoGrupoController');
+
 });
+
 
 
 

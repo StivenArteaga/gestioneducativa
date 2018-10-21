@@ -9,20 +9,10 @@
   </div>
 @endif
 
-@if ($message = Session::get('danger'))
+@if ($message = Session::get('errors'))
   <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
     <p>{{ $message }}</p>
   </div>
-@endif
-
-
-@if(count($errors) > 0)
-    <div class="alert alerrt">  
-        <strong>Whoooops!!</strong> ha ocurrido un error con tu registro.<br>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </div>
 @endif
 
 
@@ -105,6 +95,19 @@
                     <form class="form form-horizontal row-separator">
                         <div class="form-body">
                             <h4 class="form-section"><i class="la la-user"></i> Información de grupo</h4>
+                              <div class="form-group row">
+                                  <label class="col-md-3 label-control" for="projectinput6">Tipo de grupo *</label>
+                                    <div class="col-md-9">                                                        
+                                      <select class="form-control m-bot15" id="IdTipoGrupo" name="IdTipoGrupo">
+                                      @if($tipogrupos->count())
+                                        <option class="hidden">Selecciona una opción</option>
+                                      @foreach($tipogrupos as $tipogrupo)
+                                        <option value="{{ $tipogrupo->IdTipoGrupo }}">{{ $tipogrupo->NombreTipoGrupo }}</option>
+                                      @endforeach
+                                    @endif 
+                                      </select>
+                                    </div>
+                                  </div>
                                <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput6">Tipo Calendario *</label>
                                   <div class="col-md-9">                                                        
@@ -158,7 +161,7 @@
                                   </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 label-control" for="projectinput1">Selección de alumnos *</label>
+                                    <label class="col-md-3 label-control" for="projectinput1">Lista de alumnos por grado</label>
                                         <div class="col-md-9">                                            
                                             <input type="text" class="hidden">
                                             <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#listaAlumnos" ><i class="far fa-eye"></i></button>                                            
@@ -167,19 +170,16 @@
                                                 {!! Form::text('FechaGrupo', null, ['class'=>'hidden']) !!}
                                             </div>
                                         </div>                                         
-                                </div> 
-                                <div id="data">
-                                </div>    
-                                <div id="data1">
+                                </div>                                
                                 </div>                                                            
-                                <div class="form-group row">
+                                <!--<div class="form-group row">
                                     <label class="col-md-3 label-control" for="projectinput1">Selección de asignaturas *</label>
                                         <div class="col-md-9">                                            
                                             <input type="text" class="hidden">                                                                     
                                             <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#listaAsignaturas"><i class="far fa-eye"></i></button>
                                             </div>
                                         </div>                                         
-                                </div>                
+                                </div>-->
                             <div class="form-actions"> 
                                 <a href="{{ route('grupos') }}" class="btn btn-warning mr-1">
                                     <i class="la la-remove"></i> Cancelar
@@ -282,7 +282,7 @@
                         </tr>
                       </thead>
                       <tbody id="TAsign">                     
-                      @foreach($asignaturas as $asignatura)
+                      @foreach($asignaturas as $asignatura) 
                             <tr>                                
                                 <td class="hidden">{{ $asignatura->IdAsignatura }}</td>
                                 <td><input type="checkbox" class="form-check-input" value="{{ $asignatura->IdAsignatura }}" name="checkAignatura" id="checkAignatura_{{$asignatura->IdAsignatura}}"></td>

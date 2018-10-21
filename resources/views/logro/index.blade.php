@@ -42,8 +42,8 @@
                     <table class="table table-striped table-bordered dom-jQuery-events">
                       <thead>
                         <tr>                          
-                          <th>Nombre materia</th>
-                          <td>Periodo</td>
+                          <th>Nombre asignatura</th> 
+                          <th>Periodo</th>
                           <th>Descripción</th>
                           <th with="300px">Acción</th>
                         </tr>
@@ -65,8 +65,8 @@
                       </tbody>
                       <tfoot>
                         <tr>                        
-                          <th>Nombre materia</th>
-                          <td>Periodo</td>
+                          <th>Nombre asignatura</th>
+                          <th>Periodo</th>
                           <th>Descripción</th>
                           <th>Acción</th>
                         </tr>

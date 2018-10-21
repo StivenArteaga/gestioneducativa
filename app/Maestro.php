@@ -10,8 +10,8 @@ class Maestro extends Model
     protected $primaryKey ='IdMaestro';
     protected $fillable=['PrimerNombreMaes', 'SegundoNombreMaes','PrimerApellidoMaes', 'SegundoApellidoMaes', 
                         'IdTipoDocumento','NumeroDocumento','FechaNacimiento', 'IdGenero','IdTipoSangre', 'Correo',
-                        'Direccion', 'Telefono', 'IdCiudad', 'Especializacion', 'Escalafon', 'Coordinador','EstadoMaestro',
-                        'IdAsignatura'];
+                        'Direccion', 'Telefono', 'IdCiudad', 'Especializacion', 'Escalafon', 'Coordinador','EstadoMaestro'
+                        ];
 
     public $timestamps = false;
 }

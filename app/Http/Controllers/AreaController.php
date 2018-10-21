@@ -130,6 +130,6 @@ class AreaController extends Controller
         $area->EstadoArea = false;
         $area->save();
        }
-        return redirect()->route('area.index')->with('success','El area fue elimino con exito ');
+        return redirect()->route('area.index')->with('success','El area fue eliminada con exito ');
     }
 }

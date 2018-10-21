@@ -187,11 +187,17 @@
                                     @endif
                                   </select>
                                 </div>
-                              </div>
+                              </div> 
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput6">Municipio expedición *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15 mpio"  id="IdMunicipioExpedido" name="IdMunicipioExpedido">
+                                  @if ($municipios->count())
+                                          <option class="hidden">Selecciona una opción</option>
+                                      @foreach($municipios as $municipio)
+                                          <option value="{{ $municipio->IdMunicipio }}">{{ $municipio->NombreMunicipio }}</option>
+                                      @endforeach
+                                    @endif
                                   </select>
                                 </div>
                               </div>
@@ -236,6 +242,12 @@
                                 <label class="col-md-3 label-control" for="projectinput6">Ciudad nacimiento *</label>
                                 <div class="col-md-9">                                                        
                                   <select class="form-control m-bot15" id="CiudNaciAlum" name="IdCiudadNacimiento">
+                                  @if ($ciudades->count())
+                                          <option class="hidden">Selecciona una opción</option>
+                                      @foreach($ciudades as $ciudad)
+                                          <option value="{{ $ciudad->IdCiudad }}">{{ $ciudad->NombreCiudad }}</option>
+                                      @endforeach
+                                    @endif
                                   </select>
                                 </div>
                               </div>

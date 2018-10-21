@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Grupo;
 use App\Salon;
 use App\Grado;
@@ -12,6 +13,7 @@ use App\DetalleAsignaturaGrupo;
 use App\Asignatura;
 use App\TipoCalendario;
 use App\Academica;
+use App\TipoGrupo;
 
 class GrupoController extends Controller
 {
@@ -36,8 +38,9 @@ class GrupoController extends Controller
         $alumnos = Alumno::where('EstadoAlumno', true)->get();
         $tipocalendarios = TipoCalendario::where('EstadoCalendario', true)->get();
         $asignaturas = Asignatura::where('EstadoAsignatura', true)->get();
+        $tipogrupos = TipoGrupo::where('EstadoTipoGrupo', '=', true)->get();
 
-        return view('grupo.index', compact('grupos', 'salones', 'grados', 'jornadas', 'alumnos', 'tipocalendarios','asignaturas'));
+        return view('grupo.index', compact('grupos', 'salones', 'grados', 'jornadas', 'alumnos', 'tipocalendarios','asignaturas','tipogrupos'));
     }
 
     /**
@@ -65,8 +68,7 @@ class GrupoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {      
-        if ($request['IdAsignatura']!= null) {
+    {                      
             if ($request['IdGrupo'] != 0) {
                 $this->update($request, $request['IdGrupo']);
                 return redirect()->route('grupo.index')->with('success','La actualización del grupo se realizo con exito');
@@ -74,6 +76,7 @@ class GrupoController extends Controller
         
                 $request['FechaGrupo'] = date('Y-m-d H:i:s');
                 request()->validate([
+                    'IdTipoGrupo'=>'required|int',
                     'IdTipoCalendario'=>'required|int',
                     'IdSalon'=>'required|int',
                     'IdGrado'=>'required|int',
@@ -87,7 +90,8 @@ class GrupoController extends Controller
                     'IdGrado',
                     'IdJornada',
                     'FechaGrupo',
-                    'EstadoGrupo'
+                    'EstadoGrupo',
+                    'IdTipoGrupo'
                 ]);
 
                 $grupoexiste =  Grupo::where('IdGrado', '=',$request['IdGrado'])
@@ -97,67 +101,48 @@ class GrupoController extends Controller
                                  ->first();
                 
                 if (isset($grupoexiste) == false) {
-
-                    $cuposalon = Grupo::join('jornadas', 'grupos.IdJornada', '=', 'jornadas.IdJornada')  
-                                        ->join('salones', 'grupos.IdSalon', '=', 'salones.IdSalon')
-                                        ->join('detallegruposasignaturas', 'detallegruposasignaturas.IdGrupo', '=', 'grupos.IdGrupo')
-                                        ->join('asignaturas', 'detallegruposasignaturas.IdAsignatura', '=', 'asignaturas.IdAsignatura')
+                    
+                    $cuposalon = Grupo::join('jornadas', 'grupos.IdJornada', '=', 'jornadas.IdJornada')                                          
+                                        ->join('tipogrupos', 'tipogrupos.IdTipoGrupo', '=', 'grupos.IdTipoGrupo')
+                                        ->join('detalletipogrupoasignaturas', 'tipogrupos.IdTipoGrupo', '=', 'detalletipogrupoasignaturas.IdTipoGrupoDetalleTipoGrupoAsignatura')
+                                        ->join('asignaturas', 'detalletipogrupoasignaturas.IdAsignaturaDetalleTipoGrupoAsignatura', '=', 'asignaturas.IdAsignatura')
                                         ->where('grupos.IdSalon', '=', $request['IdSalon'])
                                         ->where('grupos.IdJornada', '=', $request['IdJornada'])
+                                        ->where('grupos.EstadoGrupo', '=', true)
                                         ->select('jornadas.*', 'asignaturas.*')
                                         ->get();
-                    
+                                        
                     if(isset($cuposalon)){
-                            /*$horas =0;
+                        //Validar que un aula no se le asigne mas grupos si esta ya cumple su jornada completa
+                        //En evaluación organizar las consultas y eliminar la tabla detallegruposasignaturas
+                            $horas =0;
                             $jornada;
+                            $totalhora =0;
 
                             foreach ($cuposalon as $key => $value) {
+                                
                                 $horas = $horas + $value['Intensidad'];
-                                $horainicio = (new Carbon($value['HoraInicio']))->format('h');
-                                $horafin = (new Carbon($value['HoraFin']))->format('h');
-                                    
-                            }*/
-
-                            Grupo::create($grupos);
-                            $All = Grupo::all();
-                            $IdGrup =$All->last();            
-        
-                            foreach ($request['IdAsignatura'] as $key => $value) {                                
-                                $detall = ([
-                                    'IdGrupo',
-                                    'IdAsignatura'
-                                ]);       
-                                $detall['IdGrupo'] = $IdGrup['IdGrupo'];
-                                $detall['IdAsignatura'] = $value;
-                                DetalleAsignaturaGrupo::create($detall);
-                            }            
-        
-                            return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
-
-                    }else{
-                        Grupo::create($grupos);
-                        $All = Grupo::all();
-                        $IdGrup =$All->last();            
-    
-                        foreach ($request['IdAsignatura'] as $key => $value) {                                
-                            $detall = ([
-                                'IdGrupo',
-                                'IdAsignatura'
-                            ]);       
-                            $detall['IdGrupo'] = $IdGrup['IdGrupo'];
-                            $detall['IdAsignatura'] = $value;
-                            DetalleAsignaturaGrupo::create($detall);
-                        }            
-    
+                                $horainicio = (new Carbon($value['HoraInicio']))->format('H');
+                                $horafin = (new Carbon($value['HoraFin']))->format('H');
+                                
+                                $totalhora += abs($horainicio-$horafin);
+                                
+                            }
+                            
+                            if($totalhora >= $horas){
+                                return redirect()->route('grupo.index')->with('errors','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
+                            }else{
+                                Grupo::create($grupos);                                    
+                                return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
+                            }
+                    }else{                        
+                        Grupo::create($grupos);                            
                         return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
                     }
                 } else {
-                    return redirect()->route('grupo.index')->with('danger','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo con el mismo calendario y la misma jornada');    
+                    return redirect()->route('grupo.index')->with('errors','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo con el mismo calendario y la misma jornada');    
                 }                       
-            }
-        } else {
-                return redirect()->route('grupo.index')->with('danger','Las asignaturas no cumplen con el horario de la jornada');    
-        } 
+            }        
     }
 
     /**
@@ -179,16 +164,14 @@ class GrupoController extends Controller
      */
     public function edit($id)
     {
-        $grupos = Grupo::findOrFail($id);                        
-        $IdGrupo = $grupos['IdGrupo'];        
-        $Asignaturas = DetalleAsignaturaGrupo::where('IdGrupo', '=', $IdGrupo)->get()->toArray(); 
+        $grupos = Grupo::findOrFail($id);                                
         $alumnos =  Alumno::join('informacionesacademicas', 'alumnos.IdAlumno', '=', 'informacionesacademicas.IdAlumno')
                           ->where('informacionesacademicas.IdGrado', '=', $grupos['IdGrado'])
                           ->select('Alumnos.*')
                           ->distinct()
                           ->get(['informacionesacademicas.IdAlumno']);
 
-        return response()->json(['grupos'=>$grupos, 'Asignaturas'=>$Asignaturas, 'alumnos'=>$alumnos]);
+        return response()->json(['grupos'=>$grupos,'alumnos'=>$alumnos]);
     }
 
     /**
@@ -201,18 +184,17 @@ class GrupoController extends Controller
     public function update(Request $request, $id)
     {
         request()->validate([
+            'IdTipoGrupo'=>'required|int',
             'IdTipoCalendario'=>'required|int',
             'IdSalon'=>'required|int',
             'IdGrado'=>'required|int',
             'IdJornada'=>'required|int',
             'EstadoGrupo'=>'required|int'                                      
-        ]); 
-
-        if ($request['IdAsignatura'] != null) {
-            
+        ]);     
             $request['FechaGrupo'] = date('Y-m-d H:i:s');                   
             
             $grupos = request([
+                'IdTipoGrupo',
                 'IdTipoCalendario',
                 'IdSalon',
                 'IdGrado',
@@ -230,68 +212,30 @@ class GrupoController extends Controller
             if (isset($grupExi)) {
                 
                 $gGrup = Grupo::findOrFail($id);
+                $gGrup->IdTipoGrupo = $grupos['IdTipoGrupo'];
                 $gGrup->IdSalon = $grupos['IdSalon'];
                 $gGrup->IdGrado = $grupos['IdGrado'];
                 $gGrup->IdJornada = $grupos['IdJornada'];
                 $gGrup->IdTipoCalendario = $grupos['IdTipoCalendario'];
                 $gGrup->save();
-    
-                $IdGrupo = Grupo::findOrFail($id);                    
-                $DeleteAsig = DetalleAsignaturaGrupo::where('IdGrupo', '=', $id)->get()->toArray(); 
-                
-                foreach ($DeleteAsig as $key => $value) {
-                    $elim = DetalleAsignaturaGrupo::where('IdGrupo','=',$value['IdGrupo'] )->firstOrFail();
-                    $elim->delete();
-                }
-                
-                foreach ($request['IdAsignatura'] as $key => $value) {                                
-                    $detall = ([
-                        'IdGrupo',
-                        'IdAsignatura'
-                    ]);                                               
-                                        
-                        $detall['IdGrupo'] = $id;
-                        $detall['IdAsignatura'] = $value;
-                        DetalleAsignaturaGrupo::create($detall);    
                     
-                }        
-                
                 return redirect()->route('grupo.index')->with('success','La actualización del grupo se realizo con exito');
             } else {
                 
                 if ($grupExi['IdGrupo'] == $id) {
                     $gGrup = Grupo::findOrFail($id);
+                    $gGrup->IdTipoGrupo = $grupos['IdTipoGrupo'];
                     $gGrup->IdSalon = $grupos['IdSalon'];
                     $gGrup->IdGrado = $grupos['IdGrado'];
                     $gGrup->IdJornada = $grupos['IdJornada'];
                     $gGrup->IdTipoCalendario = $grupos['IdTipoCalendario'];
                     $gGrup->save();
         
-                    $IdGrupo = Grupo::findOrFail($id);                    
-                    $DeleteAsig = DetalleAsignaturaGrupo::where('IdGrupo', '=', $id)->get()->toArray(); 
-                    
-                    foreach ($DeleteAsig as $key => $value) {
-                        $elim = DetalleAsignaturaGrupo::where('IdGrupo','=',$value['IdGrupo'] )->firstOrFail();
-                        $elim->delete();
-                    }
-                    
-                    foreach ($request['IdAsignatura'] as $key => $value) {                                
-                        $detall = ([
-                            'IdGrupo',
-                            'IdAsignatura'
-                        ]);                                               
-                                            
-                            $detall['IdGrupo'] = $id;
-                            $detall['IdAsignatura'] = $value;
-                            DetalleAsignaturaGrupo::create($detall);                            
-                    } 
+                    return redirect()->route('grupo.index')->with('success','La actualización del grupo se realizo con exito');
                 } else {
-                    return redirect()->route('grupo.index')->with('danger','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo');    
+                    return redirect()->route('grupo.index')->with('errors','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo');    
                 }
             }
-        } else {
-            return redirect()->route('grupo.index')->with('danger','Las asignaturas no cumplen con el horario de la jornada al editarlo');    
-        }
     }
 
     /**

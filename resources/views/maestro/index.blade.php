@@ -44,8 +44,7 @@
                         <tr>                          
                           <th with="50px">Nombre maestro</th>
                           <th>Apellido maestro</th>
-                          <th>Numero documento</th>
-                          <th>Asignatura</th>                          
+                          <th>Numero documento</th>                                              
                           <th with="">Acción</th>
                         </tr>
                       </thead>
@@ -54,8 +53,7 @@
                             <tr>                                
                                 <td>{{ $maestros->PrimerNombreMaes }}</td>
                                 <td>{{ $maestros->PrimerApellidoMaes }}</td>
-                                <td>{{ $maestros->NumeroDocumento }}</td>                                
-                                <td>{{ $maestros->NombreAsignatura }}</td>
+                                <td>{{ $maestros->NumeroDocumento }}</td>                                                                
                                 <td>                                       
                                   <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarMaestro({{$maestros->IdMaestro}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['maestro', $maestros->IdMaestro], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
@@ -69,8 +67,7 @@
                         <tr>                        
                           <th>Nombre maestro</th>
                           <th>Apellido maestro</th>
-                          <th>Numero documento</th>                          
-                          <th>Asignatura</th>    
+                          <th>Numero documento</th>                                                     
                           <th>Acción</th>
                         </tr>
                       </tfoot>
@@ -81,6 +78,7 @@
             </div>
           </div>
 </section>
+
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -98,6 +96,15 @@
                       <div class="form-body">
                         <h4 class="form-section"><i class="la la-user"></i> Información personal</h4>
                         <div class="form-group row">
+                               <label class="col-md-3 label-control" for="projectinput1">Selección de asignaturas *</label>
+                                   <div class="col-md-9">                                            
+                                       <input type="text" class="hidden">                                                                     
+                                       <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#listaAsignaturas"><i class="far fa-eye"></i></button>
+                                   </div>
+                             </div>                                         
+                        </div>                
+                        <div id="datasig1"></div>                        
+                        <!--<div class="form-group row">
                           <label class="col-md-3 label-control" for="projectinput6">Asignatura *</label>
                           <div class="col-md-9">                                                        
                             <select class="form-control m-bot15" id="IdAsignatura" name="IdAsignatura">
@@ -109,7 +116,7 @@
                               @endif
                             </select>
                           </div>
-                        </div>
+                        </div>-->
                         <div class="form-group row">
                           <label class="col-md-3 label-control" for="projectinput1">Primer nombre *</label>
                           <div class="col-md-9">
@@ -264,5 +271,61 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="listaAsignaturas">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Listado de asignaturas *</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div class="card-content collapse show">
+                  <div class="card-body card-dashboard">                    
+                    <table class="table table-striped table-bordered dom-jQuery-events" id="listaAsig">
+                      <thead>
+                        <tr>                      
+                          <th>Asignatura</th>    
+                          <th>Nombre Asignatura</th>                          
+                          <th>Intencidad Horaria</th>
+                        </tr>
+                      </thead>
+                      <tbody id="TAsign1">                     
+                      @foreach($asignaturas as $asignatura)
+                            <tr>                                
+                                <td class="hidden">{{ $asignatura->IdAsignatura }}</td>
+                                <td><input type="checkbox" class="form-check-input" value="{{ $asignatura->IdAsignatura }}" name="checkAignatura" id="checkAignatura_{{$asignatura->IdAsignatura}}"></td>
+                                <td>{{ $asignatura->NombreAsignatura }}</td>
+                                <td>{{ $asignatura->Intensidad }}</td>                                
+                            </tr>
+                        @endforeach        
+                      </tbody>
+                      <tfoot>
+                        <tr>                        
+                          <th>Asignatura</th>    
+                          <th>Nombre Asignatura</th>                          
+                          <th>Intencidad Horaria</th>                 
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+            </div>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="SelectAsig2()" data-dismiss="modal">Agregar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
 
 @endsection

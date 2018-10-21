@@ -50,23 +50,23 @@ class LogroController extends Controller
             $this->update($request, $request['IdLogro']);            
             return redirect()->route('logro.index')->with('success','El logro se actualizo con exito');
         } else {            
-            
-            $logros = request()->validate([
-                'DescripcionLogro'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:200',               
-                'IdAsignatura'=>'required|int',
-                'IdPeriodo'=>'required|int',    
-                'EstadoLogro'=>'required|int'           
-            ]);
-            
-            $exis = Logro::where('IdAsignatura', '=', $request['IdAsignatura'])
-                        ->where('IdPeriodo', '=', $request['IdPeriodo'])
-                        ->where('EstadoLogro', true)
-                        ->get()
-                        ->toArray(); 
-                                     
-            if ($exis != null) {
-                return redirect()->route('logro.index')->with('errors','Ya existe un logro con esta asignatura y este periodo');    
-            } else {
+
+            $existe = Logro::where('IdAsignatura','=',$request['IdAsignatura'])
+                       ->where('IdPeriodo','=',$request['IdPeriodo'])
+                       ->where('EstadoLogro', '=', true)
+                       ->where('DescripcionLogro','=', $request['DescripcionLogro'])
+                       ->first();
+
+            if($existe != null){
+                return redirect()->route('logro.index')->with('errors','Este logro ya se encuentra registrado con la misma asignatura, el mismo periodo y la misma descripción');    
+            }else{
+                $logros = request()->validate([
+                    'DescripcionLogro'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:200',               
+                    'IdAsignatura'=>'required|int',
+                    'IdPeriodo'=>'required|int',    
+                    'EstadoLogro'=>'required|int'           
+                ]);                    
+                                                     
                 Logro::create($request->all());
                 return redirect()->route('logro.index')->with('success','El logro se registro con exito');    
             }
@@ -106,55 +106,40 @@ class LogroController extends Controller
     public function update(Request $request, $id)
     {
         $logros = request()->validate([
-            'DescripcionLogro'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z]+$/|max:200',               
+            'DescripcionLogro'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:200',               
             'IdAsignatura'=>'required',
             'IdPeriodo'=>'required',
             'EstadoLogro'=>'required|int'           
         ]);
-        
-        $exis = Logro::where('IdAsignatura', '=', $request['IdAsignatura'])
-        ->where('IdPeriodo', '=', $request['IdPeriodo'])
-        ->where('EstadoLogro', true)
-        ->get()
-        ->toArray(); 
-        
-        $val;
-        foreach ($exis as $key => $value) {
-            if ($value['IdAsignatura'] == $request['IdAsignatura'] && 
-                $value['IdPeriodo'] == $request['IdPeriodo'] && 
-                $value['IdLogro'] == $request['IdLogro']) {
-                   $val = true;                
-            } else {
-                $val = false;  
-            }
-            
-        }
-        
-        if ($exis == null) {
-            $logro = Logro::findOrFail($id);
-            $logro->DescripcionLogro = $request['DescripcionLogro'];
-            $logro->IdAsignatura = $request['IdAsignatura'];
-            $logro->IdPeriodo = $request['IdPeriodo'];
-            $logro->save();
-    
-            return redirect()->route('logro.index')->with('success','El logro  se actualizo con exito');
 
-        } else {
-            if ($val == true) {
+        $existe = Logro::where('IdAsignatura','=',$request['IdAsignatura'])
+                       ->where('IdPeriodo','=',$request['IdPeriodo'])
+                       ->where('EstadoLogro', '=', true)
+                       ->where('DescripcionLogro','=', $request['DescripcionLogro'])
+                       ->first();
+        
+        if($existe != null){
+            if($existe['IdLogro'] == $id){
                 $logro = Logro::findOrFail($id);
                 $logro->DescripcionLogro = $request['DescripcionLogro'];
                 $logro->IdAsignatura = $request['IdAsignatura'];
                 $logro->IdPeriodo = $request['IdPeriodo'];
                 $logro->save();
-        
+            
                 return redirect()->route('logro.index')->with('success','El logro  se actualizo con exito');
-                
-            } else {
-                return redirect()->route('logro.index')->with('errors','Ya existe un logro con esta asignatura y este periodo');    
-            }                        
+            }else{
+                return redirect()->route('logro.index')->with('errors','Ya existe un logro con esta asignatura, con este periodo y la misma descipción');
+            }            
+        }else{
+            
+            $logro = Logro::findOrFail($id);
+            $logro->DescripcionLogro = $request['DescripcionLogro'];
+            $logro->IdAsignatura = $request['IdAsignatura'];
+            $logro->IdPeriodo = $request['IdPeriodo'];
+            $logro->save();
+        
+            return redirect()->route('logro.index')->with('success','El logro  se actualizo con exito');
         }
-        
-        
     }
 
     /**
