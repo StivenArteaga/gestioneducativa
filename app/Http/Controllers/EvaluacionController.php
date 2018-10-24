@@ -85,12 +85,13 @@ class EvaluacionController extends Controller
 
     public function evalalum($request)
     {         
-        try {
+        try {            
                 /*$mi_array = json_decode($request);
                 dd($request, $mi_array->idAsignatura);   */
                 if ($request != null) {
                     $mi_array = json_decode($request);
                     $evaluacionalumno = Evaluacion::where('IdAlumno', '=', $mi_array->IdAlumno )->get()->toArray();            
+                    
                     if ($evaluacionalumno == []) {                   
                         if ($mi_array->IdPeriodo == 1) {  
 
@@ -106,6 +107,7 @@ class EvaluacionController extends Controller
                             return response()->json(['status'=>'error','message' => 'No puedes evaluar a un alumno sin haber evaluado los periodos anteriores']);        
                         }                
                     } else {
+                        
                         foreach ($evaluacionalumno as $key => $value) {                
                             if ($value['IdPeriodo'] == $mi_array->IdPeriodo) {
                                     $aevaluacion = Evaluacion::where('IdAlumno', '=', $mi_array->IdAlumno)
@@ -175,51 +177,114 @@ class EvaluacionController extends Controller
     public function listalog($IdAsignatura, $IdAlumno)
     {
         try{
+            $NombreAsignatura;
+            $NombreMaestro;
+            $PeriodoActual;
+            $NotaFinal;
+            $logrosasignados;
+            $arraylogrosasignados =[];
             
             $evaluacion = Evaluacion::where('IdAsignatura', '=', $IdAsignatura)
                                    ->where('IdAlumno', '=', $IdAlumno)
+                                   ->select('evaluaciones.*')
                                    ->get();
                     
             $dteval = $evaluacion->last();                       
             
-            if($dteval != null){                
+            if($dteval != null){                        
+
                 $logros = Logro::join('asignaturas','logros.IdAsignatura', '=', 'asignaturas.IdAsignatura')
                                 ->join('periodos','logros.IdPeriodo','=','periodos.IdPeriodo')
+                                ->join('evaluaciones','periodos.IdPeriodo','=','evaluaciones.IdPeriodo')
                                 ->join('detalleasignaturadocente', 'asignaturas.IdAsignatura', '=', 'detalleasignaturadocente.IdAsignaturaDetalleAsignaturaDocente')
                                 ->join('maestros','detalleasignaturadocente.IdDocenteDetalleAsignaturaDocente', '=', 'maestros.IdMaestro' )
                                 ->where('logros.IdAsignatura', '=', $IdAsignatura)
                                 ->where('logros.IdPeriodo','=',$dteval['IdPeriodo'])
-                                ->select('logros.*', 'maestros.*','periodos.*','asignaturas.*')
+                                ->where('evaluaciones.IdPeriodo','=', $dteval['IdPeriodo'])
+                                ->where('evaluaciones.IdAsignatura','=',$IdAsignatura)
+                                ->where('maestros.EstadoMaestro', '=', true)
+                                ->where('logros.EstadoLogro','=',true)   
+                                ->select('logros.*', 'maestros.*','periodos.*','asignaturas.*','evaluaciones.IdEvaluacion')
+                                ->distinct()
                                 ->get();
-                 
-
-                foreach ($logros as $key => $value) {
-                    $value['EstadoLogro'] = $dteval['IdEvaluacion'];
-                }
-                
+                                                    
                 if(count($logros) > 0) {
-                    return response()->json(['status'=>'success','logros'=>$logros]);
+
+                    $dtulteval = Evaluacion::join('notas','evaluaciones.NotaFinal', '=', 'notas.IdNota')
+                                       ->join('periodos','evaluaciones.IdPeriodo','=','periodos.IdPeriodo')
+                                       ->where('evaluaciones.IdEvaluacion','=', $dteval['IdEvaluacion'])
+                                       ->select('notas.*','periodos.*')
+                                       ->first();
+                    
+                    foreach ($logros as $key => $value) {                                           
+                        $NombreAsignatura = $value['NombreAsignatura'];
+                        $NombreMaestro = $value['PrimerNombreMaes']." ".$value['PrimerApellidoMaes']." ".$value['SegundoApellidoMaes'];                
+                        $PeriodoActual = $dtulteval['NumeroPeriodo'];
+                        $NotaFinal = $dtulteval['NombreNota'];
+
+                        $logrosasignados = DetalleLogroEvaluacion::where('IdEvaluacion','=', $dteval['IdEvaluacion'])
+                                                             ->where('IdLogro','=', $dteval['IdLogro'])
+                                                             ->select('IdLogro')
+                                                             ->first();
+                        
+                        $arraylogrosasignados[] = $logrosasignados['IdLogro'];  
+                    }                
+                    
+                    $datos = ([
+                        $NombreAsignatura,
+                        $NombreMaestro,
+                        $PeriodoActual,
+                        $NotaFinal
+                    ]);
+                        
+                    return response()->json(['status'=>'success','logros'=>$logros,'datos'=>$datos,'arraylogrosasignados'=>$arraylogrosasignados]);
                 }else{
                     return response()->json(['status'=>'error','message' => 'Esta asignatura no tiene logros asignados en este periodo o la asignatura no esa ligada a un docente, por favor dirigete a la opcion logros y asignele a esta asignatura un logro para el periodo actual','logros'=>$logros]);           
                 }
-            }else{
-                
-                $logros = Logro::join('asignaturas','logros.IdAsignatura', '=', 'asignaturas.IdAsignatura')
+            }else{                
+                        $logros = Logro::join('asignaturas','logros.IdAsignatura', '=', 'asignaturas.IdAsignatura')
                         ->join('periodos','logros.IdPeriodo','=','periodos.IdPeriodo')
+                        ->join('evaluaciones','periodos.IdPeriodo','=','evaluaciones.IdPeriodo')
                         ->join('detalleasignaturadocente', 'asignaturas.IdAsignatura', '=', 'detalleasignaturadocente.IdAsignaturaDetalleAsignaturaDocente')
                         ->join('maestros','detalleasignaturadocente.IdDocenteDetalleAsignaturaDocente', '=', 'maestros.IdMaestro' )
                         ->where('logros.IdAsignatura', '=', $IdAsignatura)
-                        ->where('logros.IdPeriodo','=',1)
-                        ->where('logros.EstadoLogro','=', true)
-                        ->select('logros.*', 'maestros.*','periodos.*','asignaturas.*')
+                        ->where('logros.IdPeriodo','=', 1)
+                        ->where('evaluaciones.IdPeriodo','=', 1)
+                        ->where('evaluaciones.IdAsignatura','=',$IdAsignatura)
+                        ->where('maestros.EstadoMaestro', '=', true)
+                        ->where('logros.EstadoLogro','=',true)   
+                        ->select('logros.*', 'maestros.*','periodos.*','asignaturas.*','evaluaciones.IdEvaluacion')
+                        ->distinct()
                         ->get();
 
-                        foreach ($logros as $key => $value) {
-                            $value['EstadoLogro'] = $dteval['IdEvaluacion'];
-                        }
+                        $dtulteval = Evaluacion::join('notas','evaluaciones.NotaFinal', '=', 'notas.IdNota')
+                                       ->join('periodos','evaluaciones.IdPeriodo','=','periodos.IdPeriodo')
+                                       ->where('evaluaciones.IdEvaluacion','=', $dteval['IdEvaluacion'])
+                                       ->select('notas.*','periodos.*')
+                                       ->first();
+                       
+                        foreach ($logros as $key => $value) {                                           
+                                $NombreAsignatura = $value['NombreAsignatura'];
+                                $NombreMaestro = $value['PrimerNombreMaes']." ".$value['PrimerApellidoMaes']." ".$value['SegundoApellidoMaes'];                
+                                $PeriodoActual = $dtulteval['NumeroPeriodo'];
+                                $NotaFinal = $dtulteval['NombreNota'];
+
+                                $logrosasignados = DetalleLogroEvaluacion::where('IdEvaluacion','=', $dteval['IdEvaluacion'])
+                                                             ->where('IdLogro','=', $dteval['IdLogro'])                                                             
+                                                             ->first();
+                                
+                                $arraylogrosasignados[] = $logrosasignados['IdLogro'];  
+                        }                
                 
+                        $datos = ([
+                            $NombreAsignatura,
+                            $NombreMaestro,
+                            $PeriodoActual,
+                            $NotaFinal
+                        ]);                                       
+                                       
                 if(count($logros) > 0) {
-                    return response()->json(['status'=>'success','logros'=>$logros]);
+                    return response()->json(['status'=>'success','logros'=>$logros,'datos'=>$datos]);
                 }else{
                     return response()->json(['status'=>'error','message' => 'Esta asignatura no tiene logros asignado en este periodo o no le has asignado un docente  a esta asignatura, por favor dirigete a la opcion asignatura y asignele logros a esta asignatura','logros'=>$logros]);           
                 }        
@@ -229,24 +294,30 @@ class EvaluacionController extends Controller
         }
     }
 
-    public function savelog($request, $IdEvaluacion){
+    public function savelog($request, $IdEvaluacion)
+    {
         try
-        {            
+        {                        
             $mi_array = json_decode($request);      
-            $mi_id = json_decode($IdEvaluacion);      
+            $mi_id = json_decode($IdEvaluacion); 
+              
             if($mi_array != []){                
                 $guardo = false;
-                foreach ($mi_array as $key => $value) {
+                foreach ($mi_array as $key => $value) {                    
 
-                    $existe = DetalleLogroEvaluacion::where('IdLogro', '=', $value)
-                                                    ->where('IdEvaluacion', '=', $mi_id)
+                    $existe = DetalleLogroEvaluacion::where('IdEvaluacion', '=', $mi_id)                                                    
                                                     ->get();                    
-                    if(count($existe) <= 0){
+                    
+                        foreach ($existe as $key => $value) {
+                            $elimiar = DetalleLogroEvaluacion::where('IdDetalleLogroEvaluacion','=',$value['IdDetalleLogroEvaluacion'])->firstOrFail();
+                            $elimiar->delete();                                                             
+                        }
+                        //Convertir dato a entero
                         $detalleevaluacionlogro = new DetalleLogroEvaluacion();
-                        $detalleevaluacionlogro->IdLogro = $value;
-                        $detalleevaluacionlogro->IdEvaluacion = $mi_id;
+                        $detalleevaluacionlogro->IdLogro = $value+0;
+                        $detalleevaluacionlogro->IdEvaluacion = $mi_id+0;
                         $detalleevaluacionlogro->save();                               
-                    }                                   
+
                     $guardar = true;                                     
                 }
 

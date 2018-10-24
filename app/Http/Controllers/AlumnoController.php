@@ -73,8 +73,7 @@ class AlumnoController extends Controller
     }
 
     public function listalum($IdGrado)
-    {
-        
+    {        
         $infoacad = Academica::where('IdGrado', '=', $IdGrado)->get();
         $fininfo = $infoacad->last();
         $numLista;

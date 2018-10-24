@@ -53,7 +53,7 @@
                       @foreach($grupos as $grupo)
                             <tr>                                
                                 <td>{{ $grupo->NombreSalon }}</td>
-                                <td>{{ $grupo->NombreGrado }}</td>
+                                <td>{{ $grupo->NombreGrado }}</td> 
                                 <td>{{ $grupo->NombreJornada }}</td>
                                 <td>                                       
                                   <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick="MostrarGrupo({{$grupo->IdGrupo}})"><i class="far far fa-edit"></i></button>
@@ -136,7 +136,7 @@
                                 </div>
                                 <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput6">Grado *</label>
-                                  <div class="col-md-9">                                                        
+                                  <div class="col-md-9">                                                         
                                     <select class="form-control m-bot15 target" id="IdGrado" onchange="listarAlum()" name="IdGrado">
                                     @if($grados->count())
                                       <option class="hidden">Selecciona una opción</option>
