@@ -64,15 +64,10 @@ class GrupoController extends Controller
         return response()->json($alumnos);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * 
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
-    {                      
-            if ($request['IdGrupo'] != 0) {
+    {                    
+            if ($request['IdGrupo'] != null) {
                 $this->update($request, $request['IdGrupo']);
                 return redirect()->route('grupo.index')->with('success','La actualización del grupo se realizo con exito');
             } else {            
@@ -103,8 +98,8 @@ class GrupoController extends Controller
                                  ->where('EstadoGrupo', true)                                                               
                                  ->first();
                 
-                if (isset($grupoexiste) == false) {
-                    
+                if ($grupoexiste == null) {
+                       
                     $cuposalon = Grupo::join('jornadas', 'grupos.IdJornada', '=', 'jornadas.IdJornada')                                          
                                         ->join('tipogrupos', 'tipogrupos.IdTipoGrupo', '=', 'grupos.IdTipoGrupo')
                                         ->join('detalletipogrupoasignaturas', 'tipogrupos.IdTipoGrupo', '=', 'detalletipogrupoasignaturas.IdTipoGrupoDetalleTipoGrupoAsignatura')
@@ -114,9 +109,9 @@ class GrupoController extends Controller
                                         ->where('grupos.EstadoGrupo', '=', true)
                                         ->select('jornadas.*', 'asignaturas.*')
                                         ->get();
-                    
-                    if(isset($cuposalon)){
-                                                
+                     
+                    if(count($cuposalon) > 0){
+                            
                             $horasasignaturas =0;
                             $jornada;
                             $totalhorajornada =0;
@@ -135,12 +130,40 @@ class GrupoController extends Controller
                                 Grupo::create($grupos);                                    
                                 return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
                             }
-                    }else{               
+                    }else{      
+
                         
-                        Grupo::create($grupos);                            
-                        return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
+                        $horasasignaturas =0;
+                        $jornada;
+                        $totalhorajornada =0;
+
+                        $jornadas = Jornada::where('IdJornada','=', $request['IdJornada'])->first();
+                        
+                        $intensidad = TipoGrupo::join('detalletipogrupoasignaturas','tipogrupos.IdTipoGrupo','=','detalletipogrupoasignaturas.IdTipoGrupoDetalleTipoGrupoAsignatura')
+                                               ->join('asignaturas','detalletipogrupoasignaturas.IdAsignaturaDetalleTipoGrupoAsignatura','=','asignaturas.IdAsignatura')
+                                               ->where('tipogrupos.IdTipoGrupo','=',$request['IdTipoGrupo'])
+                                               ->where('tipogrupos.EstadoTipoGrupo','=', true)
+                                               ->select('asignaturas.*','tipogrupos.*')
+                                               
+                                               ->get();
+                        
+                        foreach ($intensidad as $key => $value) {                                  
+                                $horasasignaturas = $horasasignaturas + $value['Intensidad'];
+                                $horainicio = (new Carbon($jornadas['HoraInicio']))->format('H');
+                                $horafin = (new Carbon($jornadas['HoraFin']))->format('H');
+                                
+                                $totalhorajornada = abs($horainicio-$horafin);                                                                
+                            }                                               
+                           
+                           if($horasasignaturas > $totalhorajornada){
+                                return redirect()->route('grupo.index')->with('errors','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
+                            }else{
+                                Grupo::create($grupos);                                    
+                                return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
+                            }
                     }
                 } else {
+                    
                     return redirect()->route('grupo.index')->with('errors','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo con el mismo calendario y la misma jornada');    
                 }                       
             }        

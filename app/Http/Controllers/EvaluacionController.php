@@ -314,8 +314,8 @@ class EvaluacionController extends Controller
                         }
                         //Convertir dato a entero
                         $detalleevaluacionlogro = new DetalleLogroEvaluacion();
-                        $detalleevaluacionlogro->IdLogro = $value+0;
-                        $detalleevaluacionlogro->IdEvaluacion = $mi_id+0;
+                        $detalleevaluacionlogro->IdLogro = $value;
+                        $detalleevaluacionlogro->IdEvaluacion = $mi_id;
                         $detalleevaluacionlogro->save();                               
 
                     $guardar = true;                                     
