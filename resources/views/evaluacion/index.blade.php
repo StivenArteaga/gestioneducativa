@@ -8,9 +8,13 @@
   </div>
 @endif
 
-@if ($message = Session::get('errors'))
+@if ($errors->any())
   <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
-    <p>{{ $message }}</p>
+    <ul>
+      @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+      @endforeach
+    </ul>
   </div>
 @endif
 
