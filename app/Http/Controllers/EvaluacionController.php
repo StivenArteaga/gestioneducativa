@@ -312,6 +312,7 @@ class EvaluacionController extends Controller
                             $elimiar = DetalleLogroEvaluacion::where('IdDetalleLogroEvaluacion','=',$value['IdDetalleLogroEvaluacion'])->firstOrFail();
                             $elimiar->delete();                                                             
                         }
+                        
                         //Convertir dato a entero
                         $detalleevaluacionlogro = new DetalleLogroEvaluacion();
                         $detalleevaluacionlogro->IdLogro = $value;

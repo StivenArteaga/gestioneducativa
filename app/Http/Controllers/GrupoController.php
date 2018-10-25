@@ -143,8 +143,7 @@ class GrupoController extends Controller
                                                ->join('asignaturas','detalletipogrupoasignaturas.IdAsignaturaDetalleTipoGrupoAsignatura','=','asignaturas.IdAsignatura')
                                                ->where('tipogrupos.IdTipoGrupo','=',$request['IdTipoGrupo'])
                                                ->where('tipogrupos.EstadoTipoGrupo','=', true)
-                                               ->select('asignaturas.*','tipogrupos.*')
-                                               
+                                               ->select('asignaturas.*','tipogrupos.*')                                               
                                                ->get();
                         
                         foreach ($intensidad as $key => $value) {                                  
