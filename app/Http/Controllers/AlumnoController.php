@@ -71,8 +71,8 @@ class AlumnoController extends Controller
         return response()->json(['codigo'=>$numCodigo, 'numMatricula'=>$numMatricula]);
     }
 
-    public function listalum($IdGrado){
-        
+    public function listalum($IdGrado)
+    {        
         $infoacad = Academica::where('IdGrado', '=', $IdGrado)->get();
         $fininfo = $infoacad->last();
         $numLista;

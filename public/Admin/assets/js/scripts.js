@@ -125,7 +125,7 @@ function Mostrar(id) {
     });
 }
 
-function MostrarArea(id) {
+function MostrarArea(id) {    
     $.get('edit/edit/' + id, function(data) {
         if (data != null) {
             /*Dato del area */

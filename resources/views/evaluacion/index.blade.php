@@ -193,6 +193,7 @@
             <h4>Maestro:  <label id="NombreMaestroEvaluador"></label></h4>
             <h4>Periodo:  <label id="PeriodoActual"></label></h4>
             <h4>Asignatura: <label id="AsignaturaEvaluada"></label></h4>
+            <h4>Nota Final: <label id="NotaFinal"></label></h4>
         </div>
         <div id="data3"></div>
         <!-- Modal body -->
@@ -207,16 +208,7 @@
                         </tr>
                       </thead>
                       <tbody id="IdBodyLogroEvaluacion">                                                                               
-                        @foreach($logros as $logro)
-                          <tr>
-                            <td>                                
-                                <input type="checkbox" class="form-check-input" value="{{ $logro->IdLogro }}" name="checkLogro" id="checkLogro_{{$logro->IdLogro}}">
-                            </td>
-                            <td>
-                                {{$logro.DescripcionLogro}}
-                            </td>                          
-                          </tr>
-                        @endforeach                                 
+                        
                       </tbody>
                       <tfoot>
                         <tr>                                                    
@@ -348,21 +340,49 @@ function listalogro(IdAsignatura, IdAlumno)
 {
   $.get("listalog/listalog/"+IdAsignatura+'/'+IdAlumno, function(data, eval){
       if(data != null){
-        debugger;
+
         if(data.status == "success"){
           var valor8 = ''
           var i=0;
             data.logros.forEach(data => {              
               valor8 += "<tr>"+    
                "<td class='hidden'>"+ data.IdLogro+ "</td>"+               
-               "<td class='hidden'>"+ data.EstadoLogro+ "</td>"+     
-               "<td>" + "<input type='checkbox' name="+data.IdLogro+" id='acheckbox' class='form-check-input check'></input>" + "</td>" +  
+               "<td class='hidden'>"+ data.IdEvaluacion+ "</td>"+     
+               "<td class='hidden'>"+ data.EstadoLogro+ "</td>"+
+               "<td>" + "<input type='checkbox' name='chekLogro' id='chekLogro_"+data.IdLogro+"' class='form-check-input check'></input>" + "</td>" +  
                "<td>" + data.DescripcionLogro + "</td>"+                              
-               "<tr>";               
+               "<tr>";                                             
             })
+            
             $("#IdBodyLogroEvaluacion").html(valor8); 
+            $("#AsignaturaEvaluada").text(data.datos[0]);
+            $("#NombreMaestroEvaluador").text(data.datos[1]);
+            $("#PeriodoActual").text(data.datos[2]);
+            $("#NotaFinal").text(data.datos[3]);
 
-            $("#NombreMaestroEvaluador").val();
+
+            //Listado de logros ya seleccionados
+        if(data.arraylogrosasignados != null){
+            $('#IdBodyLogroEvaluacion td').each(function() {
+                  //console.log(index)
+                  var valores = '';
+                  valores = $(this).parents("tr").find("td").eq(0).html();
+                  //console.log(data.Asignaturas.IdAsignatura,valores );
+
+                  data.arraylogrosasignados.forEach(function(e) {
+                      var parametro = $("input[name='chekLogro']");
+                      for (let index = 0; index < parametro.length; index++) {
+                          if (e == valores) {
+                              $('#chekLogro_' + e).attr('checked', true);
+                              break;
+                          }
+                      }
+                  });
+
+          }); 
+        }
+
+
         }else{
           swal({
                 type:'error',
@@ -410,7 +430,8 @@ function SelectLogros(){
     var logros = JSON.stringify(selectedAsig);
     var eval = JSON.stringify(IdEvaluacion);     
     
-    $.get("savelog/savelog/"+logros+"/"+eval, function (data){
+    if(logros != "[]"){
+      $.get("savelog/savelog/"+logros+"/"+eval, function (data){
       if(data != null){
         if (data.status == "success") {
                     swal({
@@ -435,10 +456,21 @@ function SelectLogros(){
                     title: 'Upsss',
                     animation: true,
                     customClass: 'animated tada',
-                    text: 'Upsss algo salio mal, verifica en proceso, recarga la pagina y vuelve a asignar los logros!'
+                    text: 'Algo salio mal, verifica en proceso, recarga la pagina y vuelve a asignar los logros!'
                   });                                        
       }
     });
+    }else{  
+      swal({
+                    type:'warning',
+                    title: 'Upsss',
+                    animation: true,
+                    customClass: 'animated tada',
+                    text: 'No seleccionastes logros para esta evaluación!'
+                  });                                        
+    }
+
+    
 }
 
   </script>  
