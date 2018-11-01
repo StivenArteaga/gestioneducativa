@@ -58,10 +58,10 @@ class LogroController extends Controller
                        ->first();
 
             if($existe != null){
-                return redirect()->route('logro.index')->with('errors','Este logro ya se encuentra registrado con la misma asignatura, el mismo periodo y la misma descripción');    
+                return redirect()->route('logro.index')->with('error','Este logro ya se encuentra registrado con la misma asignatura, el mismo periodo y la misma descripción');    
             }else{
                 $logros = request()->validate([
-                    'DescripcionLogro'=>'required|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:200',               
+                    'DescripcionLogro'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:200',               
                     'IdAsignatura'=>'required|int',
                     'IdPeriodo'=>'required|int',    
                     'EstadoLogro'=>'required|int'           
@@ -106,7 +106,7 @@ class LogroController extends Controller
     public function update(Request $request, $id)
     {
         $logros = request()->validate([
-            'DescripcionLogro'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:200',               
+            'DescripcionLogro'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|max:200',               
             'IdAsignatura'=>'required',
             'IdPeriodo'=>'required',
             'EstadoLogro'=>'required|int'           
@@ -128,7 +128,7 @@ class LogroController extends Controller
             
                 return redirect()->route('logro.index')->with('success','El logro  se actualizo con exito');
             }else{
-                return redirect()->route('logro.index')->with('errors','Ya existe un logro con esta asignatura, con este periodo y la misma descipción');
+                return redirect()->route('logro.index')->with('error','Ya existe un logro con esta asignatura, con este periodo y la misma descipción');
             }            
         }else{
             

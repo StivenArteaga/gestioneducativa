@@ -75,7 +75,7 @@ class MaestroController extends Controller
                                   ->first();
                     
                 if($existesede != null){
-                      return redirect()->route('maestro.index')->with('errors','Ya existe un docente con este número de documento');                                                                 
+                      return redirect()->route('maestro.index')->with('error','Ya existe un docente con este número de documento');                                                                 
                 }else{
 
                     $existecorreo = Maestro::where('Correo', '=', $request['Correo'])
@@ -83,7 +83,7 @@ class MaestroController extends Controller
                                   ->first();
 
                     if($existecorreo != null){
-                        return redirect()->route('maestro.index')->with('errors','Ya existe un docente con este correo electronico');                                                                   
+                        return redirect()->route('maestro.index')->with('error','Ya existe un docente con este correo electronico');                                                                   
                     }else{
                         Maestro::create($request->all());                    
 
@@ -106,7 +106,7 @@ class MaestroController extends Controller
                 }   
             } 
         }else{
-            return redirect()->route('maestro.index')->with('errors','Al docente no se le ha asignado asignaturas');   
+            return redirect()->route('maestro.index')->with('error','Al docente no se le ha asignado asignaturas');   
         }               
     }
 

@@ -43,7 +43,7 @@ class JornadaController extends Controller
             return redirect()->route('jornada.index')->with('success','La jornada se actualizo con exito');
         } else {       
             $logros = request()->validate([
-                'NombreJornada'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',               
+                'NombreJornada'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/',               
                 'HoraInicio'=>'required',     
                 'HoraFin'=>'required',     
                 'EstadoJornada'=>'required|int',    
@@ -54,26 +54,26 @@ class JornadaController extends Controller
                               ->first();
 
             if($existe != null){
-                return redirect()->route('jornada.index')->with('errors','El nombre de esta jornada ya se encuentra registrado');
+                return redirect()->route('jornada.index')->with('error','El nombre de esta jornada ya se encuentra registrado');
             }else{                                        
                 if ($request['HoraFin'] <= $request['HoraInicio']) {
-                    return redirect()->route('jornada.index')->with('errors','La hora fin no puede ser menor o igual a la hora de inicio en una jornada'.' '.'Hora de inicio: '.$request['HoraInicio'].'-'.'Hora fin: '.$request['HoraFin']);
+                    return redirect()->route('jornada.index')->with('error','La hora fin no puede ser menor o igual a la hora de inicio en una jornada'.' '.'Hora de inicio: '.$request['HoraInicio'].'-'.'Hora fin: '.$request['HoraFin']);
                 } else {
                     $valHora = Jornada::where('EstadoJornada', true)->get();
                     $cont = true;
-                    foreach ($valHora as $key => $value) {
-            
+                    foreach ($valHora as $key => $value) {            
                         if (($request['HoraInicio'] >= $value['HoraFin'])&& ($request['HoraFin'] <= $value['HoraInicio'])||
                             ($request['HoraInicio'] < $value['HoraFin'])&& ($request['HoraFin'] <= $value['HoraInicio'])||
                             ($request['HoraInicio'] >= $value['HoraFin'])&& ($request['HoraFin'] > $value['HoraInicio']) ) {
-                            $cont = true;
+                            $cont = true;                            
                         } else {
                             $cont = false;               
+                            break;
                         }            
                     }      
     
                     if ($cont) {
-                                                   
+
                         $request['HoraInicio'] = ((new Carbon($request['HoraInicio']))->format('H') == '00') ? (new Carbon($request['HoraInicio']))->format('h:i:s') : (new Carbon($request['HoraInicio']))->format('H:i:s');
                         $request['HoraFin'] = ((new Carbon($request['HoraFin']))->format('H') == '00') ? (new Carbon($request['HoraFin']))->format('h:i:s') : (new Carbon($request['HoraFin']))->format('H:i:s');
                         $request['HoraInicio'] = (new Carbon($request['HoraInicio']))->toTimeString();
@@ -82,7 +82,7 @@ class JornadaController extends Controller
                         Jornada::create($request->all());
                         return redirect()->route('jornada.index')->with('success','La jornada se registro con exito');  
                     } else {
-                        return redirect()->route('jornada.index')->with('errors','Ya existe una jornada que contiene un rango de horas entre'.$request['HoraInicio'].'-'.$request['HoraFin']);
+                        return redirect()->route('jornada.index')->with('error','Ya existe una jornada que contiene un rango de horas entre '.$request['HoraInicio'].'-'.$request['HoraFin']);
                     }    
                 }  
             }                                                                        
@@ -122,7 +122,7 @@ class JornadaController extends Controller
     public function update(Request $request, $id)
     {                        
         $logros = request()->validate([
-            'NombreJornada'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:jornadas,NombreJornada,'.$id.',IdJornada,EstadoJornada,'.true,
+            'NombreJornada'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:jornadas,NombreJornada,'.$id.',IdJornada,EstadoJornada,'.true,
             'HoraInicio'=>'required|unique:jornadas,HoraInicio,'.$id.',IdJornada,EstadoJornada,'.true,
             'HoraFin'=>'required|unique:jornadas,HoraFin,'.$id.',IdJornada,EstadoJornada,'.true,
             'EstadoJornada'=>'required|int',    

@@ -61,7 +61,7 @@ class MateriaController extends Controller
             ->first();
 
             if($existesede != null){
-                return redirect()->route('materias.index')->with('errors','Esta materia ya se encuentra registrada');                                                                 
+                return redirect()->route('materias.index')->with('error','Esta materia ya se encuentra registrada');                                                                 
             }else{
                 Materia::create($request->all());
                 return redirect()->route('materias.index')->with('success','La materia se registro con exito');    
@@ -103,7 +103,7 @@ class MateriaController extends Controller
     public function update(Request $request, $id)
     {        
         $materias = request()->validate([
-            'NombreMateria'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:materias,NombreMateria,'.$id.',IdMateria,EstadoMateria,'.true,
+            'NombreMateria'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:materias,NombreMateria,'.$id.',IdMateria,EstadoMateria,'.true,
             'IdArea'=>'required|int',                
             'EstadoMateria'=>'required|int'           
         ]);

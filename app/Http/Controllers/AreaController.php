@@ -47,13 +47,13 @@ class AreaController extends Controller
                 'NombreArea'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/',
                 'EstadoArea'=>'required|int'
             ]);            
-    
+            
             $existesede = Area::where('NombreArea', '=', $request['NombreArea'])
                                 ->where('EstadoArea', '=', true)
                                 ->first();
 
             if($existesede != null){
-                return redirect()->route('area.index')->with('errors','El nombre de esta area ya se encuentra registrada');                                                                 
+                return redirect()->route('area.index')->with('error','El nombre de esta area ya se encuentra registrada');                                                                 
             }else{
                 Area::create($request->all());
                 return redirect()->route('area.index')->with('success','El area se registro con exito');    
@@ -97,7 +97,7 @@ class AreaController extends Controller
     public function update(Request $request, $id)
     {
         $areas = request()->validate([
-            'NombreArea'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:areas,NombreArea,'.$id.',IdArea,EstadoArea,'.true,
+            'NombreArea'=>'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:areas,NombreArea,'.$id.',IdArea,EstadoArea,'.true,
             'EstadoArea'=>'required|int'
         ]);   
 

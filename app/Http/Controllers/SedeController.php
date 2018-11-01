@@ -56,7 +56,7 @@ class SedeController extends Controller
 
             
             if($existesede != null){
-                return redirect()->route('sede.index')->with('errors','Esta sede ya se encuentra registrada');                                                                 
+                return redirect()->route('sede.index')->with('error','Esta sede ya se encuentra registrada');                                                                 
             }else{
                 $request->flash();                    
                 Sede::create($request->all());

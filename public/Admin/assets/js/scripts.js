@@ -84,7 +84,7 @@ function Mostrar(id) {
             /*Datos acudiente*/
             $("#IdTipoAcudiente").val(data.detallealumacu.IdTipoAcudiente);
             $("#PrimNombAcu").val(data.acudiente.PrimerNombreAcu);
-            $("#SeguNombAcu").val(data.acudiente.SegundoApellidoAcu);
+            $("#SeguNombAcu").val(data.acudiente.SegundoNombreAcu);
             $("#PriApellAcu").val(data.acudiente.PrimerApellidoAcu);
             $("#SeguApellAcu").val(data.acudiente.SegundoApellidoAcu);
             $("#EmailAcu").val(data.acudiente.CorreoAcu);

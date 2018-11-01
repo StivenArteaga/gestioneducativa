@@ -125,7 +125,7 @@ class GrupoController extends Controller
                             }
                             
                             if($horasasignaturas >= $totalhorajornada){
-                                return redirect()->route('grupo.index')->with('errors','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
+                                return redirect()->route('grupo.index')->with('error','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
                             }else{
                                 Grupo::create($grupos);                                    
                                 return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
@@ -155,7 +155,7 @@ class GrupoController extends Controller
                             }                                               
                            
                            if($horasasignaturas > $totalhorajornada){
-                                return redirect()->route('grupo.index')->with('errors','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
+                                return redirect()->route('grupo.index')->with('error','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
                             }else{
                                 Grupo::create($grupos);                                    
                                 return redirect()->route('grupo.index')->with('success','El registro del grupo se realizo con exito');    
@@ -163,7 +163,7 @@ class GrupoController extends Controller
                     }
                 } else {
                     
-                    return redirect()->route('grupo.index')->with('errors','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo con el mismo calendario y la misma jornada');    
+                    return redirect()->route('grupo.index')->with('error','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo con el mismo calendario y la misma jornada');    
                 }                       
             }        
     }
@@ -285,7 +285,7 @@ class GrupoController extends Controller
                                     $horasasignaturas = 1;
                             }
                             if($horasasignaturas >= $totalhorajornada){                                
-                                return redirect()->route('grupo.index')->with('errors','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
+                                return redirect()->route('grupo.index')->with('error','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
                             }else{
 
                                 $gGrup = Grupo::findOrFail($id);
@@ -334,7 +334,7 @@ class GrupoController extends Controller
                             $horasasignaturas = $horasasignaturas - ($horasasignaturas / $div);
                            
                             if($horasasignaturas >= $totalhorajornada){
-                                return redirect()->route('grupo.index')->with('errors','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
+                                return redirect()->route('grupo.index')->with('error','Este grupo no se puede crear en esta aula. Esta aula ya cumplio con el total de horas de la jornada');    
                             }else{
                                 $gGrup = Grupo::findOrFail($id);
                                 $gGrup->IdTipoGrupo = $grupos['IdTipoGrupo'];
@@ -360,7 +360,7 @@ class GrupoController extends Controller
                         }
 
                 } else {
-                    return redirect()->route('grupo.index')->with('errors','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo');    
+                    return redirect()->route('grupo.index')->with('error','El grado que le asigno al grupo, ya se encuentra asignado en otro grupo');    
                 }
             }
     }

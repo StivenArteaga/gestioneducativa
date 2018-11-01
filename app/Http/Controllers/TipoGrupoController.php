@@ -42,7 +42,7 @@ class TipoGrupoController extends Controller
                                         ->first();
                     
                     if($existe != null){
-                        return redirect()->route('tgrupo.index')->with('errors','Este nombre de tipo de grupo ya se encuentra registrado');
+                        return redirect()->route('tgrupo.index')->with('error','Este nombre de tipo de grupo ya se encuentra registrado');
                     }else{
     
                         $valtipogrupo = ([
@@ -72,7 +72,7 @@ class TipoGrupoController extends Controller
                     }   
                 }        
             }else{
-                return redirect()->route('tgrupo.index')->with('errors','Al tipo de grupo no le has asignado asignaturas. El tipo de grupo necesita como minimo una asignatura');
+                return redirect()->route('tgrupo.index')->with('error','Al tipo de grupo no le has asignado asignaturas. El tipo de grupo necesita como minimo una asignatura');
             }                       
     }
 
@@ -127,7 +127,7 @@ class TipoGrupoController extends Controller
             return redirect()->route('tgrupo.index')->with('success','La actualización del tipo de grupo fue exitosa!');    
         }
         catch(\Exception $e){
-            return redirect()->route('tgrupo.index')->with('errors','Algo ha salido mal con tu actualización, recarga la pagina y vuelve a intentarlo!');
+            return redirect()->route('tgrupo.index')->with('error','Algo ha salido mal con tu actualización, recarga la pagina y vuelve a intentarlo!');
         }
     }
 

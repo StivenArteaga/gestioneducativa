@@ -177,10 +177,10 @@ class EvaluacionController extends Controller
     public function listalog($IdAsignatura, $IdAlumno)
     {
         try{
-            $NombreAsignatura;
-            $NombreMaestro;
-            $PeriodoActual;
-            $NotaFinal;
+            $NombreAsignatura ="";
+            $NombreMaestro ="";
+            $PeriodoActual ="";
+            $NotaFinal ="";
             $logrosasignados;
             $arraylogrosasignados =[];
             
@@ -198,16 +198,17 @@ class EvaluacionController extends Controller
                                 ->join('evaluaciones','periodos.IdPeriodo','=','evaluaciones.IdPeriodo')
                                 ->join('detalleasignaturadocente', 'asignaturas.IdAsignatura', '=', 'detalleasignaturadocente.IdAsignaturaDetalleAsignaturaDocente')
                                 ->join('maestros','detalleasignaturadocente.IdDocenteDetalleAsignaturaDocente', '=', 'maestros.IdMaestro' )
-                                ->where('logros.IdAsignatura', '=', $IdAsignatura)
+                                ->where('logros.IdAsignatura', '=', (int)$IdAsignatura)
                                 ->where('logros.IdPeriodo','=',$dteval['IdPeriodo'])
                                 ->where('evaluaciones.IdPeriodo','=', $dteval['IdPeriodo'])
-                                ->where('evaluaciones.IdAsignatura','=',$IdAsignatura)
+                                ->where('evaluaciones.IdAsignatura','=',(int)$IdAsignatura)
                                 ->where('maestros.EstadoMaestro', '=', true)
                                 ->where('logros.EstadoLogro','=',true)   
+                                ->where('evaluaciones.IdEvaluacion','=', $dteval['IdEvaluacion'])
                                 ->select('logros.*', 'maestros.*','periodos.*','asignaturas.*','evaluaciones.IdEvaluacion')
                                 ->distinct()
-                                ->get();
-                                                    
+                                ->get('logros.IdLogro');
+                
                 if(count($logros) > 0) {
 
                     $dtulteval = Evaluacion::join('notas','evaluaciones.NotaFinal', '=', 'notas.IdNota')
@@ -222,8 +223,8 @@ class EvaluacionController extends Controller
                         $PeriodoActual = $dtulteval['NumeroPeriodo'];
                         $NotaFinal = $dtulteval['NombreNota'];
 
-                        $logrosasignados = DetalleLogroEvaluacion::where('IdEvaluacion','=', $dteval['IdEvaluacion'])
-                                                             ->where('IdLogro','=', $dteval['IdLogro'])
+                        
+                        $logrosasignados = DetalleLogroEvaluacion::where('IdEvaluacion','=', $dteval['IdEvaluacion'])                                                             
                                                              ->select('IdLogro')
                                                              ->first();
                         
@@ -252,11 +253,13 @@ class EvaluacionController extends Controller
                         ->where('evaluaciones.IdPeriodo','=', 1)
                         ->where('evaluaciones.IdAsignatura','=',$IdAsignatura)
                         ->where('maestros.EstadoMaestro', '=', true)
-                        ->where('logros.EstadoLogro','=',true)   
+                        ->where('logros.EstadoLogro','=',true)                           
+                        ->where('evaluaciones.IdEvaluacion','=', $dteval['IdEvaluacion'])
                         ->select('logros.*', 'maestros.*','periodos.*','asignaturas.*','evaluaciones.IdEvaluacion')
                         ->distinct()
-                        ->get();
+                        ->get('logros.IdLogro');
 
+                        
                         $dtulteval = Evaluacion::join('notas','evaluaciones.NotaFinal', '=', 'notas.IdNota')
                                        ->join('periodos','evaluaciones.IdPeriodo','=','periodos.IdPeriodo')
                                        ->where('evaluaciones.IdEvaluacion','=', $dteval['IdEvaluacion'])
@@ -269,8 +272,8 @@ class EvaluacionController extends Controller
                                 $PeriodoActual = $dtulteval['NumeroPeriodo'];
                                 $NotaFinal = $dtulteval['NombreNota'];
 
-                                $logrosasignados = DetalleLogroEvaluacion::where('IdEvaluacion','=', $dteval['IdEvaluacion'])
-                                                             ->where('IdLogro','=', $dteval['IdLogro'])                                                             
+                                $logrosasignados = DetalleLogroEvaluacion::where('IdEvaluacion','=', $dteval['IdEvaluacion'])                                                             
+                                                             ->select('IdLogro')
                                                              ->first();
                                 
                                 $arraylogrosasignados[] = $logrosasignados['IdLogro'];  
@@ -297,26 +300,29 @@ class EvaluacionController extends Controller
     public function savelog($request, $IdEvaluacion)
     {
         try
-        {                        
+        {                     
+            
             $mi_array = json_decode($request);      
-            $mi_id = json_decode($IdEvaluacion); 
-              
+            $mi_id = json_decode($IdEvaluacion);                         
+            $array_intlogros = array_map('intval',$mi_array);            
+            
             if($mi_array != []){                
                 $guardo = false;
-                foreach ($mi_array as $key => $value) {                    
+                foreach ($array_intlogros as $key => $value) {                    
 
-                    $existe = DetalleLogroEvaluacion::where('IdEvaluacion', '=', $mi_id)                                                    
+                    $existe = DetalleLogroEvaluacion::where('IdEvaluacion', '=', (int)$mi_id)
+                                                    ->select('detallelogrosevaluaciones.*')
                                                     ->get();                    
                     
-                        foreach ($existe as $key => $value) {
-                            $elimiar = DetalleLogroEvaluacion::where('IdDetalleLogroEvaluacion','=',$value['IdDetalleLogroEvaluacion'])->firstOrFail();
+                        foreach ($existe as $key => $value1) {                            
+                            $elimiar = DetalleLogroEvaluacion::where('IdDetalleLogroEvaluacion','=',$value1['IdDetalleLogroEvaluacion'])->firstOrFail();
                             $elimiar->delete();                                                             
                         }
                         
-                        //Convertir dato a entero
+                        //Convertir dato a entero                                              
                         $detalleevaluacionlogro = new DetalleLogroEvaluacion();
                         $detalleevaluacionlogro->IdLogro = $value;
-                        $detalleevaluacionlogro->IdEvaluacion = $mi_id;
+                        $detalleevaluacionlogro->IdEvaluacion = (int)$mi_id;
                         $detalleevaluacionlogro->save();                               
 
                     $guardar = true;                                     

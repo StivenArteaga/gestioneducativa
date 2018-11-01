@@ -73,7 +73,7 @@ class MatriculaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {    
         $matricula = request()->validate([
             'IdGradoName'=>'required',
             'valorMatricula'=>'required|regex:/^[$-,-.0-9]+$/'                      

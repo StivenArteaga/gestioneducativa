@@ -51,7 +51,7 @@ class GradoController extends Controller
             ->first();
 
             if($existe != null){
-                return redirect()->route('grado.index')->with('errors','Este grado ya se encuentra registrado');                                                                 
+                return redirect()->route('grado.index')->with('error','Este grado ya se encuentra registrado');                                                                 
             }else{
                 Grado::create($request->all());
                 return redirect()->route('grado.index')->with('success','El grado se registro con exito');     

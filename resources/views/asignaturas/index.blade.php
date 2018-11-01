@@ -9,6 +9,12 @@
   </div>
 @endif
 
+@if ($message = Session::get('error'))
+  <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
+    <p>{{ $message }}</p>
+  </div>
+@endif
+
 @if ($errors->any())
   <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
     <ul>
@@ -109,7 +115,7 @@
                               </div>                          
                             </div> 
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput4">Intensidad *</label>
+                              <label class="col-md-3 label-control" for="projectinput4">Intensidad (Horas)*</label>
                               <div class="col-md-9">                            
                                 {!! Form::text('Intensidad', null, ['id'=>'Intensidad', 'placeholder'=>'Ingrese la intensidad de la asignatura', 'class'=> 'form-control']) !!}                                
                               </div>                          

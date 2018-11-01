@@ -66,7 +66,7 @@ class SalonController extends Controller
                       ->first();
             
             if($existe != null){
-                return redirect()->route('aula.index')->with('errors','Esta aula ya se encuentra registrada en esta sede');    
+                return redirect()->route('aula.index')->with('error','Esta aula ya se encuentra registrada en esta sede');    
             }else{
                 Salon::create($request->all());
                 return redirect()->route('aula.index')->with('success','El aula se registro con exito');    
@@ -118,7 +118,7 @@ class SalonController extends Controller
                       ->first();
             
             if($existe != null){
-                return redirect()->route('aula.index')->with('errors','Esta aula ya se encuentra registrada en la sede que le asigno');    
+                return redirect()->route('aula.index')->with('error','Esta aula ya se encuentra registrada en la sede que le asigno');    
             }else{
                 $aula = Salon::findOrFail($id);
                 $aula->NombreSalon = $request['NombreSalon'];

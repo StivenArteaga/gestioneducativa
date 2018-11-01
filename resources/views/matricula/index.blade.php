@@ -8,19 +8,19 @@
   </div>
 @endif
 
-
-@if(count($errors) > 0)
-    <div class="alert alerrt">  
-        <strong>Whoooops!!</strong> ha ocurrido un error con tu registro.<br>
-        @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </div>
-@endif
-
-@if ($message = Session::get('danger'))
+@if ($message = Session::get('error'))
   <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
     <p>{{ $message }}</p>
+  </div>
+@endif
+
+@if ($errors->any())
+  <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
+    <ul>
+      @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+      @endforeach
+    </ul>
   </div>
 @endif
 

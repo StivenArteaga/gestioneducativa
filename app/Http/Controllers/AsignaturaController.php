@@ -57,7 +57,7 @@ class AsignaturaController extends Controller
         } else {                        
                 
             $materias = request()->validate([                
-                'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/',
+                'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/',
                 'IdMateria'=>'required|int',                                         
                 'IdTipoAsignatura'=>'required|int',           
                 'EstadoAsignatura'=>'required|int',
@@ -69,7 +69,7 @@ class AsignaturaController extends Controller
                                 ->first();
     
             if($existesede != null){
-                return redirect()->route('asignatura.index')->with('errors','Esta asignatura ya se encuentra registrada');                                                                 
+                return redirect()->route('asignatura.index')->with('error','Esta asignatura ya se encuentra registrada');                                                                 
             }else{
                 Asignatura::create($request->all());
                 return redirect()->route('asignatura.index')->with('success','La asignatura se registro con exito');    
@@ -111,7 +111,7 @@ class AsignaturaController extends Controller
     public function update(Request $request, $id)
     {
         $materias = request()->validate([                
-            'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z]+(\s*[a-zA-Z]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:asignaturas,NombreAsignatura,'.$id.',IdAsignatura,EstadoAsignatura,'.true ,
+            'NombreAsignatura'=>'required|max:90|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-0-9-ZñÑáéíóúÁÉÍÓÚ]+$/|unique:asignaturas,NombreAsignatura,'.$id.',IdAsignatura,EstadoAsignatura,'.true ,
             'IdMateria'=>'required|int',                                         
             'IdTipoAsignatura'=>'required|int',           
             'EstadoAsignatura'=>'required|int',

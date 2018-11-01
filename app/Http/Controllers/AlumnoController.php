@@ -138,8 +138,8 @@ class AlumnoController extends Controller
 
         $alumno =  request()->validate([
             'PrimerNombre'=> 'required',            
-            'PrimerApellido'=> 'required',
-            'SegundoApellido'=> 'required',
+            'PrimerApellido'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',
+            'SegundoApellido'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',
             'Correo'=> 'required|email|unique:alumnos,Correo',
             'IdTipoDocumento'=> 'required',
             'NumeroDocumento'=> 'required|numeric|min:0|unique:alumnos,NumeroDocumento',
@@ -153,7 +153,7 @@ class AlumnoController extends Controller
             'Telefono'=> 'required',   
             'EstadoAlumno'=>'required|int'         
         ]);
-
+ 
             
         $salud = request()->validate([
             'IdEps'=> 'required',
@@ -167,8 +167,8 @@ class AlumnoController extends Controller
         
         $acudiente = request()->validate([
             'PrimerNombreAcu'=> 'required',             
-            'PrimerApellidoAcu'=> 'required', 
-            'SegundoApellidoAcu'=> 'required', 
+            'PrimerApellidoAcu'=> 'required|required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/', 
+            'SegundoApellidoAcu'=> 'required|required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/', 
             'IdTipoDocumento'=> 'required', 
             'IdMunicipioExpedicion'=> 'required', 
             'IdParentesco'=> 'required', 
@@ -312,11 +312,11 @@ class AlumnoController extends Controller
         //validar los datos del alumno
         $alumno =  request()->validate([
             'PrimerNombre'=> 'required',            
-            'PrimerApellido'=> 'required',
-            'SegundoApellido'=> 'required',
-            'Correo'=> 'required','unique:alumnos,Correo,'.$id.',IdAlumno',
+            'PrimerApellido'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',
+            'SegundoApellido'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',
+            'Correo'=> 'required|unique:alumnos,Correo,'.$id.',IdAlumno,EstadoAlumno,'.true,
             'IdTipoDocumento'=> 'required',
-            'NumeroDocumento'=> 'required','unique:alumnos,NumeroDocumento,'.$id.',IdAlumno',
+            'NumeroDocumento'=> 'required|unique:alumnos,NumeroDocumento,'.$id.',IdAlumno,EstadoAlumno,'.true,
             'IdMunicipioExpedido'=> 'required', 
             'IdGenero'=> 'required',
             'FechaNacimiento'=> 'required', 
@@ -326,10 +326,10 @@ class AlumnoController extends Controller
             'Zona'=> 'required',
             'Telefono'=> 'required',            
         ]);
-
+        
         //validar los datos de la salud
         $salud = request()->validate([
-            'IdEps'=> 'required',
+            'IdEps'=> 'required|int',
             'IdTipoSangre'=> 'required', 
             'Ips'=> 'required', 
             'Ars'=> 'required', 
@@ -340,27 +340,21 @@ class AlumnoController extends Controller
 
         //validar los datos de el acudiente
         $acudiente = request()->validate([
-            'PrimerNombreAcu'=> 'required',             
-            'PrimerApellidoAcu'=> 'required', 
-            'SegundoApellidoAcu'=> 'required', 
+            'PrimerNombreAcu'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',             
+            'PrimerApellidoAcu'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/', 
+            'SegundoApellidoAcu'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/', 
             'IdTipoDocumento'=> 'required', 
             'IdMunicipioExpedicion'=> 'required', 
             'IdParentesco'=> 'required', 
-            'DireccionHogar'=> 'required', 
-            'TelefonoHogar'=> 'required',
-            'DireccionTrabajo'=> 'required', 
-            'TelefonoTrabajo'=> 'required', 
-            'TelefonoCelular'=> 'required', 
-            'Ocupacion'=> 'required',             
+            'DireccionHogar'=> 'required',             
+            'TelefonoCelular'=> 'required',             
             'NumeroDocumentoAcu'=> 'required', 
-            'CorreoAcu'=> 'required',
+            'CorreoAcu'=> 'required'
         ]);
 
         //validar los datos de la información académica
         $academica = request()->validate([
-            'IdGrado'=> 'required', 
-            'valorPension'=> 'required', 
-            'valorMatricula'=> 'required', 
+            'IdGrado'=> 'required',             
             'Numerolista'=> 'required', 
             'Estado'=> 'required', 
             'FechaEstado'=> 'required', 
@@ -368,9 +362,7 @@ class AlumnoController extends Controller
             'NumeroMatricula'=> 'required', 
             'InstitucionOrigen'=> 'required', 
             'EstadoAcademicoAnterior'=> 'required', 
-            'EstadoMatriculaFinal'=> 'required', 
-            'CausaTraslado'=> 'required',
-            'CondicionFinAno'=> 'required',
+            'EstadoMatriculaFinal'=> 'required'                     
         ]);
         
         //Consultar al aprendiz
@@ -395,7 +387,8 @@ class AlumnoController extends Controller
         $ediAlum->save();
 
         //Consultar datos de la salud del alumno
-        $editSalud = Salud::find($id);
+        $editSalud = Salud::where('IdAlumno', '=', $id)->first();
+        
         //Ingresar los nuevs registros de saud del alumno
         $editSalud->IdEps = $request['IdEps'];
         $editSalud->IdTipoSangre = $request['IdTipoSangre'];
@@ -423,7 +416,7 @@ class AlumnoController extends Controller
                                     ->select('acudientes.*')
                                     ->distinct()
                                     ->get(['detallealumnosacudientes.IdAlumno']);
-        
+                                    
         foreach ($editAcudiente as $key => $value) {            
             //Ingresar los nuevos registros del acudiente del alumno                                            
             $value->PrimerNombreAcu = $request['PrimerNombreAcu'];
@@ -452,7 +445,7 @@ class AlumnoController extends Controller
 
         
         //Consultar la 
-        $editAcademica = Academica::find($id);
+        $editAcademica = Academica::where('IdAlumno','=', $id)->first();
         //Ingresar los nuevos registros de la informacion academica del alumno
         $editAcademica->IdGrado = $request['IdGrado'];
         $editAcademica->valorPension = $request['valorPension'];

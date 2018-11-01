@@ -9,6 +9,12 @@
   </div>
 @endif
 
+@if ($message = Session::get('error'))
+  <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
+    <p>{{ $message }}</p>
+  </div>
+@endif
+
 @if ($errors->any())
   <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
     <ul>
@@ -104,7 +110,7 @@
                                         </div>                                         
                                 </div>                                                                 
                             <div class="form-actions">
-                                <a href="{{ route('logros') }}" class="btn btn-warning mr-1">
+                                <a href="{{ route('grados') }}" class="btn btn-warning mr-1">
                                     <i class="la la-remove"></i> Cancelar
                                 </a>
                                 <button type="submit" class="btn btn-primary">
