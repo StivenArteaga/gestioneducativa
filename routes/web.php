@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('listalum/{id}', 'AlumnoController@listalum');
 
+    Route::get('guardalum/{request}', 'AlumnoController@store');
+
     Route::post('update/update/{request}/{id}', 'AlumnoContoller@update');
 
     Route::resource('alumno','AlumnoController');

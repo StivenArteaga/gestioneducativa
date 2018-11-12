@@ -1,13 +1,12 @@
-<div role="tabpanel" class="tab-pane active" id="active3" aria-labelledby="active-tab3" aria-expanded="true">
-                        {!! Form::open(['route' => 'alumno.store', 'method' => 'POST']) !!}    
-                        <form class="form form-horizontal row-separator">
+<div role="tabpanel" class="tab-pane active" id="active3" aria-labelledby="active-tab3" aria-expanded="true">                        
+                        <form class="form form-horizontal row-separator" id="form">
                               <div class="form-body">
                               <h4 class="form-section"><i class="la la-user"></i> Información personal</h4>
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput1">Primer nombre *</label>
                                 <div class="col-md-9">
                                 <input type="text" class="hidden">
-                                {!! Form::text('PrimerNombre', null, ['id'=>'PNombreA', 'placeholder'=>'Ingrese su primer nombre', 'class'=> 'form-control']) !!}
+                                {!! Form::text('PrimerNombre', null, ['id'=>'PNombreA', 'placeholder'=>'Ingrese su primer nombre', 'class'=> 'form-control valletras longitudbasica']) !!}
                                 {!! Form::text('Usuario', 1, ['placeholder'=>'Ingrese su primer nombre', 'class'=> 'form-control hidden']) !!}
                                 {!! Form::text('IdUsuario', 1, ['placeholder'=>'Ingrese su primer nombre', 'class'=> 'form-control hidden']) !!}
                                 {!! Form::text('EstadoAlumno', true, ['placeholder'=>'Ingrese su primer nombre', 'class'=> 'form-control hidden']) !!}                              
@@ -16,25 +15,25 @@
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput1">Segundo nombre</label>
                                 <div class="col-md-9">                            
-                                  {!! Form::text('SegundoNombre', null, ['id'=>'SNombreAlum','placeholder'=>'Ingrese su segundo nombre', 'class'=> 'form-control']) !!}
+                                  {!! Form::text('SegundoNombre', null, ['id'=>'SNombreAlum','placeholder'=>'Ingrese su segundo nombre', 'class'=> 'form-control valletras']) !!}
                                 </div>
                               </div>
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput2">Primer apellido *</label>
                                 <div class="col-md-9">                            
-                                  {!! Form::text('PrimerApellido', null, ['id'=>'PApellidoAlum', 'placeholder'=>'Ingrese su primer apellido', 'class'=> 'form-control']) !!}
+                                  {!! Form::text('PrimerApellido', null, ['id'=>'PApellidoAlum', 'placeholder'=>'Ingrese su primer apellido', 'class'=> 'form-control vallel']) !!}
                                 </div>
                               </div>
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput2">Segundo apellido *</label>
                                 <div class="col-md-9">                            
-                                  {!! Form::text('SegundoApellido', null, ['id'=>'SApellidoAlum','placeholder'=>'Ingrese su segundo apellido', 'class'=> 'form-control']) !!}
+                                  {!! Form::text('SegundoApellido', null, ['id'=>'SApellidoAlum','placeholder'=>'Ingrese su segundo apellido', 'class'=> 'form-control vallel']) !!}
                                 </div>
                               </div>
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput3">E-mail *</label>
                                 <div class="col-md-9">                            
-                                  {!! Form::email('Correo', null, ['id'=>'CorreoAlum','placeholder'=>'example@example.com', 'class'=> 'form-control']) !!}
+                                  {!! Form::email('Correo', null, ['id'=>'CorreoAlum','placeholder'=>'ejemplo@ejemplo.com', 'class'=> 'form-control']) !!}
                                 </div>
                               </div>
                               <div class="form-group row">
@@ -54,7 +53,7 @@
                               <div class="form-group row">
                                 <label class="col-md-3 label-control" for="projectinput4">Numero de documento *</label>
                                 <div class="col-md-9">                            
-                                  {!! Form::text('NumeroDocumento', null, ['id'=>'NDocumentAlum','placeholder'=>'Ingrese su numero de documento', 'class'=> 'form-control']) !!}
+                                  {!! Form::text('NumeroDocumento', null, ['id'=>'NDocumentAlum','placeholder'=>'Ingrese su numero de documento', 'class'=> 'form-control valnum']) !!}
                                 </div>                          
                               </div>
                               <div class="form-group row">
@@ -152,7 +151,7 @@
                               <div class="form-group row last">
                                 <label class="col-md-3 label-control" for="projectinput4">Numero de contacto *</label>
                                 <div class="col-md-9">                            
-                                  {!! Form::text('Telefono', null, ['id'=>'NumContatAlum','placeholder'=>'Ingrese su numero de telefono', 'class'=> 'form-control']) !!}
+                                  {!! Form::text('Telefono', null, ['id'=>'NumContatAlum','placeholder'=>'Ingrese su numero de telefono ejemplo: 4294 ext 32, 8219087 ...', 'class'=> 'form-control']) !!}
                                 </div>
                               </div>
                               <div class="form-group row">
@@ -183,9 +182,9 @@
                               </div>                        
                               </div>                            
                           
-                      </div>  
+</div>  
 
-                      <div class="tab-pane" id="link3" role="tabpanel" aria-labelledby="link-tab3" aria-expanded="false">
+<div class="tab-pane" id="link3" role="tabpanel" aria-labelledby="link-tab3" aria-expanded="false">
                         
                           <div class="form-body">
                             <h4 class="form-section"><i class="la la-user"></i> Información salud</h4>                            
@@ -203,11 +202,11 @@
                                   </div>
                                 </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput1">Ips *</label>
+                              <label class="col-md-3 label-control" for="projectinput1">Ips (Opcional)</label>
                               <div class="col-md-9">
-                              {!! Form::text('Ips', null, ['id'=>'IpsAlum', 'placeholder'=>'Ingrese su ips', 'class'=> 'form-control']) !!}
+                              {!! Form::text('Ips', null, ['id'=>'IpsAlum', 'placeholder'=>'Ingrese su ips', 'class'=> 'form-control valalfanumericoespace']) !!}
                               {!! Form::text('IdAlumno', null, ['id'=>'IdAlumno','class'=> 'hidden']) !!}                              
-                              {!! Form::text('EstadoAlumno', 1, ['class'=>'hidden']) !!}
+                              {!! Form::text('EstadoAlumno', 1, ['id'=>'EstadoAlumno','class'=>'hidden']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
@@ -224,27 +223,27 @@
                               </div>
                             </div>
                             <div class="form-group row">
-                              <label class="col-md-3 label-control" for="projectinput1">Ars *</label>
+                              <label class="col-md-3 label-control" for="projectinput1">Ars (Opcional)</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('Ars', null, ['id'=>'ArsAlum','placeholder'=>'Ingrese su ars', 'class'=> 'form-control']) !!}
+                                {!! Form::text('Ars', null, ['id'=>'ArsAlum','placeholder'=>'Ingrese su ars', 'class'=> 'form-control valalfanumericoespace']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput2">Numero de ficha del sisben *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('CarnetSisben', null, ['id'=>'NumCarnetAlum','placeholder'=>'Ingrese el numero de su carnet del sisben', 'class'=> 'form-control']) !!}
+                                {!! Form::text('CarnetSisben', null, ['id'=>'NumCarnetAlum','placeholder'=>'Ingrese el numero de su carnet del sisben', 'class'=> 'form-control valnum']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput2">Puntaje sisben *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('PuntajeSisben', null, ['id'=>'PunSisAlum','placeholder'=>'Ingrese el puntaje de sus sisben', 'class'=> 'form-control']) !!}
+                                {!! Form::text('PuntajeSisben', null, ['id'=>'PunSisAlum','placeholder'=>'Ingrese el puntaje de sus sisben', 'class'=> 'form-control valnum']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput3">Estrato *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('Estrato', null, ['id'=>'EstraroAlum','placeholder'=>'Ingrese en numero de su estrato', 'class'=> 'form-control']) !!}
+                                {!! Form::text('Estrato', null, ['id'=>'EstraroAlum','placeholder'=>'Ingrese en numero de su estrato', 'class'=> 'form-control valnum']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
@@ -377,12 +376,16 @@
                                    
                             </div>
                                                     
-                      </div>
+</div>
   
-                      <div class="tab-pane" id="linkOpt3" role="tabpanel" aria-labelledby="linkOpt-tab3"aria-expanded="false">
+<div class="tab-pane" id="linkOpt3" role="tabpanel" aria-labelledby="linkOpt-tab3"aria-expanded="false">
                          
                             <div class="form-body">
-                            <h4 class="form-section"><i class="la la-user"></i> Información acudiente</h4>
+                              <div class="col-md-12">
+                                <button type="button" class="btn btn-primary pull-right col-md-3" title="Segundo acudiente" data-toggle="modal" data-target="#SegundoAcudiente"><i class="fas fa-users"></i> Segundo Acudiente</button>
+                                <h4 class="form-section col-md-5"><i class="la la-user"></i> Información acudiente</h4>                                                              
+                              </div>   
+                              <br>     
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput6">Tipo Acudiente *</label>
                               <div class="col-md-9">                                                        
@@ -399,25 +402,25 @@
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput1">Primer nombre *</label>
                               <div class="col-md-9">
-                              {!! Form::text('PrimerNombreAcu', null, ['id'=>'PrimNombAcu','placeholder'=>'Ingrese su primer nombre', 'class'=> 'form-control']) !!}
+                              {!! Form::text('PrimerNombreAcu', null, ['id'=>'PrimNombAcu','placeholder'=>'Ingrese su primer nombre', 'class'=> 'form-control valletras']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput1">Segundo nombre</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('SegundoNombreAcu', null, ['id'=>'SeguNombAcu','placeholder'=>'Ingrese su segundo nombre', 'class'=> 'form-control']) !!}
+                                {!! Form::text('SegundoNombreAcu', null, ['id'=>'SeguNombAcu','placeholder'=>'Ingrese su segundo nombre', 'class'=> 'form-control valletras']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput2">Primer apellido *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('PrimerApellidoAcu', null, ['id'=>'PriApellAcu','placeholder'=>'Ingrese su primer apellido', 'class'=> 'form-control']) !!}
+                                {!! Form::text('PrimerApellidoAcu', null, ['id'=>'PriApellAcu','placeholder'=>'Ingrese su primer apellido', 'class'=> 'form-control vallel']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput2">Segundo apellido *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('SegundoApellidoAcu', null, ['id'=>'SeguApellAcu','placeholder'=>'Ingrese su segundo apellido', 'class'=> 'form-control']) !!}
+                                {!! Form::text('SegundoApellidoAcu', null, ['id'=>'SeguApellAcu','placeholder'=>'Ingrese su segundo apellido', 'class'=> 'form-control vallel']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
@@ -448,7 +451,7 @@
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput4">Telefono hogar (opcional)</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('TelefonoHogar', null, ['id'=>'TelHogAcu', 'placeholder'=>'Ingrese su numero de telefono del hogar', 'class'=> 'form-control']) !!}
+                                {!! Form::text('TelefonoHogar', null, ['id'=>'TelHogAcu', 'placeholder'=>'Ingrese su numero de telefono del hogar', 'class'=> 'form-control valalfanumericoespace']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row last">
@@ -460,19 +463,19 @@
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput4">Telefono trabajo (opcional)</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('TelefonoTrabajo', null, ['id'=>'TelTraAcu','placeholder'=>'Ingrese su numero de telefono del trabajo', 'class'=> 'form-control']) !!}
+                                {!! Form::text('TelefonoTrabajo', null, ['id'=>'TelTraAcu','placeholder'=>'Ingrese su numero de telefono del trabajo', 'class'=> 'form-control valalfanumericoespace']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput4">Telefono personal *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('TelefonoCelular', null, ['id'=>'TelPerAcu','placeholder'=>'Ingrese su numero de telefono de celular', 'class'=> 'form-control']) !!}
+                                {!! Form::text('TelefonoCelular', null, ['id'=>'TelPerAcu','placeholder'=>'Ingrese su numero de telefono de celular', 'class'=> 'form-control valalfanumericoespace']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput4">Ocupación (opcional)</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('Ocupacion', null, ['id'=>'OcupAcu','placeholder'=>'Ingrese su ocupación laboral', 'class'=> 'form-control']) !!}
+                                {!! Form::text('Ocupacion', null, ['id'=>'OcupAcu','placeholder'=>'Ingrese su ocupación laboral', 'class'=> 'form-control vallel']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row">
@@ -491,7 +494,7 @@
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput4">Numero de documento *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('NumeroDocumentoAcu', null, ['id'=>'NumDocuAcu','placeholder'=>'Ingrese su numero de documento', 'class'=> 'form-control']) !!}
+                                {!! Form::text('NumeroDocumentoAcu', null, ['id'=>'NumDocuAcu','placeholder'=>'Ingrese su numero de documento', 'class'=> 'form-control valnum']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row">
@@ -523,10 +526,10 @@
 
                                                   
                             </div> 
-                      </div>
+</div>
 
 
-                      <div class="tab-pane" id="linkOpt4" role="tabpanel" aria-labelledby="linkOpt-tab4" aria-expanded="false">                        
+<div class="tab-pane" id="linkOpt4" role="tabpanel" aria-labelledby="linkOpt-tab4" aria-expanded="false">                        
                             <div class="form-body">
                             <h4 class="form-section"><i class="la la-user"></i> Información académica</h4>
                             <div class="form-group row">
@@ -545,13 +548,13 @@
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput1">Valor pension (opcional)</label>
                               <div class="col-md-9">
-                              {!! Form::text('valorPension', null, ['id'=>'ValPensIfAca','placeholder'=>'Ingrese el valor de la pensión', 'class'=> 'form-control']) !!}
+                              {!! Form::text('valorPension', null, ['id'=>'ValPensIfAca','placeholder'=>'Ingrese el valor de la pensión', 'class'=> 'form-control valpesos']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput1">Valor matrícula (opcional)</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('valorMatricula', null, ['id'=>'valorMatricula','placeholder'=>'Ingrese el valor de la matrícula', 'class'=> 'form-control']) !!}
+                                {!! Form::text('valorMatricula', null, ['id'=>'valorMatricula','placeholder'=>'Ingrese el valor de la matrícula', 'class'=> 'form-control valpesos']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
@@ -598,31 +601,31 @@
                             <div class="form-group row last">
                               <label class="col-md-3 label-control" for="projectinput9">Institución de origen *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('InstitucionOrigen', null, ['id'=>'InstOrigAca','placeholder'=>'Ingrese el nombre de su anterior institución', 'class'=> 'form-control', 'style'=>'height:150px']) !!}
+                                {!! Form::text('InstitucionOrigen', null, ['id'=>'InstOrigAca','placeholder'=>'Ingrese el nombre de su anterior institución', 'class'=> 'form-control valalfanumericoespace', 'style'=>'height:150px']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput4">Estado academico anterior *</label>
                               <div class="col-md-9">                            
-                                  {!! Form::text('EstadoAcademicoAnterior', null, ['id'=>'EstaAcaAnte','placeholder'=>'Ingrese su estado academico anterior', 'class'=> 'form-control']) !!}
+                                  {!! Form::text('EstadoAcademicoAnterior', null, ['id'=>'EstaAcaAnte','placeholder'=>'Ingrese su estado academico anterior', 'class'=> 'form-control vallel']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row last">
                               <label class="col-md-3 label-control" for="projectinput9">Estado matricula final *</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('EstadoMatriculaFinal', null, ['id'=>'EstaMatrFinAca','placeholder'=>'Ingrese su estado de matrícula final', 'class'=> 'form-control', 'style'=>'height:150px']) !!}
+                                {!! Form::text('EstadoMatriculaFinal', null, ['id'=>'EstaMatrFinAca','placeholder'=>'Ingrese su estado de matrícula final', 'class'=> 'form-control vallel', 'style'=>'height:150px']) !!}
                               </div>
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput4">Condición fin de año (opcional)</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('CondicionFinAno', null, ['id'=>'CondiFinAnoAca','placeholder'=>'Ingrese su condición', 'class'=> 'form-control']) !!}
+                                {!! Form::text('CondicionFinAno', null, ['id'=>'CondiFinAnoAca','placeholder'=>'Ingrese su condición', 'class'=> 'form-control vallel']) !!}
                               </div>                          
                             </div>
                             <div class="form-group row">
                               <label class="col-md-3 label-control" for="projectinput4">Causa traslado (opcional)</label>
                               <div class="col-md-9">                            
-                                {!! Form::text('CausaTraslado', null, ['id'=>'CausTrasAca','placeholder'=>'Ingrese su motivo de traslado', 'class'=> 'form-control']) !!}
+                                {!! Form::text('CausaTraslado', null, ['id'=>'CausTrasAca','placeholder'=>'Ingrese su motivo de traslado', 'class'=> 'form-control vallel']) !!}
                               </div>                          
                             </div>                
                         </div>    
@@ -631,11 +634,9 @@
                         <a href="{{ route('alumno') }}" class="btn btn-warning mr-1">
                           <i class="la la-remove"></i> Cancelar
                         </a>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="button" onclick="GuardarAlumno()" class="btn btn-primary">
                           <i class="la la-check"></i> Guardar
                         </button>
-                      </div>                      
-                      </form>                        
+</div>                      
+</form>                        
 
-                      {!! Form::close() !!}
-                      </div>

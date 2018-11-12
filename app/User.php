@@ -13,9 +13,11 @@ class User extends Authenticatable
     protected $table='users';
     protected $primaryKey ='IdUsers';
     protected $fillable = [
-        'email','Contrasena' 
-    ];
-
+        'email','Contrasena','EstadoUsuario'
+    ]; 
+    
+    public $timestamps = false;
+    
     protected $hidden = [
         'Contrasena',
         'remember_token'
