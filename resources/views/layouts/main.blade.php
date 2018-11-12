@@ -512,7 +512,8 @@
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/scripts/tables/jsgrid/jsgrid.js') }}"></script>
 
   <script type="text/javascript" src="{{ URL::asset('Admin/assets/js/scripts.js') }}"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script>
   <!-- Swwet alert -->  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
   @yield('script')

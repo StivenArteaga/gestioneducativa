@@ -151,6 +151,13 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('tgrupo', 'TipoGrupoController');
 
+    /**
+     * observador del alumno
+     */
+
+     Route::get('observador', 'ObservadorController@index');
+     Route::get('observador/notas','ObservadorController@cargarTablaNotas');
+
 });
 
 

@@ -124,11 +124,8 @@
                       </li>
                     </ul>
                     <div class="tab-content px-1 pt-1">
-                    
-
                       <!--Contenido del formulario (hacer include o no se que joda para que aparezca jajaja)-->
                       @include('alumno/create')
-
                   </div>
                 </div>
               </div>
@@ -137,5 +134,29 @@
     </div>
   </div>
 </div>
+@endsection
 
+@section('script')
+<script>
+  $().ready(function() {
+    $('#alumno_form').validate({
+        rules: {
+            PrimerNombre: {
+                required: true
+            },
+            SegundoNombre: {
+                required: true
+            }
+        },
+        messages: {
+            PrimerNombre: {
+                required: "El campo Nombres es obligatorio."
+            },
+            SegundoNombre: {
+                required: "El campo Apellidos es obligatorio."
+            },
+        }
+    });
+  });
+</script>
 @endsection
