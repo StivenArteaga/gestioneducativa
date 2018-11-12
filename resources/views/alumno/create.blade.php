@@ -623,7 +623,7 @@
     <a href="{{ route('alumno') }}" class="btn btn-warning mr-1">
         <i class="la la-remove"></i> Cancelar
     </a>
-    <button type="submit" class="btn btn-primary">
+    <button type="button" onclick="GuardarAlumno()" class="btn btn-primary">
       <i class="la la-check"></i> Guardar
     </button>
 </div>
