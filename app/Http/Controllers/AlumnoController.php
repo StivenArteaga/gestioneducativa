@@ -669,21 +669,27 @@ class AlumnoController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {          
-        $user = Alumno::findOrfail($id);
-       if ($user != null) {
-            if ($user->EstadoAlumno == true) {
-                $user->EstadoAlumno = false;
-                $user->save();
+
+        if ($request->ajax()) {
+            $alumno = Alumno::findOrFail($id);
+            if ($alumno != null) {
+                if ($alumno->EstadoAlumno == true) {
+                    $alumno->EstadoAlumno = false;
+                    $alumno->save();
+                }else {
+                    $alumno->EstadoAlumno = true;
+                    $alumno->save();
+                }
             }else {
-                $user->EstadoAlumno = true;
-                $user->save();
+                $alumno->EstadoAlumno = false;
+                $alumno->save();
             }
-       }else {
-        $user->EstadoAlumno = false;
-        $user->save();
-       }
-        return redirect()->route('alumno.index')->with('success','El alumno  fue eliminado con exito ');
+            
+            return response()->json([
+                'message' => 'El alumno '. $alumno->PrimerNombre. ' '. $alumno->PrimerApellido. ' Ha sido eliminado exitosamente!'
+            ]);
+        }
     }
 }

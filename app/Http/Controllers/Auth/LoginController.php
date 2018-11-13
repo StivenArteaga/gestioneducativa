@@ -24,7 +24,11 @@ class LoginController extends Controller
         
         if (Auth::attempt(['email'=> $credentials['email'] , 'password' => $credentials['Contrasena'] ] )) 
         {
+           if(Auth::user()->IdTipoUsuario == 5) {
+            return redirect('/observador');
+           }else {
             return redirect()->route('main');
+           }
         }    
 
         return back()

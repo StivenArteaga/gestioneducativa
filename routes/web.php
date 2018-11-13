@@ -158,7 +158,7 @@ Route::group(['middleware' => ['auth']], function() {
      */
 
      Route::get('observador', 'ObservadorController@index');
-     Route::get('observador/notas','ObservadorController@cargarTablaNotas');
+     Route::get('observador/notas/{id}','ObservadorController@cargarTablaNotas');
 
 });
 

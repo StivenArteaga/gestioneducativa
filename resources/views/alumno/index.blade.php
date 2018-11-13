@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 @if ($message = Session::get('success'))
   <div class="alert alert-success alert-dismissable custom-success-box" style="margin: 15px;">
     <p>{{ $message }}</p>
@@ -71,8 +70,8 @@
                                 <td>{{ $alumno->Correo }}</td>
                                 <td>                                       
                                 <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='Mostrar({{$alumno->IdAlumno}})'><i class="far far fa-edit"></i></button>                                                                                                    
-                                {!! Form::open([ 'url'=>['alumno', $alumno->IdAlumno], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                <button type="submit" class="btn icon-table" ><i class="far fa-trash-alt icon-size"></i></a></button>
+                                {!! Form::open([ 'url'=>['alumno', $alumno->IdAlumno], 'name'=>"formularioEliminar" , 'onsubmit'=>'return confirmarEliminar()' , 'method' => 'DELETE' ,'style'=> 'display:inline' ]) !!}                                                            
+                                <button type="submit" class="btn icon-table btn-delete" ><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}              
                                 </td>
                             </tr>
@@ -311,6 +310,7 @@
 
 
 @section('script')
+<script src="js/alumno_scripts.js"></script>
     <script>
 
 $('.valletras').on('input', function (e) {
