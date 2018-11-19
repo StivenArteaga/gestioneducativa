@@ -9,12 +9,22 @@ use App\Alumno;
 use App\Evaluacion;
 use App\Periodo;
 use App\Observacion;
+use App\Coordinador;
 
 class ObservadorController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'alumno']);
+        $this->middleware(['auth', 'alumno'], ['only' => ['index']]);
+    }
+
+    public function observaciones()
+    {
+        $observaciones = Observacion::select('observaciones.*', 'coordinadores.*', 'alumnos.*')
+        ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
+        ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
+        ->get();
+        return view('observaciones.index', compact('observaciones', 'alumnos'));
     }
     
     public function index()
@@ -30,10 +40,10 @@ class ObservadorController extends Controller
         ->first();
 
         $observaciones = Observacion::where('alumnos.Usuario', $id)
-        ->join('maestros', 'maestros.IdMaestro', 'observaciones.IdMaestro')
+        ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
         ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
         ->join('users', 'users.IdUsers','alumnos.Usuario')
-        ->select('maestros.*', 'observaciones.descripcion')->get();
+        ->select('coordinadores.*', 'observaciones.descripcion')->get();
         
         $periodos = Periodo::pluck('NumeroPeriodo', 'IdPeriodo');
 
@@ -52,5 +62,61 @@ class ObservadorController extends Controller
         ->select('notas.NombreNota','periodos.NumeroPeriodo','materias.NombreMateria')->get();
       
           return response()->json(["data" => $notas]);
+    }
+
+    public function create()
+    {
+        $alumnos = Alumno::all();
+        return view('observaciones.create', compact('alumnos'));
+    }
+
+    public function store(Request $request)
+    {
+        $id = Auth::user()->IdUsers;
+        $coordinador = Coordinador::where('coordinadores.IdCoordinador', $id)
+        ->join('users', 'users.IdUsers', 'coordinadores.IdUser')
+        ->select('coordinadores.IdCoordinador')
+        ->first();
+
+        $this->validate($request, [
+            'IdAlumno' => 'required',
+            'descripcion' => 'required|string|max:800'
+        ]);
+
+        $observacion = new Observacion();
+        $observacion->IdCoordinador = $coordinador->IdCoordinador;
+        $observacion->IdAlumno = $request->get('IdAlumno');
+        $observacion->descripcion = $request->get('descripcion');
+        $observacion->save();
+
+        return redirect('observaciones');
+    }
+
+    public function edit($id)
+    {
+        $observaciones = Observacion::findOrFail($id);
+        $alumnos = Alumno::pluck('PrimerNombre', 'IdAlumno');
+        return view('observaciones.edit', compact('observaciones', 'alumnos'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = Auth::user()->IdUsers;
+        $coordinador = Coordinador::where('coordinadores.IdCoordinador', $user)
+        ->join('users', 'users.IdUsers', 'coordinadores.IdUser')
+        ->select('coordinadores.IdCoordinador')
+        ->first();
+
+        $this->validate($request, [
+            'IdAlumno' => 'required',
+            'descripcion' => 'required|string|max:800'
+        ]);
+        $observaciones = Observacion::findOrFail($id);
+        $observaciones->IdCoordinador = $coordinador->IdCoordinador;
+        $observaciones->IdAlumno = $request->get('IdAlumno');
+        $observaciones->descripcion = $request->get('descripcion');
+        $observaciones->save();
+
+        return redirect('observaciones');
     }
 }
