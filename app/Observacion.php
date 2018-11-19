@@ -8,7 +8,7 @@ class Observacion extends Model
 {
     protected $table = 'observaciones';
     protected $primaryKey = 'IdObservacion';
-    protected $fillable = ['IdMaestro', 'IdAlumno', 'descripcion'];
+    protected $fillable = ['IdCoordinador', 'IdAlumno', 'descripcion'];
 
     public $timestamps = false;
 }
