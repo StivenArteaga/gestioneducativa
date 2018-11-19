@@ -29,12 +29,7 @@ use App\TipoAcudiente;
 use Exception;
 
 class AlumnoController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+{    
     public function index()
     {
         
@@ -87,7 +82,6 @@ class AlumnoController extends Controller
         return response()->json($numLista);
     }
 
-    
     public function create()
     {
        $tipodocumentos = TipoDocumento::all();
@@ -112,33 +106,27 @@ class AlumnoController extends Controller
     {
         
         $Idalumnoglobl = 0;
-        try{
-            $mi_array = json_decode($request);                        
-            /*$usuario = new Usuario();
-    
-            $usuario->NombreUsuario=$request->get('NumeroDocumento');  
-            $usuario->Contrasena = '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm';
-            $usuario->TipoUsuario = 2;
-    
-            $usuario->id_autor=$autor->idautor;
-            $libro->save();*/            
+        try{        
+            $mi_array = json_decode($request);                                    
             if ($mi_array->IdAlumno != "" ) {            
                 $this->update($mi_array, $mi_array->IdAlumno);            
-                return redirect()->route('alumno.index')->with('success','La actualización de la matricula del alumno se registro con exito');
+                return response()->json(['status'=>'success','message' => 'La actualización de la matricula del alumno se realizo con éxito']);                                 
             } else {            
-                                
-            //Validar datos personales obligatorios del alumno
+                                     
+            //Validar datos personales obligatorios del alumno                
             if($mi_array->PrimerNombre == "" || $mi_array->PrimerApellido==""|| $mi_array->SegundoApellido=="" || $mi_array->Correo ==""
                ||$mi_array->IdTipoDocumento == ""||$mi_array->NumeroDocumento == "" ||$mi_array->IdMunicipioExpedido == "" ||$mi_array->IdGenero == ""
                ||$mi_array->FechaNacimiento == "" ||$mi_array->IdCiudadNacimiento == "" ||$mi_array->IdCiudadResidencia == "" ||$mi_array->Direccion == ""
                ||$mi_array->Zona == "" ||$mi_array->Telefono == "" ||$mi_array->EstadoAlumno == "")
-            {                
+            {                                 
                 return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información personal del alumno. Estos campos son obligatorios para registrar un alumno']);                            
-            }else{                                                                
+            }else{  
+                                                                            
                 if($mi_array->IdEps ==""||$mi_array->IdTipoSangre =="" || $mi_array->CarnetSisben =="" || $mi_array->PuntajeSisben =="" ||$mi_array->Estrato =="")
                 {                    
                     return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información de salud del alumno. Estos campos son obligatorios para registrar un alumno']);                            
                 }else{                                        
+                    
                     if($mi_array->IdTipoAcudiente==""||$mi_array->PrimerNombreAcu=="" ||$mi_array->PrimerApellidoAcu=="" ||$mi_array->SegundoApellidoAcu=="" || $mi_array->IdTipoDocumento=="" ||
                         $mi_array->IdMunicipioExpedicion=="" ||$mi_array->IdParentesco=="" ||$mi_array->DireccionHogar=="" ||$mi_array->TelefonoCelular=="" ||
                         $mi_array->NumeroDocumentoAcu=="" || $mi_array->CorreoAcu=="")
@@ -159,14 +147,23 @@ class AlumnoController extends Controller
                             
                                 if($existeusuario != null)
                                 {
-                                    return response()->json(['status'=>'error','message' => 'Ya existe un usuario con este correo en el sistema, por favor verifica tu correo electronico']);        
+                                    return response()->json(['status'=>'error','message' => 'Ya existe un usuario con este correo en el sistema, por favor verifica el correo electronico del alumno']);        
                                 }else
                                 {
+
+                                    $existealumno = Alumno::where('NumeroDocumento', '=', $mi_array->NumeroDocumento)
+                                                          ->where('EstadoAlumno','=', true)
+                                                          ->select('alumnos.*')
+                                                          ->first();
+
+                                    if($existealumno != null){
+                                        return response()->json(['status'=>'error','message' => 'Ya existe un usuario con este número de documento en el sistema, por favor verifica el número de documento del alumno']);        
+                                    }
                                                   
                                  $usuarioalumno = new User();
                                  $usuarioalumno->email = $mi_array->Correo;
                                  $usuarioalumno->Contrasena = Hash::make($mi_array->NumeroDocumento);
-                                 $usuarioalumno->IdTipoUsuario = 2;
+                                 $usuarioalumno->IdTipoUsuario = 5;
                                  $usuarioalumno->EstadoUsuario = 'Activo';
                                  $usuarioalumno->save();
 
@@ -175,7 +172,7 @@ class AlumnoController extends Controller
                                                              ->first();
 
                                 //$mi_array->flash();                                            
-
+                                
                                 $alumnos = new Alumno();
                                 $alumnos->PrimerNombre = $mi_array->PrimerNombre;                                                             
                                 $alumnos->SegundoNombre = $mi_array->SegundoNombre;                                                           
@@ -204,6 +201,7 @@ class AlumnoController extends Controller
                                 $mi_array->IdAlumno = $gu['IdAlumno'];                                                                               
                                 $Idalumnoglobl = $mi_array->IdAlumno;                                
                                 //Guardar datos de salud del alumno en la tabla salud                                
+                                
                                 $salud = new Salud();                                
                                 $salud->IdEps = (int)$mi_array->IdEps;                                
                                 $salud->IdTipoSangre = (int)$mi_array->IdTipoSangre;                                
@@ -231,8 +229,7 @@ class AlumnoController extends Controller
                                                             ->first();                                                            
                                 
                                 if($acudienteexiste != null)
-                                {
-                                
+                                {                                    
                                     $detallealumnoacudiente = new DetalleAlumnoAcudiente();
                                     $detallealumnoacudiente->IdAcudiente = $acudienteexiste['IdAcudiente'];
                                     $detallealumnoacudiente->IdTipoAcudiente = (int)$mi_array->IdTipoAcudiente;
@@ -240,18 +237,18 @@ class AlumnoController extends Controller
                                     $detallealumnoacudiente->save();   
                                 }
                                 else
-                                {
+                                {                                    
                                     $usuarioacudiente = new User();
                                     $usuarioacudiente->email = $mi_array->CorreoAcu;
                                     $usuarioacudiente->Contrasena = Hash::make($mi_array->NumeroDocumentoAcu);
                                     $usuarioacudiente->EstadoUsuario = "Activo";
-                                    $usuarioacudiente->IdTipoUsuario = 3;
+                                    $usuarioacudiente->IdTipoUsuario = 6;
                                     $usuarioacudiente->save();
                                     
                                     $idusuarioacudiente = User::where('email','=',$mi_array->CorreoAcu)
                                                               ->select('users.*')
                                                               ->first();                                    
-                                    
+
                                     $acudienteuno = new Acudiente();                                    
                                     $acudienteuno->PrimerNombreAcu = $mi_array->PrimerNombreAcu;                                    
                                     $acudienteuno->SegundoNombreAcu = $mi_array->SegundoNombreAcu;                                    
@@ -301,7 +298,7 @@ class AlumnoController extends Controller
                                                             ->first();                                                            
 
                                     if($acudienteexiste2 != null)
-                                    {
+                                    {                                        
                                         $detallealumnoacudiente2 = new DetalleAlumnoAcudiente();
                                         $detallealumnoacudiente2->IdAcudiente = $acudienteexiste2['IdAcudiente'];
                                         $detallealumnoacudiente2->IdTipoAcudiente = (int)$mi_array->IdTipoAcudiente2;
@@ -309,19 +306,18 @@ class AlumnoController extends Controller
                                         $detallealumnoacudiente2->save();   
                                     }
                                     else
-                                    {
-                                        
+                                    {                                        
                                         $usuarioacudiente2 = new User();
                                         $usuarioacudiente2->email = $mi_array->CorreoAcu2;
                                         $usuarioacudiente2->Contrasena = Hash::make($mi_array->NumeroDocumentoAcu2);
                                         $usuarioacudiente2->EstadoUsuario = "Activo";
-                                        $usuarioacudiente->IdTipoUsuario = 3;
+                                        $usuarioacudiente->IdTipoUsuario = 6;
                                         $usuarioacudiente2->save();
 
                                         $idusuarioacudiente2 = User::where('email','=',$mi_array->CorreoAcu2)
                                                                 ->select('users.*')
                                                                 ->first();       
-                                    
+
                                         $acudienteuno2 = new Acudiente();
                                         $acudienteuno2->PrimerNombreAcu = $mi_array->PrimerNombreAcu2;
                                         $acudienteuno2->SegundoNombreAcu = $mi_array->SegundoNombreAcu2;
@@ -342,7 +338,7 @@ class AlumnoController extends Controller
                                         $idacudiente2 = Acudiente::where('NumeroDocumentoAcu', '=', $mi_array->NumeroDocumentoAcu2)
                                                                 ->select('acudientes.*')
                                                                 ->first();
-                                    
+
                                         $detallealumnoacudiente2 = new DetalleAlumnoAcudiente();
                                         $detallealumnoacudiente2->IdAcudiente = $idacudiente2['IdAcudiente'];
                                         $detallealumnoacudiente2->IdTipoAcudiente = (int)$mi_array->IdTipoAcudiente2;
@@ -369,7 +365,7 @@ class AlumnoController extends Controller
                                 $infacademica->CausaTraslado = $mi_array->CausaTraslado;
                                 $infacademica->IdAlumno = $mi_array->IdAlumno;
                                 $infacademica->save();                                
-                                
+                            
                                 $insmatricula = new Matricula();
                                 if ($mi_array->valorMatricula != "") {
                                     $insmatricula->valorMatricula = $mi_array->valorMatricula;
@@ -379,9 +375,7 @@ class AlumnoController extends Controller
                                 $insmatricula->IdGrado =  (int)$mi_array->IdGrado;
                                 $insmatricula->IdEstadoMatricula = 1;
                                 $insmatricula->save();                                
-
-                                return response()->json(['status'=>'success','message' => 'El registro del alumno se realizo correctamente']);                                        
-
+                                return response()->json(['status'=>'success','message' => 'El registro del alumno se realizo correctamente']);
                             }                                                     
                         }
                     }   
@@ -416,240 +410,215 @@ class AlumnoController extends Controller
         }       
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {                  
-    //Consultar datos del alumno por el dato unico
+      //Consultar datos del alumno por el dato unico
        $alumnos = Alumno::findOrFail($id);                    
+       
        $IdMun = $alumnos['IdMunicipioExpedido'];
-    //Se envia la variable como parametro para hacer la consulta en la tabla municipio por medio del id
-       $municip = Municipio::findOrFail($IdMun);                            
-    //Enviar los array con los datos de alumno y departamento a la función ajax para asignarlos
-       $depart1 = Departamento::where('IdDepartamento', '=', $municip['IdDepartamento'])->firstOrFail();       
-    //Consultar ciudad para obtener el foreign key de ciudad para consultarlo
-        $Idciud = $alumnos['IdCiudadNacimiento'];
-       $ciudad = Municipio::findOrFail($Idciud);       
-    //Consultar el departamento de esta ciudad para enviarlo a la vista por ajax
-       $depart2 = Departamento::where('IdDepartamento', '=', $ciudad['IdDepartamento'])->firstOrFail();
-    //Por comentar
-       $Idciud1 = $alumnos['IdCiudadResidencia'];
-    //Por comentar
-       $ciudad1 = Municipio::findOrFail($Idciud1);       
-    //Por comentar
-       $depart3 = Departamento::where('IdDepartamento', '=', $ciudad['IdDepartamento'])->firstOrFail();              
-    //Por comentar    
-       $salud = Salud::where('IdAlumno','=', $alumnos['IdAlumno'])->firstOrFail();       
-       
-    //Municipio expulsor del alumno
-       $municiexp = Municipio::where('IdMunicipio', '=', $salud['IdMunicipio'])->firstOrFail();              
-    //Departamento expulsor        
-       $departexp = Departamento::where('IdDepartamento', '=', $municiexp['IdDepartamento'])->firstOrFail();
-    //Consultar en la tabla detalle que acudiente tiene asignados    
-      $detalleacualum = DetalleAlumnoAcudiente::where('IdAlumno', '=', $alumnos['IdAlumno'])->firstOrFail();      
-    //Datos del acudiente que pertenece al alumno
-       $acudiente = Acudiente::where('IdAcudiente', '=', $detalleacualum['IdAcudiente'])->firstOrFail();
-    //Consultar municipio de expedición del acudiente 
-       $municiexpacu = Municipio::where('IdMunicipio', '=', $acudiente['IdMunicipioExpedicion'])->firstOrFail();
-    //Consultar departamento de expedición del acudiente
-       $departexpacu = Departamento::where('IdDepartamento', '=' , $municiexpacu['IdDepartamento'])->firstOrFail();
-    //Datos de la información académica del alumno
-        $academica = Academica::where('IdAlumno', '=', $alumnos['IdAlumno'])->firstOrFail();
-    //Consultar aula en el que esta el alumno
-        $aulas = Grupo::join('salones', 'grupos.IdSalon', '=', 'salones.IdSalon')                        
-                        ->where('grupos.IdSalon','=',  $academica['IdGrado'])                         
-                        ->select('salones.*')
-                        ->getQuery()
-                        ->get();
-        
-
-    return response()->json(['alumno' => $alumnos,'departamento'=>$depart1,
-                            'departamento2'=>$depart2, 'departamento3'=>$depart3,
-                            'salud'=>$salud, 'departamento4'=>$departexp, 'acudiente'=>$acudiente, 
-                            'departamento5'=>$departexpacu, 'academica'=> $academica, 'aulas'=> $aulas, 'detallealumacu'=>$detalleacualum]);
-       
+            //Se envia la variable como parametro para hacer la consulta en la tabla municipio por medio del id
+            $municip = Municipio::findOrFail($IdMun);                            
+            //Enviar los array con los datos de alumno y departamento a la función ajax para asignarlos
+            $depart1 = Departamento::where('IdDepartamento', '=', $municip['IdDepartamento'])->firstOrFail();       
+            //Consultar ciudad para obtener el foreign key de ciudad para consultarlo
+                $Idciud = $alumnos['IdCiudadNacimiento'];
+            $ciudad = Municipio::findOrFail($Idciud);       
+            //Consultar el departamento de esta ciudad para enviarlo a la vista por ajax
+            $depart2 = Departamento::where('IdDepartamento', '=', $ciudad['IdDepartamento'])->firstOrFail();
+            //Por comentar
+            $Idciud1 = $alumnos['IdCiudadResidencia'];
+            //Por comentar
+            $ciudad1 = Municipio::findOrFail($Idciud1);       
+            //Por comentar
+            $depart3 = Departamento::where('IdDepartamento', '=', $ciudad['IdDepartamento'])->firstOrFail();              
+            //Por comentar    
+            $salud = Salud::where('IdAlumno','=', $alumnos['IdAlumno'])->firstOrFail();       
+            
+            //Municipio expulsor del alumno
+            $municiexp = Municipio::where('IdMunicipio', '=', $salud['IdMunicipio'])->firstOrFail();              
+            //Departamento expulsor        
+            $departexp = Departamento::where('IdDepartamento', '=', $municiexp['IdDepartamento'])->firstOrFail();
+            //Consultar en la tabla detalle que acudiente tiene asignados    
+            $detalleacualum = DetalleAlumnoAcudiente::where('IdAlumno', '=', $alumnos['IdAlumno'])->firstOrFail();      
+            //Datos del acudiente que pertenece al alumno
+            $acudiente = Acudiente::join('detallealumnosacudientes', 'acudientes.IdAcudiente', '=','detallealumnosacudientes.IdAcudiente')
+                                    ->join('alumnos', 'detallealumnosacudientes.IdAlumno', '=', 'alumnos.IdAlumno')
+                                    ->where('alumnos.IdAlumno', '=',$alumnos['IdAlumno'])
+                                    ->where('detallealumnosacudientes.IdTipoAcudiente','=', 1)
+                                    ->select('acudientes.*','detallealumnosacudientes.IdTipoAcudiente')
+                                    ->firstOrFail();
+            
+            //Consultar segundo acudiente
+            $acudientedos = Acudiente::join('detallealumnosacudientes', 'acudientes.IdAcudiente', '=','detallealumnosacudientes.IdAcudiente')
+                                    ->join('alumnos', 'detallealumnosacudientes.IdAlumno', '=', 'alumnos.IdAlumno')
+                                    ->where('alumnos.IdAlumno', '=',$alumnos['IdAlumno'])
+                                    ->where('detallealumnosacudientes.IdTipoAcudiente','=', 2)
+                                    ->select('acudientes.*','detallealumnosacudientes.IdTipoAcudiente')
+                                    ->firstOrFail();
+            
+            //Consultar municipio de expedición del acudiente 
+            $municiexpacu = Municipio::where('IdMunicipio', '=', $acudiente['IdMunicipioExpedicion'])->firstOrFail();
+            //Consultar departamento de expedición del acudiente
+            $departexpacu = Departamento::where('IdDepartamento', '=' , $municiexpacu['IdDepartamento'])->firstOrFail();
+            //Datos de la información académica del alumno
+                $academica = Academica::where('IdAlumno', '=', $alumnos['IdAlumno'])->firstOrFail();
+            //Consultar aula en el que esta el alumno
+                $aulas = Grupo::join('salones', 'grupos.IdSalon', '=', 'salones.IdSalon')                        
+                                ->where('grupos.IdSalon','=',  $academica['IdGrado'])                         
+                                ->select('salones.*')
+                                ->getQuery()
+                                ->get();
+                
+                
+            return response()->json(['alumno' => $alumnos,'departamento'=>$depart1,
+                                    'departamento2'=>$depart2, 'departamento3'=>$depart3,
+                                    'salud'=>$salud, 'departamento4'=>$departexp, 'acudiente'=>$acudiente,'acudientedos'=>$acudientedos ,
+                                    'departamento5'=>$departexpacu, 'academica'=> $academica, 'aulas'=> $aulas, 'detallealumacu'=>$detalleacualum]);
+            
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update($request, $id)
     {        
-        
-        //validar los datos del alumno
-        $alumno =  request()->validate([
-            'PrimerNombre'=> 'required',            
-            'PrimerApellido'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',
-            'SegundoApellido'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',
-            'Correo'=> 'required|unique:alumnos,Correo,'.$id.',IdAlumno,EstadoAlumno,'.true,
-            'IdTipoDocumento'=> 'required',
-            'NumeroDocumento'=> 'required|unique:alumnos,NumeroDocumento,'.$id.',IdAlumno,EstadoAlumno,'.true,
-            'IdMunicipioExpedido'=> 'required', 
-            'IdGenero'=> 'required',
-            'FechaNacimiento'=> 'required', 
-            'IdCiudadNacimiento'=> 'required', 
-            'IdCiudadResidencia'=> 'required',
-            'Direccion'=> 'required',
-            'Zona'=> 'required',
-            'Telefono'=> 'required',            
-        ]);
-        
-        //validar los datos de la salud
-        $salud = request()->validate([
-            'IdEps'=> 'required|int',
-            'IdTipoSangre'=> 'required',             
-            'CarnetSisben'=> 'required', 
-            'PuntajeSisben'=> 'required', 
-            'Estrato'=> 'required' 
-        ]);
+        try{            
+         $mi_array = json_decode($request);
+         
+         if($mi_array->PrimerNombre == "" || $mi_array->PrimerApellido==""|| $mi_array->SegundoApellido=="" || $mi_array->Correo ==""
+            ||$mi_array->IdTipoDocumento == ""||$mi_array->NumeroDocumento == "" ||$mi_array->IdMunicipioExpedido == "" ||$mi_array->IdGenero == ""
+            ||$mi_array->FechaNacimiento == "" ||$mi_array->IdCiudadNacimiento == "" ||$mi_array->IdCiudadResidencia == "" ||$mi_array->Direccion == ""
+            ||$mi_array->Zona == "" ||$mi_array->Telefono == "" ||$mi_array->EstadoAlumno == "")
+            {
+                return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información personal del alumno. Estos campos son obligatorios para registrar un alumno']);                            
+            }else{
+                
+                if($mi_array->IdEps ==""||$mi_array->IdTipoSangre =="" || $mi_array->CarnetSisben =="" || $mi_array->PuntajeSisben =="" ||$mi_array->Estrato =="")
+                {
+                    return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información de salud del alumno. Estos campos son obligatorios para registrar un alumno']);                            
+                }else{
+                    
+                    if($mi_array->IdTipoAcudiente==""||$mi_array->PrimerNombreAcu=="" ||$mi_array->PrimerApellidoAcu=="" ||$mi_array->SegundoApellidoAcu=="" || $mi_array->IdTipoDocumento=="" ||
+                    $mi_array->IdMunicipioExpedicion=="" ||$mi_array->IdParentesco=="" ||$mi_array->DireccionHogar=="" ||$mi_array->TelefonoCelular=="" ||
+                    $mi_array->NumeroDocumentoAcu=="" || $mi_array->CorreoAcu=="")
+                    {
+                        return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información del acudiente del alumno. Estos campos son obligatorios para registrar un alumno']);                             
+                    }else{
+                        
+                        if($mi_array->IdGrado == ""||$mi_array->Numerolista == ""||$mi_array->Estado == ""||$mi_array->FechaEstado == ""||
+                        $mi_array->CodigoInterno == ""||$mi_array->NumeroMatricula == ""||$mi_array->InstitucionOrigen == ""||$mi_array->EstadoAcademicoAnterior == ""||
+                        $mi_array->EstadoMatriculaFinal == "")
+                        {
+                            
+                            return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información academica del alumno. Estos campos son obligatorios para registrar un alumno']);                                 
+                        }else{
+                            
+                            //Consultar al aprendiz
+                            $ediAlum = Alumno::find($request->IdAlumno);
+                            
+                            //Asignar los nuevos datos para el alumno
+                            $ediAlum->PrimerNombre = $request['PrimerNombre'];
+                            $ediAlum->SegundoNombre = $request['SegundoNombre'];
+                            $ediAlum->PrimerApellido = $request['PrimerApellido'];
+                            $ediAlum->SegundoApellido = $request['SegundoApellido'];
+                            $ediAlum->Correo = $request['Correo'];
+                            $ediAlum->IdTipoDocumento = $request['IdTipoDocumento'];
+                            $ediAlum->NumeroDocumento = $request['NumeroDocumento'];
+                            $ediAlum->IdMunicipioExpedido = $request['IdMunicipioExpedido'];
+                            $ediAlum->IdGenero = $request['IdGenero'];
+                            $ediAlum->FechaNacimiento = $request['FechaNacimiento'];
+                            $ediAlum->IdCiudadNacimiento = $request['IdCiudadNacimiento'];
+                            $ediAlum->IdCiudadResidencia = $request['IdCiudadResidencia'];
+                            $ediAlum->Direccion = $request['Direccion'];
+                            $ediAlum->Zona = $request['Zona'];
+                            $ediAlum->Telefono = $request['Telefono'];
+                            //Actualizar asignación en la BD
+                            $ediAlum->save();
 
-        //validar los datos de el acudiente
-        $acudiente = request()->validate([
-            'PrimerNombreAcu'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',             
-            'PrimerApellidoAcu'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/', 
-            'SegundoApellidoAcu'=> 'required|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/', 
-            'IdTipoDocumento'=> 'required', 
-            'IdMunicipioExpedicion'=> 'required', 
-            'IdParentesco'=> 'required', 
-            'DireccionHogar'=> 'required',             
-            'TelefonoCelular'=> 'required',             
-            'NumeroDocumentoAcu'=> 'required', 
-            'CorreoAcu'=> 'required'
-        ]);
+                            //Consultar datos de la salud del alumno
+                            $editSalud = Salud::where('IdAlumno', '=', $id)->first();
+                            
+                            //Ingresar los nuevs registros de saud del alumno
+                            $editSalud->IdEps = $request['IdEps'];
+                            $editSalud->IdTipoSangre = $request['IdTipoSangre'];
+                            $editSalud->Ips = $request['Ips'];
+                            $editSalud->Ars = $request['Ars'];
+                            $editSalud->CarnetSisben = $request['CarnetSisben'];
+                            $editSalud->PuntajeSisben = $request['PuntajeSisben'];
+                            $editSalud->Estrato = $request['Estrato'];
+                            $editSalud->FuenteRecursos = $request['FuenteRecursos'];
+                            $editSalud->MadreCabFamilia = $request['MadreCabFamilia'];
+                            $editSalud->HijoDeMadreCabFamilia = $request['HijoDeMadreCabFamilia'];
+                            $editSalud->BeneVeteranoMilitar = $request['BeneVeteranoMilitar'];
+                            $editSalud->BeneHeroeNacional = $request['BeneHeroeNacional'];
+                            $editSalud->IdVictima = $request['IdVictima'];
+                            $editSalud->FechaExpulsion = $request['FechaExpulsion'];
+                            $editSalud->IdMunicipio = $request['IdMunicipio'];
+                            $editSalud->IdResguardo = $request['IdResguardo'];
+                            $editSalud->IdEtnia = $request['IdEtnia'];
+                            //Actualizar registros en la bd
+                            $editSalud->save();
 
-        //validar los datos de la información académica
-        $academica = request()->validate([
-            'IdGrado'=> 'required',             
-            'Numerolista'=> 'required', 
-            'Estado'=> 'required', 
-            'FechaEstado'=> 'required', 
-            'CodigoInterno'=> 'required', 
-            'NumeroMatricula'=> 'required', 
-            'InstitucionOrigen'=> 'required', 
-            'EstadoAcademicoAnterior'=> 'required', 
-            'EstadoMatriculaFinal'=> 'required'                     
-        ]);
-        
-        //Consultar al aprendiz
-        $ediAlum = Alumno::find($request['IdAlumno']);
-        //Asignar los nuevos datos para el alumno
-        $ediAlum->PrimerNombre = $request['PrimerNombre'];
-        $ediAlum->SegundoNombre = $request['SegundoNombre'];
-        $ediAlum->PrimerApellido = $request['PrimerApellido'];
-        $ediAlum->SegundoApellido = $request['SegundoApellido'];
-        $ediAlum->Correo = $request['Correo'];
-        $ediAlum->IdTipoDocumento = $request['IdTipoDocumento'];
-        $ediAlum->NumeroDocumento = $request['NumeroDocumento'];
-        $ediAlum->IdMunicipioExpedido = $request['IdMunicipioExpedido'];
-        $ediAlum->IdGenero = $request['IdGenero'];
-        $ediAlum->FechaNacimiento = $request['FechaNacimiento'];
-        $ediAlum->IdCiudadNacimiento = $request['IdCiudadNacimiento'];
-        $ediAlum->IdCiudadResidencia = $request['IdCiudadResidencia'];
-        $ediAlum->Direccion = $request['Direccion'];
-        $ediAlum->Zona = $request['Zona'];
-        $ediAlum->Telefono = $request['Telefono'];
-        //Actualizar asignación en la BD
-        $ediAlum->save();
+                            //Consultar la información del acudiente del alumno
+                            $editAcudiente = Acudiente::join('detallealumnosacudientes', 'acudientes.IdAcudiente', '=', 'detallealumnosacudientes.IdAcudiente')
+                                                        ->where('detallealumnosacudientes.IdAlumno', '=', $id)
+                                                        ->select('acudientes.*')
+                                                        ->distinct()
+                                                        ->get(['detallealumnosacudientes.IdAlumno']);
+                                                        
+                            foreach ($editAcudiente as $key => $value) {            
+                                //Ingresar los nuevos registros del acudiente del alumno                                            
+                                $value->PrimerNombreAcu = $request['PrimerNombreAcu'];
+                                $value->SegundoNombreAcu = $request['SegundoNombreAcu'];
+                                $value->PrimerApellidoAcu = $request['PrimerApellidoAcu'];
+                                $value->SegundoApellidoAcu = $request['SegundoApellidoAcu'];
+                                $value->CorreoAcu = $request['CorreoAcu'];
+                                $value->IdParentesco = $request['IdParentesco'];
+                                $value->DireccionHogar = $request['DireccionHogar'];
+                                $value->TelefonoHogar = $request['TelefonoHogar'];
+                                $value->DireccionTrabajo = $request['DireccionTrabajo'];
+                                $value->TelefonoTrabajo = $request['TelefonoTrabajo'];
+                                $value->TelefonoCelular = $request['TelefonoCelular'];
+                                $value->Ocupacion = $request['Ocupacion'];
+                                $value->IdTipoDocumento = $request['IdTipoDocumento'];
+                                $value->NumeroDocumentoAcu = $request['NumeroDocumentoAcu'];
+                                $value->IdMunicipioExpedicion = $request['IdMunicipioExpedicion'];
+                                //Actualizar registros en la bd
+                                $value->save();
+                            }
+                            
+                            $editDetalleAlumAcu = DetalleAlumnoAcudiente::where('IdAlumno', $id)->firstOrFail();
+                            
+                            $editDetalleAlumAcu->IdTipoAcudiente = $request['IdTipoAcudiente'];
+                            $editDetalleAlumAcu->save();
 
-        //Consultar datos de la salud del alumno
-        $editSalud = Salud::where('IdAlumno', '=', $id)->first();
-        
-        //Ingresar los nuevs registros de saud del alumno
-        $editSalud->IdEps = $request['IdEps'];
-        $editSalud->IdTipoSangre = $request['IdTipoSangre'];
-        $editSalud->Ips = $request['Ips'];
-        $editSalud->Ars = $request['Ars'];
-        $editSalud->CarnetSisben = $request['CarnetSisben'];
-        $editSalud->PuntajeSisben = $request['PuntajeSisben'];
-        $editSalud->Estrato = $request['Estrato'];
-        $editSalud->FuenteRecursos = $request['FuenteRecursos'];
-        $editSalud->MadreCabFamilia = $request['MadreCabFamilia'];
-        $editSalud->HijoDeMadreCabFamilia = $request['HijoDeMadreCabFamilia'];
-        $editSalud->BeneVeteranoMilitar = $request['BeneVeteranoMilitar'];
-        $editSalud->BeneHeroeNacional = $request['BeneHeroeNacional'];
-        $editSalud->IdVictima = $request['IdVictima'];
-        $editSalud->FechaExpulsion = $request['FechaExpulsion'];
-        $editSalud->IdMunicipio = $request['IdMunicipio'];
-        $editSalud->IdResguardo = $request['IdResguardo'];
-        $editSalud->IdEtnia = $request['IdEtnia'];
-        //Actualizar registros en la bd
-        $editSalud->save();
-
-        //Consultar la información del acudiente del alumno
-        $editAcudiente = Acudiente::join('detallealumnosacudientes', 'acudientes.IdAcudiente', '=', 'detallealumnosacudientes.IdAcudiente')
-                                    ->where('detallealumnosacudientes.IdAlumno', '=', $id)
-                                    ->select('acudientes.*')
-                                    ->distinct()
-                                    ->get(['detallealumnosacudientes.IdAlumno']);
-                                    
-        foreach ($editAcudiente as $key => $value) {            
-            //Ingresar los nuevos registros del acudiente del alumno                                            
-            $value->PrimerNombreAcu = $request['PrimerNombreAcu'];
-            $value->SegundoNombreAcu = $request['SegundoNombreAcu'];
-            $value->PrimerApellidoAcu = $request['PrimerApellidoAcu'];
-            $value->SegundoApellidoAcu = $request['SegundoApellidoAcu'];
-            $value->CorreoAcu = $request['CorreoAcu'];
-            $value->IdParentesco = $request['IdParentesco'];
-            $value->DireccionHogar = $request['DireccionHogar'];
-            $value->TelefonoHogar = $request['TelefonoHogar'];
-            $value->DireccionTrabajo = $request['DireccionTrabajo'];
-            $value->TelefonoTrabajo = $request['TelefonoTrabajo'];
-            $value->TelefonoCelular = $request['TelefonoCelular'];
-            $value->Ocupacion = $request['Ocupacion'];
-            $value->IdTipoDocumento = $request['IdTipoDocumento'];
-            $value->NumeroDocumentoAcu = $request['NumeroDocumentoAcu'];
-            $value->IdMunicipioExpedicion = $request['IdMunicipioExpedicion'];
-            //Actualizar registros en la bd
-            $value->save();
-        }
-        
-        $editDetalleAlumAcu = DetalleAlumnoAcudiente::where('IdAlumno', $id)->firstOrFail();
-        
-        $editDetalleAlumAcu->IdTipoAcudiente = $request['IdTipoAcudiente'];
-        $editDetalleAlumAcu->save();
-
-        
-        //Consultar la 
-        $editAcademica = Academica::where('IdAlumno','=', $id)->first();
-        //Ingresar los nuevos registros de la informacion academica del alumno
-        $editAcademica->IdGrado = $request['IdGrado'];
-        $editAcademica->valorPension = $request['valorPension'];
-        $editAcademica->valorMatricula = $request['valorMatricula'];
-        $editAcademica->Numerolista = $request['Numerolista'];
-        $editAcademica->Estado = $request['Estado'];
-        $editAcademica->FechaEstado = $request['FechaEstado'];
-        $editAcademica->CodigoInterno = $request['CodigoInterno'];
-        $editAcademica->NumeroMatricula = $request['NumeroMatricula'];
-        $editAcademica->InstitucionOrigen = $request['InstitucionOrigen'];
-        $editAcademica->EstadoAcademicoAnterior = $request['EstadoAcademicoAnterior'];
-        $editAcademica->EstadoMatriculaFinal = $request['EstadoMatriculaFinal'];
-        $editAcademica->CondicionFinAno = $request['CondicionFinAno'];
-        $editAcademica->CausaTraslado = $request['CausaTraslado'];
-        //Actualizar los nuevos registros de la información academica del alumno
-        $editAcademica->save();
-
-
-        return redirect()->route('alumno.index')->with('success','El registro de la matricula del alumno se registro con exito');
-            
+                            
+                            //Consultar la 
+                            $editAcademica = Academica::where('IdAlumno','=', $id)->first();
+                            //Ingresar los nuevos registros de la informacion academica del alumno
+                            $editAcademica->IdGrado = $request['IdGrado'];
+                            $editAcademica->valorPension = $request['valorPension'];
+                            $editAcademica->valorMatricula = $request['valorMatricula'];
+                            $editAcademica->Numerolista = $request['Numerolista'];
+                            $editAcademica->Estado = $request['Estado'];
+                            $editAcademica->FechaEstado = $request['FechaEstado'];
+                            $editAcademica->CodigoInterno = $request['CodigoInterno'];
+                            $editAcademica->NumeroMatricula = $request['NumeroMatricula'];
+                            $editAcademica->InstitucionOrigen = $request['InstitucionOrigen'];
+                            $editAcademica->EstadoAcademicoAnterior = $request['EstadoAcademicoAnterior'];
+                            $editAcademica->EstadoMatriculaFinal = $request['EstadoMatriculaFinal'];
+                            $editAcademica->CondicionFinAno = $request['CondicionFinAno'];
+                            $editAcademica->CausaTraslado = $request['CausaTraslado'];
+                            //Actualizar los nuevos registros de la información academica del alumno
+                            $editAcademica->save();
+                            
+                            return response()->json(['status'=>'success','message' => 'El registro de la matricula del alumno se registro con exito']);                                 
+                        }
+                    }   
+                }
+            }            
+        }catch (\Exception $e) {         
+            return response()->json(['status'=>'error','message' => 'Ha ocurrido un error con el proceso de registrar este alumno en el sistema. Actulice su navegador y vuelva a ingresarlo']);        
+            /*return response()->json([$e->getMessage()]);  */
+        }    
     }
 
     public function getCiudad(Request $request, $id)

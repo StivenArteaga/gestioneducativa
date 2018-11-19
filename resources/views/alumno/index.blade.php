@@ -69,7 +69,7 @@
                                 <td>{{ $alumno->Telefono }}</td>
                                 <td>{{ $alumno->Correo }}</td>
                                 <td>                                       
-                                <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='Mostrar({{$alumno->IdAlumno}})'><i class="far far fa-edit"></i></button>                                                                                                    
+                                <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='Mostrar({{$alumno->IdAlumno}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['alumno', $alumno->IdAlumno], 'name'=>"formularioEliminar" , 'onsubmit'=>'return confirmarEliminar()' , 'method' => 'DELETE' ,'style'=> 'display:inline' ]) !!}                                                            
                                 <button type="submit" class="btn icon-table btn-delete" ><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}              
@@ -360,8 +360,7 @@ function SelectAcud2() {
 } 
 
 
-function GuardarAlumno(){
-  debugger;
+function GuardarAlumno(){  
     var request ={
       //Datos personales del alumno
       EstadoAlumno: $("#EstadoAlumno").val(),
@@ -455,13 +454,12 @@ function GuardarAlumno(){
       CausaTraslado: $("#CausTrasAca").val(),
 
     };    
-    var valParam = JSON.stringify(request);
-    console.log(request, valParam);
+    var valParam = JSON.stringify(request);    
     $.get('guardalum/'+valParam, function(data){
         if(data.status == "success"){
           swal({
               type: 'success',
-              title: 'Exito',
+              title: 'Éxito',
               animation: true,
               customClass: 'animated tada',
               text: data.message

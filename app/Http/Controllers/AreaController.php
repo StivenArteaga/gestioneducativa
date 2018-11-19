@@ -8,11 +8,7 @@ use App\Materia;
 
 class AreaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
         $areas = Area::where('EstadoArea', true)->get();
@@ -20,22 +16,6 @@ class AreaController extends Controller
         return view('area.index', compact('areas','materias'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {        
         if ($request['IdArea'] != 0) {
@@ -83,8 +63,7 @@ class AreaController extends Controller
     public function edit($id)
     {           
         $area = Area::findOrFail($id);        
-        return response()->json($area);
-        
+        return response()->json($area);        
     }
 
     /**

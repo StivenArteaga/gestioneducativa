@@ -38,8 +38,7 @@ function MostrarMateria(id) {
 }
 
 function Mostrar(id) {
-    $.get('editalum/editalum/' + id, function(data) {
-        console.log(data.aulas);
+    $.get('editalum/editalum/'+id, function(data) {        
         if (data.alumno != null) {
 
             /*Datos personales del alumno*/
@@ -99,6 +98,25 @@ function Mostrar(id) {
             $("#NumDocuAcu").val(data.acudiente.NumeroDocumentoAcu);
             $("#IdDepartamentoExpAcu").val(data.departamento5.IdDepartamento);
             $("#IdMunicipioExpedicionAcu").val(data.acudiente.IdMunicipioExpedicion);
+
+            /*Datos segundo acudiente */
+            $("#IdTipoAcudiente2").val(data.acudientedos.IdTipoAcudiente);
+            $("#PrimNombAcu2").val(data.acudientedos.PrimerNombreAcu);
+            $("#SeguNombAcu2").val(data.acudientedos.SegundoNombreAcu);
+            $("#PriApellAcu2").val(data.acudientedos.PrimerApellidoAcu);
+            $("#SeguApellAcu2").val(data.acudientedos.SegundoApellidoAcu);
+            $("#EmailAcu2").val(data.acudientedos.CorreoAcu);
+            $("#IdParentescoAcu2").val(data.acudientedos.IdParentesco);
+            $("#DirHogAcu2").val(data.acudientedos.DireccionHogar);
+            $("#TelHogAcu2").val(data.acudientedos.TelefonoHogar);
+            $("#DirTraAcu2").val(data.acudientedos.DireccionTrabajo);
+            $("#TelTraAcu2").val(data.acudientedos.TelefonoTrabajo);
+            $("#TelPerAcu2").val(data.acudientedos.TelefonoCelular);
+            $("#OcupAcu2").val(data.acudientedos.Ocupacion);
+            $("#IdTipoDocumentoAcu2").val(data.acudientedos.IdTipoDocumento);
+            $("#NumDocuAcu2").val(data.acudientedos.NumeroDocumentoAcu);
+            $("#IdDepartamentoExpAcu2").val(data.departamento5.IdDepartamento);
+            $("#IdMunicipioExpedicionAcu2").val(data.acudientedos.IdMunicipioExpedicion);
 
             /*Detalle alumno acudiente */
             $("#IdTipoAcudiente").val(data.detallealumacu.IdTipoAcudiente);
