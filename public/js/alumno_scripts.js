@@ -40,7 +40,7 @@ function cargarNotas(value) {
 $(document).ready(function() {
     $('.btn-delete').click(function(e) {
         e.preventDefault();
-        if (!confirm("¿Esta seguro que desea eliminar este alumno?")) {
+        if (!confirm("¿Esta seguro que desea eliminar este registro?")) {
             return false;
         }
 

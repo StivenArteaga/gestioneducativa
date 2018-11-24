@@ -4,27 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Coordinador;
 use Illuminate\Http\Request;
+use App\Http\Requests\CreateCoordinadorRequest;
+use App\Http\Requests\UpdateCoordinadorRequest;
+use App\TipoDocumento;
+use App\Genero;
+use App\Ciudad;
+use App\TipoSangre;
 
 class CoordinadorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function index()
     {
-        //
+        $coordinadores = Coordinador::select('coordinadores.*', 'tipodocumentos.*', 'tiposangres.*','generos.*', 'ciudades.*')
+        ->join('tipodocumentos', 'tipodocumentos.IdTipoDocumento', 'coordinadores.IdTipoDocumento')
+        ->join('generos', 'generos.IdGenero', 'coordinadores.IdGenero')
+        ->join('tiposangres', 'tiposangres.IdTipoSangre', 'coordinadores.IdTipoSangre')
+        ->join('ciudades', 'ciudades.IdCiudad', 'coordinadores.IdCiudad')
+        ->where('Estado', true)
+        ->get();
+
+        return view('coordinadores.index', compact('coordinadores'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
-        //
+        $tipodocumentos = TipoDocumento::pluck('NombreTipoDocumento', 'IdTipoDocumento');
+        $generos = Genero::pluck('NombreGenero', 'IdGenero');
+        $ciudades = Ciudad::pluck('NombreCiudad', 'IdCiudad');
+        $tiposangres = TipoSangre::pluck('NombreTipoSangre', 'IdTipoSangre');
+
+        return view('coordinadores.create', compact('tipodocumentos', 'generos', 'ciudades', 'tiposangres'));
     }
 
     /**
@@ -33,9 +44,11 @@ class CoordinadorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateCoordinadorRequest $request)
     {
-        //
+        Coordinador::create($request->all());
+
+        return redirect('coordinadores');
     }
 
     /**
@@ -55,9 +68,15 @@ class CoordinadorController extends Controller
      * @param  \App\Coordinador  $coordinador
      * @return \Illuminate\Http\Response
      */
-    public function edit(Coordinador $coordinador)
+    public function edit($id)
     {
-        //
+        $coordinador = Coordinador::findOrFail($id);
+        $tipodocumentos = TipoDocumento::pluck('NombreTipoDocumento', 'IdTipoDocumento');
+        $generos = Genero::pluck('NombreGenero', 'IdGenero');
+        $ciudades = Ciudad::pluck('NombreCiudad', 'IdCiudad');
+        $tiposangres = TipoSangre::pluck('NombreTipoSangre', 'IdTipoSangre');
+
+        return view('coordinadores/edit', compact('coordinador', 'tipodocumentos', 'generos', 'ciudades', 'tiposangres'));
     }
 
     /**
@@ -67,9 +86,12 @@ class CoordinadorController extends Controller
      * @param  \App\Coordinador  $coordinador
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Coordinador $coordinador)
+    public function update(UpdateCoordinadorRequest $request, $id)
     {
-        //
+        $coordinador = Coordinador::findOrFail($id);
+        $coordinador->update($request->all());
+
+        return redirect('coordinadores');
     }
 
     /**
@@ -78,8 +100,26 @@ class CoordinadorController extends Controller
      * @param  \App\Coordinador  $coordinador
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Coordinador $coordinador)
+    public function destroy(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $coordinador = Coordinador::findOrFail($id);
+            if ($coordinador != null) {
+                if ($coordinador->Estado == true) {
+                    $coordinador->Estado = false;
+                    $coordinador->save();
+                }else {
+                    $coordinador->Estado = true;
+                    $coordinador->save();
+                }
+            }else {
+                $coordinador->Estado = false;
+                $coordinador->save();
+            }
+            
+            return response()->json([
+                'message' => 'El Coordinador '. $coordinador->PrimerNombre. ' '. $coordinador->PrimerApellido. ' Ha sido eliminado exitosamente!'
+            ]);
+        }
     }
 }

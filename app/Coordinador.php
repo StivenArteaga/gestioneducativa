@@ -8,5 +8,9 @@ class Coordinador extends Model
 {
     protected $table = 'coordinadores';
     protected $primaryKey = 'IdCoordinador';
-    protected $fillable = ['Nombres', 'Apellidos', 'IdUser'];
+    protected $fillable = ['PrimerNombre', 'SegundoNombre', 'PrimerApellido', 'SegundoApellido', 'IdTipoDocumento',
+    'NumeroDocumento', 'FechaNacimiento', 'IdGenero', 'IdTipoSangre', 'Correo', 'Direccion', 'Telefono', 'IdCiudad',
+    'IdUser', 'Estado'];
+
+    public $timestamps = false;
 }

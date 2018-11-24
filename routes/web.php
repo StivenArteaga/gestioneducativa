@@ -173,6 +173,11 @@ Route::group(['middleware' => ['auth']], function() {
      Route::get('observaciones/{id}/edit', 'ObservadorController@edit');
      Route::post('observaciones/update/{id}', 'ObservadorController@update');
 
+     /**
+      * Coordinador
+      */
+      Route::resource('coordinadores', 'CoordinadorController');
+
 
 });
 
