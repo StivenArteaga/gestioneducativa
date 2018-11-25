@@ -28,7 +28,7 @@ class CreateCoordinadorRequest extends FormRequest
             'SegundoNombre' => 'nullable',
             'PrimerApellido' => 'required',
             'SegundoApellido' => 'nullable',
-            'NumeroDocumento' => 'required|max:20|unique:tipodocumentos',
+            'NumeroDocumento' => 'required|max:20|unique:coordinadores',
             'FechaNacimiento' => 'required|date',
             'Correo' => 'required|email|string|max:100',
             'Direccion' => 'nullable|string|max:100',

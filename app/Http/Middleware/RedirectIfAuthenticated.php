@@ -28,6 +28,8 @@ class RedirectIfAuthenticated
               return redirect('/main');
             }else if (Auth::user()->IdTipoUsuario == 5) {
               return redirect('/observador');
+            }else {
+              return redirect('/observador');
             }
           }else{
             return $next($request);

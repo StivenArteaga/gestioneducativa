@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateCoordinadorRequest;
 use App\TipoDocumento;
 use App\Genero;
 use App\Ciudad;
+use App\User;
 use App\TipoSangre;
 
 class CoordinadorController extends Controller
@@ -46,8 +47,31 @@ class CoordinadorController extends Controller
      */
     public function store(CreateCoordinadorRequest $request)
     {
-        Coordinador::create($request->all());
 
+        $user = new User();
+        $user->email = $request->get('Correo');
+        $user->Contrasena = bcrypt($request->get('NumeroDocumento'));
+        $user->IdTipoUsuario = 2;
+        $user->EstadoUsuario = true;
+        $user->save();
+
+        $coordinador = new Coordinador();
+        $coordinador->PrimerNombre = $request->get('PrimerNombre');
+        $coordinador->SegundoNombre = $request->get('SegundoNombre');
+        $coordinador->PrimerApellido = $request->get('PrimerApellido');
+        $coordinador->SegundoApellido = $request->get('SegundoApellido');
+        $coordinador->IdTIpoDocumento = $request->get('IdTipoDocumento');
+        $coordinador->NumeroDocumento = $request->get('NumeroDocumento');
+        $coordinador->FechaNacimiento = $request->get('FechaNacimiento');
+        $coordinador->IdGenero = $request->get('IdGenero');
+        $coordinador->IdTipoSangre = $request->get('IdTipoSangre');
+        $coordinador->Correo = $request->get('Correo');
+        $coordinador->Direccion = $request->get('Direccion');
+        $coordinador->Telefono = $request->get('Telefono');
+        $coordinador->IdCiudad = $request->get('IdCiudad');
+        $coordinador->IdUser = $user->IdUsers;
+        $coordinador->save();
+        
         return redirect('coordinadores');
     }
 
