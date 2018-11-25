@@ -52,7 +52,7 @@
                     <div class="card-body">
                         <div class="row">
                             @foreach ($observaciones as $observacion )
-                                <strong class="col-4 mb-1">Docente: {{ $observacion->PrimerNombreMaes . " " . $observacion->PrimerApellidoMaes }}</strong>
+                                <strong class="col-4 mb-1">Coordinador: {{ $observacion->PrimerNombre . " " . $observacion->PrimerApellido }}</strong>
                                 <textarea cols="30" rows="5" class="form-control col-8 mb-1" readonly>{{ $observacion['descripcion'] }}</textarea>
                             @endforeach
                         </div>
