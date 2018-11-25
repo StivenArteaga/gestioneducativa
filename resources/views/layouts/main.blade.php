@@ -115,8 +115,7 @@
               <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i class="ft-user"></i> Editar Perfil</a>            
                 <form method="POST" action="{{ route('logout') }}">
                 {{ csrf_field() }}
-                  
-                  <div class="dropdown-divider"></div><button class="dropdown-item ft-power" class="" >Cerrar sesiones</button>
+                  <div class="dropdown-divider"></div><button class="dropdown-item ft-power" class="" >Cerrar sesión</button>
                 </form>                
               </div>
             </li>                  
@@ -142,7 +141,7 @@
           </li>
         @endif
 
-        @if (Auth::user()->IdTipoUsuario != 6)
+        @if (Auth::user()->IdTipoUsuario != 6 && Auth::user()->IdTipoUsuario != 5)
         <!--Docente-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-slideshare"></i><span class="menu-title" data-i18n="nav.dash.main">Docentes</span></a>
               <ul class="menu-content">
@@ -158,7 +157,7 @@
         <!--Observador Alumno-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-pencil-square-o"></i><span class="menu-title" data-i18n="nav.dash.main">Observador Alumnos</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="{{ route('observador') }}" data-i18n="nav.dash.ecommerce">Gestionar Observador</a></li>                        
+            <li><a class="menu-item" href="{{ url('observador') }}" data-i18n="nav.dash.ecommerce">Gestionar Observador</a></li>                        
           </ul>
         </li>
         @endif
