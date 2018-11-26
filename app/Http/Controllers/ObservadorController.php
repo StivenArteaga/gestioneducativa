@@ -13,10 +13,10 @@ use App\Coordinador;
 
 class ObservadorController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['auth', 'alumno'], ['only' => ['index']]);
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware(['auth', 'alumno'], ['only' => ['index']]);
+    // }
 
     public function observaciones()
     {

@@ -177,6 +177,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('inasistencia/grado/{Id}/{IdA}','InasistenciaController@alumnos');
     Route::get('inasistenciasalumnos/{asignatura}/{alumno}','InasistenciaController@add');
     Route::resource('inasistencia','InasistenciaController');
+     /**
+      * Coordinador
+      */
+      Route::resource('coordinadores', 'CoordinadorController');
+
 
 });
 

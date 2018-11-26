@@ -108,18 +108,18 @@
             </li>           
           </ul>
           <ul class="nav navbar-nav float-right">
-            <li class="dropdown dropdown-user nav-item">
-              <a class="dropdown-toggle nav-link dropdown-user-link" href="#" data-toggle="dropdown">
-                <span class="mr-1">Bienvenido,    
-                @            
-                  <span class="user-name text-bold-700">{{ auth()->user()->email }}</span>
+              <li class="nav-item">
+                  <a href="/" style="color: white" class="nav-link"><i class="fa fa-home fa-lg"></i> Inicio</a>
+              </li>
+            <li class="dropdown nav-item">
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-1"><span class="user-name text-bold-700"><i class="fa fa-user-circle fa-lg"></i>{{ auth()->user()->email }}</span>
                 </span>              
               </a>
-              <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i class="ft-user"></i> Editar Perfil</a>                
+              <div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i class="ft-user"></i> Editar Perfil</a>            
                 <form method="POST" action="{{ route('logout') }}">
                 {{ csrf_field() }}
-                  
-                  <div class="dropdown-divider"></div><button class="dropdown-item ft-power" class="" >Cerrar sesiones</button>
+                  <div class="dropdown-divider"></div><button class="dropdown-item ft-power" class="" >Cerrar sesión</button>
                 </form>                
               </div>
             </li>                  
@@ -132,38 +132,55 @@
   <div class="main-menu menu-fixed menu-dark menu-accordion    menu-shadow " data-scroll-to-active="true">
     <div class="main-menu-content">
       <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-      <!--Alumno-->
-        <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-mortar-board"></i><span class="menu-title" data-i18n="nav.dash.main">Alumnos</span></a>
-          <ul class="menu-content">
-            <li><a class="menu-item" href="{{ route('alumno') }}" data-i18n="nav.dash.ecommerce">Gestionar Alumno</a></li>
-            <li><a class="menu-item" href="{{ route('matriculas') }}" data-i18n="nav.dash.crypto">Gestionar Matrícula</a></li>            
-          </ul>
-        </li>
+
+        @if (Auth::user()->IdTipoUsuario == 1 || Auth::user()->IdTipoUsuario == 2 || Auth::user()->IdTipoUsuario == 3)
+        <!--Alumno-->
+          <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-mortar-board"></i><span class="menu-title" data-i18n="nav.dash.main">Alumnos</span></a>
+            <ul class="menu-content">
+              <li><a class="menu-item" href="{{ route('alumno') }}" data-i18n="nav.dash.ecommerce">Gestionar Alumno</a></li>
+              @if(Auth::user()->IdTipoUsuario == 3)
+                <li><a class="menu-item" href="{{ route('matriculas') }}" data-i18n="nav.dash.crypto">Gestionar Matrícula</a></li>            
+              @endif
+            </ul>
+          </li>
+        @endif
+
+        @if (Auth::user()->IdTipoUsuario != 6 && Auth::user()->IdTipoUsuario != 5)
         <!--Docente-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-slideshare"></i><span class="menu-title" data-i18n="nav.dash.main">Docentes</span></a>
               <ul class="menu-content">
+                @if (Auth::user()->IdTipoUsuario != 4)
                 <li><a class="menu-item" href="{{ route('maestros') }}" data-i18n="nav.templates.horz.classic">Gestionar Docente</a></li>                
-                <li><a class="menu-item" href="{{ route('cons') }}" data-i18n="nav.templates.horz.classic">Gestionar Inasistencia</a></li>                                            
+                @endif
+                <li><a class="menu-item" href="{{ route('cons') }}" data-i18n="nav.templates.horz.classic">Gestionar Inasistencia</a></li>          
               </ul>
         </li>
+        @endif
+
+        @if (Auth::user()->IdTipoUsuario == 5 || Auth::user()->IdTipoUsuario == 6)
         <!--Observador Alumno-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-pencil-square-o"></i><span class="menu-title" data-i18n="nav.dash.main">Observador Alumnos</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="{{ route('observaciones') }}" data-i18n="nav.dash.ecommerce">Gestionar Observador</a></li>                        
+            <li><a class="menu-item" href="{{ url('observador') }}" data-i18n="nav.dash.ecommerce">Gestionar Observador</a></li>                        
           </ul>
         </li>
         <!--Inasistencia-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-calendar-times-o"></i><span class="menu-title" data-i18n="nav.dash.main">Inasistencias</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="{{ route('inasistencias') }}" data-i18n="nav.dash.ecommerce">Gestionar Inasistencia</a></li>                        
+            <li><a class="menu-item" href="{{ route('inasistencias') }}" data-i18n="nav.dash.ecommerce">Gestionar Inasistencia</a></li>
           </ul>
         </li>
+        @endif
+
+        @if(Auth::user()->IdTipoUsuario == 4)
         <!--Registro Notas-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-check-circle-o"></i><span class="menu-title" data-i18n="nav.dash.main">Registro Notas</span></a>
           <ul class="menu-content">
-            <li><a class="menu-item" href="{{ route('evaluaciones') }}" data-i18n="nav.dash.ecommerce">Gestionar Registro Nota</a></li>                        
+            <li><a class="menu-item" href="{{ route('evaluaciones') }}" data-i18n="nav.dash.ecommerce">Gestionar Registro Nota</a></li>
           </ul>
         </li>
+        @endif
+
         <!--Reportes-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-file-text-o"></i><span class="menu-title" data-i18n="nav.dash.main">Reportes</span></a>
           <ul class="menu-content">
@@ -177,6 +194,8 @@
               <li><a class="menu-item" href="{{ route('cons') }}" data-i18n="nav.templates.vert.compact_menu">Reportes Institución</a></li>
           </ul>
         </li>
+
+        @if(Auth::user()->IdTipoUsuario == 1 || Auth::user()->IdTipoUsuario == 2 || Auth::user()->IdTipoUsuario == 3)
         <!--Pensum-->
         <li class=" nav-item"><a href="{{ route('main') }}"><i class="la la-bookmark"></i><span class="menu-title" data-i18n="nav.templates.main">Pensum</span></a>
           <ul class="menu-content">
@@ -185,20 +204,24 @@
             <li><a class="menu-item" href="{{ route('logros') }}" data-i18n="nav.templates.horz.classic">Gestionar Logro</a></li>
             <li><a class="menu-item" href="{{ route('materia') }}" data-i18n="nav.templates.horz.classic">Gestionar Materia</a></li>
           </ul>
-        </li>   
+        </li>
+        
         <!--Grupos-->
         <li class=" nav-item"><a href="{{ route('main') }}"><i class="la la-group"></i><span class="menu-title" data-i18n="nav.templates.main">Grupos</span></a>
           <ul class="menu-content">             
-              <li><a class="menu-item" href="{{ route('aulas') }}" data-i18n="nav.dash.ecommerce">Gestionar Aula</a></li>            
+            <li><a class="menu-item" href="{{ route('aulas') }}" data-i18n="nav.dash.ecommerce">Gestionar Aula</a></li>            
               <li><a class="menu-item" href="{{ route('grados') }}" data-i18n="nav.templates.horz.classic">Gestionar Grados</a>
               <li><a class="menu-item" href="{{ route('tgrupos') }}" data-i18n="nav.templates.horz.classic">Gestionar Asignaturas Grupo</a>
               <li><a class="menu-item" href="{{ route('grupos') }}" data-i18n="nav.dash.ecommerce">Gestionar Grupo</a></li>
           </ul>
         </li>
+        @endif
+
+        @if(Auth::user()->IdTipoUsuario == 1)
         <!--Configuracion-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-gears"></i><span class="menu-title" data-i18n="nav.dash.main">Configuraciones</span></a>
           <ul class="menu-content">
-              <li><a class="menu-item" href="{{ route('jornadas') }}" data-i18n="nav.templates.horz.classic">Gestionar Jornadas</a>
+            <li><a class="menu-item" href="{{ route('jornadas') }}" data-i18n="nav.templates.horz.classic">Gestionar Jornadas</a>
               <li><a class="menu-item" href="{{ route('sedes') }}" data-i18n="nav.templates.horz.classic">Gestionar Sedes</a>
               <li><a class="menu-item" href="{{ route('calificaciones') }}" data-i18n="nav.templates.horz.classic">Configurar Calificaciones</a>
           </ul>
@@ -218,8 +241,7 @@
             <li><a class="menu-item" href="{{ route('cons') }}" data-i18n="nav.dash.crypto">Asignaciones Módulo</a>
           </ul>
         </li>
-        
-        
+        @endif
       </ul>
     </div>
   </div>
