@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Maestro;
 use App\Ciudad;
 use App\TipoSangre;
@@ -10,6 +11,8 @@ use App\TipoDocumento;
 use App\Genero;
 use App\Asignatura;
 use App\DetalleAsignaturaDocente;
+use App\User;
+use Exception;
 
 class MaestroController extends Controller
 {
@@ -44,70 +47,85 @@ class MaestroController extends Controller
     }
 
     public function store(Request $request)
-    {        
-        if($request['IdAsignatura'] != null){
-            if ($request['IdMaestro'] != 0) {
-                $this->update($request, $request['IdMaestro']);
-                return redirect()->route('maestro.index')->with('success','La actualización del docente se realizo con exito');
-            } else {
-    
-                request()->validate([                    
-                    'PrimerNombreMaes'=> ['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)+$/'],             
-                    'PrimerApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u'],             
-                    'SegundoApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u'],             
-                    'IdTipoDocumento'=>'required|int',            
-                    'NumeroDocumento'=>'required|string|max:12|regex:/^[0-9]+$/',
-                    'FechaNacimiento'=>'required|date',
-                    'IdGenero'=>'required|int',
-                    'IdTipoSangre'=>'required|int',                
-                    'Correo'=>'required|email|unique:maestros,Correo|max:200',
-                    'Direccion'=>'required|string|max:200',
-                    'Telefono'=>'required|string|max:50',
-                    'IdCiudad'=>'required|int',
-                    'Especializacion'=>'required|string|max:100',
-                    'Escalafon'=>'required|string|max:50',
-                    'Coordinador'=>'required|string|max:20',
-                    'EstadoMaestro'=>'required|int'
-                ]); 
-                
-                $existesede = Maestro::where('NumeroDocumento', '=', $request['NumeroDocumento'])
-                                  ->where('EstadoMaestro', '=', true)
-                                  ->first();
+    { 
+        $correoglobal = '';
+        try{
+            if($request['IdAsignatura'] != null){
+                if ($request['IdMaestro'] != 0) {
+                    $this->update($request, $request['IdMaestro']);
+                    return redirect()->route('maestro.index')->with('success','La actualización del docente se realizo con exito');
+                } else {
+        
+                    request()->validate([                    
+                        'PrimerNombreMaes'=> ['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)+$/'],             
+                        'PrimerApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u'],             
+                        'SegundoApellidoMaes'=>['required', 'string', 'max:50', 'regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*$/u'],             
+                        'IdTipoDocumento'=>'required|int',            
+                        'NumeroDocumento'=>'required|string|max:12|regex:/^[0-9]+$/',
+                        'FechaNacimiento'=>'required|date',
+                        'IdGenero'=>'required|int',
+                        'IdTipoSangre'=>'required|int',                
+                        'Correo'=>'required|email|unique:maestros,Correo|max:200',
+                        'Direccion'=>'required|string|max:200',
+                        'Telefono'=>'required|string|max:50',
+                        'IdCiudad'=>'required|int',
+                        'Especializacion'=>'required|string|max:100',
+                        'Escalafon'=>'required|string|max:50',
+                        'Coordinador'=>'required|string|max:20',
+                        'EstadoMaestro'=>'required|int'
+                    ]); 
                     
-                if($existesede != null){
-                      return redirect()->route('maestro.index')->with('error','Ya existe un docente con este número de documento');                                                                 
-                }else{
-
-                    $existecorreo = Maestro::where('Correo', '=', $request['Correo'])
-                                  ->where('EstadoMaestro', '=', true)
-                                  ->first();
-
-                    if($existecorreo != null){
-                        return redirect()->route('maestro.index')->with('error','Ya existe un docente con este correo electronico');                                                                   
+                    $existesede = Maestro::where('NumeroDocumento', '=', $request['NumeroDocumento'])
+                                      ->where('EstadoMaestro', '=', true)
+                                      ->first();
+                        
+                    if($existesede != null){
+                          return redirect()->route('maestro.index')->with('error','Ya existe un docente con este número de documento');                                                                 
                     }else{
-                        Maestro::create($request->all());                    
+    
+                        $existecorreo = Maestro::where('Correo', '=', $request['Correo'])
+                                      ->where('EstadoMaestro', '=', true)
+                                      ->first();
+    
+                        if($existecorreo != null){
+                            return redirect()->route('maestro.index')->with('error','Ya existe un docente con este correo electronico');                                                                   
+                        }else{
+    
+                            $User = new User();
+                            $User->Contrasena = Hash::make($request['NumeroDocumento']);
+                            $User->email = $request['Correo'];
+                            $User->IdTipoUsuario = 4;
+                            $User->EstadoUsuario = 'Activo';
+                            $User->save();
 
-                        $All = Maestro::all();
-                        $IdMaestro =$All->last();  
+                            $correoglobal = $request['Correo'];
+                            $request['IdUser'] = $User->IdUsers;
+                            Maestro::create($request->all());                    
     
-                        foreach ($request['IdAsignatura'] as $key => $value) {
-                            $array = ([
-                                'IdAsignaturaDetalleAsignaturaDocente',
-                                'IdDocenteDetalleAsignaturaDocente'
-                            ]);
-    
-                            $array['IdDocenteDetalleAsignaturaDocente'] = $IdMaestro['IdMaestro'];
-                            $array['IdAsignaturaDetalleAsignaturaDocente'] = $value;
-                            DetalleAsignaturaDocente::create($array);
-                        }
-    
-                        return redirect()->route('maestro.index')->with('success','El registro del docente se realizo con exito');
-                    }                                  
-                }   
-            } 
-        }else{
-            return redirect()->route('maestro.index')->with('error','Al docente no se le ha asignado asignaturas');   
-        }               
+                            $All = Maestro::all();
+                            $IdMaestro =$All->last();  
+        
+                            foreach ($request['IdAsignatura'] as $key => $value) {
+                                $array = ([
+                                    'IdAsignaturaDetalleAsignaturaDocente',
+                                    'IdDocenteDetalleAsignaturaDocente'
+                                ]);
+        
+                                $array['IdDocenteDetalleAsignaturaDocente'] = $IdMaestro['IdMaestro'];
+                                $array['IdAsignaturaDetalleAsignaturaDocente'] = $value;
+                                DetalleAsignaturaDocente::create($array);
+                            }
+        
+                            return redirect()->route('maestro.index')->with('success','El registro del docente se realizo con exito');
+                        }                                  
+                    }   
+                } 
+            }else{
+                return redirect()->route('maestro.index')->with('error','Al docente no se le ha asignado asignaturas');   
+            }               
+        }catch (\Exception $e) {
+
+        }       
     }
 
     public function show($id)

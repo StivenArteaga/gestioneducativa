@@ -95,7 +95,7 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">Registro de jornada</h2>
+                  <h2 class="card-title">REGISTRO DE JORNADA</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   

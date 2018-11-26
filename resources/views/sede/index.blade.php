@@ -90,7 +90,7 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">Registro de sedes</h2>
+                  <h2 class="card-title">REGISTRO DE SEDE</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   

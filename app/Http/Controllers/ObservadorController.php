@@ -71,25 +71,30 @@ class ObservadorController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {   
         $id = Auth::user()->IdUsers;
+        
         $coordinador = Coordinador::where('coordinadores.IdCoordinador', $id)
         ->join('users', 'users.IdUsers', 'coordinadores.IdUser')
         ->select('coordinadores.IdCoordinador')
         ->first();
 
-        $this->validate($request, [
-            'IdAlumno' => 'required',
-            'descripcion' => 'required|string|max:800'
-        ]);
-
-        $observacion = new Observacion();
-        $observacion->IdCoordinador = $coordinador->IdCoordinador;
-        $observacion->IdAlumno = $request->get('IdAlumno');
-        $observacion->descripcion = $request->get('descripcion');
-        $observacion->save();
-
-        return redirect('observaciones');
+        if($coordinador == null){
+            return redirect()->route('observacion.index')->with('error','Este usuario no tiene permisos para realizar esta acción. Rol requerido "Coordinador"');            
+        }else{
+            $this->validate($request, [
+                'IdAlumno' => 'required',
+                'descripcion' => 'required|string|max:800'
+            ]);
+    
+            $observacion = new Observacion();
+            $observacion->IdCoordinador = $coordinador->IdCoordinador;
+            $observacion->IdAlumno = $request->get('IdAlumno');
+            $observacion->descripcion = $request->get('descripcion');
+            $observacion->save();
+    
+            return redirect('observaciones');
+        }               
     }
 
     public function edit($id)
@@ -107,6 +112,9 @@ class ObservadorController extends Controller
         ->select('coordinadores.IdCoordinador')
         ->first();
 
+        if($coordinador == null){
+            return redirect()->route('observacion.index')->with('error','Este usuario no tiene permisos para realizar esta acción. Rol requerido "Coordinador"');            
+        }else{
         $this->validate($request, [
             'IdAlumno' => 'required',
             'descripcion' => 'required|string|max:800'
@@ -118,5 +126,6 @@ class ObservadorController extends Controller
         $observaciones->save();
 
         return redirect('observaciones');
+        }
     }
 }

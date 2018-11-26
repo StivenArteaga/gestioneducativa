@@ -2,6 +2,13 @@
 
 @section('content')
 
+
+@if ($message = Session::get('error'))
+  <div class="alert alert-danger alert-dismissable custom-success-box" style="margin: 15px;">
+    <p>{{ $message }}</p>
+  </div>
+@endif
+
 <div class="container">
     <div class="row">
         <div class="col">

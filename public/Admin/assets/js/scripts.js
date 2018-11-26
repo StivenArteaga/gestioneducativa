@@ -100,23 +100,25 @@ function Mostrar(id) {
             $("#IdMunicipioExpedicionAcu").val(data.acudiente.IdMunicipioExpedicion);
 
             /*Datos segundo acudiente */
-            $("#IdTipoAcudiente2").val(data.acudientedos.IdTipoAcudiente);
-            $("#PrimNombAcu2").val(data.acudientedos.PrimerNombreAcu);
-            $("#SeguNombAcu2").val(data.acudientedos.SegundoNombreAcu);
-            $("#PriApellAcu2").val(data.acudientedos.PrimerApellidoAcu);
-            $("#SeguApellAcu2").val(data.acudientedos.SegundoApellidoAcu);
-            $("#EmailAcu2").val(data.acudientedos.CorreoAcu);
-            $("#IdParentescoAcu2").val(data.acudientedos.IdParentesco);
-            $("#DirHogAcu2").val(data.acudientedos.DireccionHogar);
-            $("#TelHogAcu2").val(data.acudientedos.TelefonoHogar);
-            $("#DirTraAcu2").val(data.acudientedos.DireccionTrabajo);
-            $("#TelTraAcu2").val(data.acudientedos.TelefonoTrabajo);
-            $("#TelPerAcu2").val(data.acudientedos.TelefonoCelular);
-            $("#OcupAcu2").val(data.acudientedos.Ocupacion);
-            $("#IdTipoDocumentoAcu2").val(data.acudientedos.IdTipoDocumento);
-            $("#NumDocuAcu2").val(data.acudientedos.NumeroDocumentoAcu);
-            $("#IdDepartamentoExpAcu2").val(data.departamento5.IdDepartamento);
-            $("#IdMunicipioExpedicionAcu2").val(data.acudientedos.IdMunicipioExpedicion);
+            if(data.acudientedos!= null){
+                $("#IdTipoAcudiente2").val(data.acudientedos.IdTipoAcudiente);
+                $("#PrimNombAcu2").val(data.acudientedos.PrimerNombreAcu);
+                $("#SeguNombAcu2").val(data.acudientedos.SegundoNombreAcu);
+                $("#PriApellAcu2").val(data.acudientedos.PrimerApellidoAcu);
+                $("#SeguApellAcu2").val(data.acudientedos.SegundoApellidoAcu);
+                $("#EmailAcu2").val(data.acudientedos.CorreoAcu);
+                $("#IdParentescoAcu2").val(data.acudientedos.IdParentesco);
+                $("#DirHogAcu2").val(data.acudientedos.DireccionHogar);
+                $("#TelHogAcu2").val(data.acudientedos.TelefonoHogar);
+                $("#DirTraAcu2").val(data.acudientedos.DireccionTrabajo);
+                $("#TelTraAcu2").val(data.acudientedos.TelefonoTrabajo);
+                $("#TelPerAcu2").val(data.acudientedos.TelefonoCelular);
+                $("#OcupAcu2").val(data.acudientedos.Ocupacion);
+                $("#IdTipoDocumentoAcu2").val(data.acudientedos.IdTipoDocumento);
+                $("#NumDocuAcu2").val(data.acudientedos.NumeroDocumentoAcu);
+                $("#IdDepartamentoExpAcu2").val(data.departamento5.IdDepartamento);
+                $("#IdMunicipioExpedicionAcu2").val(data.acudientedos.IdMunicipioExpedicion);
+            }
 
             /*Detalle alumno acudiente */
             $("#IdTipoAcudiente").val(data.detallealumacu.IdTipoAcudiente);
@@ -547,6 +549,7 @@ function SelectAsig2() {
     $("#datasig1").empty();
     console.log($('#datasig1').val());
     SelectAsig3();
+    CerrarModal('listaAsignaturas');
 }
 
 
@@ -584,3 +587,9 @@ function MostrarTipoGrupo(id) {
         }
     });
 }
+
+function CerrarModal(Id){
+    $("#"+Id).hide();
+  }
+
+  

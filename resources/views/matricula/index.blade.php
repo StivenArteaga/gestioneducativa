@@ -95,7 +95,7 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">Registro de matriculas</h2>
+                  <h2 class="card-title">REGISTRO DE MATRICULA</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   
@@ -151,7 +151,7 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Matricula de alumno</h4>
+          <h4 class="modal-title">MATRICULA DE ALUMNO</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         

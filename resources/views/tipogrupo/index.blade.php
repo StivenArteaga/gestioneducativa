@@ -34,12 +34,12 @@
               <div class="card">
                 <div class="card-header">
                   <button class="btn btn-success">
-                     <a data-toggle="modal" data-target=".bd-example-modal-lg">Nuevo Tipo Grupo</a>
+                     <a data-toggle="modal" data-target=".bd-example-modal-lg">Nuevo Asignaturas Grupo</a>
                   </button>
                       
                   
                   <div class="text-center">
-                    <h1 class="card-title">Listado de tipos de grupos</h1>
+                    <h1 class="card-title">Listado de asignaturas de grupos</h1>
                   </div>
                   <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3" ></i></a>                  
                   <div class="heading-elements">
@@ -55,7 +55,7 @@
                     <table class="table table-striped table-bordered dom-jQuery-events">
                       <thead>
                         <tr>                          
-                          <th>Nombre Tipo De Grupo</th>                          
+                          <th>Nombre Asignaturas Grupo</th>                          
                           <th with="300px">Acción</th>
                         </tr>
                       </thead>
@@ -74,7 +74,7 @@
                       </tbody>
                       <tfoot>
                         <tr> 
-                          <th>Nombre Tipo De Grupo</th>                          
+                          <th>Nombre Asignaturas Grupo</th>                          
                           <th>Acción</th>
                         </tr>
                       </tfoot>
@@ -93,16 +93,16 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">Registro de grupos</h2>
+                  <h2 class="card-title">REGISTRO DE ASIGNATURA POR GRUPO</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   
                 {!! Form::open(['route' => 'tgrupo.store', 'method' => 'POST']) !!}    
                     <form class="form form-horizontal row-separator">
                         <div class="form-body">
-                            <h4 class="form-section"><i class="la la-user"></i> Información de tipo de grupos</h4>                                                                                               
+                            <h4 class="form-section"><i class="la la-user"></i> Información de asignaturas de grupos</h4>                                                                                               
                                 <div class="form-group row">
-                                    <label class="col-md-3 label-control" for="projectinput1">Nombre Tipo Grupo *</label>
+                                    <label class="col-md-3 label-control" for="projectinput1">Nombre Asignaturas Grupo *</label>
                                         <div class="col-md-9">                                            
                                             <input type="text" class="hidden">
                                                 {!! Form::text('NombreTipoGrupo', null, ['id'=>'NombreTipoGrupo', 'class'=> 'form-control', 'placeholder'=>'Ingrese el nombre del tipo de grupo']) !!}                                                                                                      
@@ -151,7 +151,7 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Listado de asignaturas *</h4>
+          <h4 class="modal-title">LISTADO DE ASIGNATURAS</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         

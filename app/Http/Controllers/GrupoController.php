@@ -17,43 +17,35 @@ use App\TipoGrupo;
 
 class GrupoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
     public function index()
     {
         $grupos = Grupo::join('salones', 'grupos.IdSalon', '=','salones.IdSalon')
                        ->join('grados', 'grupos.IdGrado', '=', 'grados.IdGrado')
                        ->join('jornadas', 'grupos.IdJornada', '=', 'jornadas.IdJornada')                       
-                       ->where('EstadoGrupo', true)
+                       ->where('EstadoGrupo','=', true)
                        ->select('grupos.*', 'salones.NombreSalon', 'grados.NombreGrado', 'jornadas.NombreJornada')
                        ->getQuery()
                        ->get();
 
-        $salones = Salon::where('EstadoSalon', true)->get();                       
-        $grados = Grado::where('EstadoGrado', true)->get();
-        $jornadas = Jornada::where('EstadoJornada', true)->get();
-        $alumnos = Alumno::where('EstadoAlumno', true)->get();
-        $tipocalendarios = TipoCalendario::where('EstadoCalendario', true)->get();
-        $asignaturas = Asignatura::where('EstadoAsignatura', true)->get();
+        $salones = Salon::where('EstadoSalon','=', true)->get();                       
+        $grados = Grado::where('EstadoGrado','=', true)->get();
+        $jornadas = Jornada::where('EstadoJornada','=', true)->get();
+        $alumnos = Alumno::where('EstadoAlumno','=', true)->get();
+        $tipocalendarios = TipoCalendario::where('EstadoCalendario','=', true)->get();
+        $asignaturas = Asignatura::where('EstadoAsignatura','=', true)->get();
         $tipogrupos = TipoGrupo::where('EstadoTipoGrupo', '=', true)->get();
 
         return view('grupo.index', compact('grupos', 'salones', 'grados', 'jornadas', 'alumnos', 'tipocalendarios','asignaturas','tipogrupos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     
     public function listalum($id)
     {
         $alumnos = Alumno::join('informacionesacademicas', 'alumnos.IdAlumno', '=', 'informacionesacademicas.IdAlumno')
                         ->join('matriculas','alumnos.IdAlumno','=','matriculas.IdAlumno')
-                        ->where('alumnos.EstadoAlumno', true)
+                        ->where('alumnos.EstadoAlumno','=', true)
                         ->where('matriculas.IdGrado', $id)
                         ->where('matriculas.IdEstadoMatricula','=',2)
                         ->select('alumnos.*')
@@ -168,23 +160,6 @@ class GrupoController extends Controller
             }        
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $grupos = Grupo::findOrFail($id);                                
@@ -197,13 +172,7 @@ class GrupoController extends Controller
         return response()->json(['grupos'=>$grupos,'alumnos'=>$alumnos]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
         request()->validate([
@@ -365,12 +334,6 @@ class GrupoController extends Controller
             }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
        $grupo = Grupo::findOrfail($id);

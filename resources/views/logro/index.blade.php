@@ -52,9 +52,9 @@
                     <table class="table table-striped table-bordered dom-jQuery-events">
                       <thead>
                         <tr>                          
-                          <th>Nombre asignatura</th> 
+                          <th>Nombre Asignatura</th> 
                           <th>Periodo</th>
-                          <th>Descripción</th>
+                          <th>Descripción Logro</th>
                           <th with="300px">Acción</th>
                         </tr>
                       </thead>
@@ -75,9 +75,9 @@
                       </tbody>
                       <tfoot>
                         <tr>                        
-                          <th>Nombre asignatura</th>
+                          <th>Nombre Asignatura</th>
                           <th>Periodo</th>
-                          <th>Descripción</th>
+                          <th>Descripción Logro</th>
                           <th>Acción</th>
                         </tr>
                       </tfoot>
@@ -96,7 +96,7 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">Registro de logros</h2>
+                  <h2 class="card-title">REGISTRO DE LOGRO</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   

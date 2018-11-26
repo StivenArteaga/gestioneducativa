@@ -99,7 +99,7 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">Registro de materia</h2>
+                  <h2 class="card-title">REGISTRO DE MATERIA</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   
@@ -161,7 +161,7 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Listado de asignaturas por materia</h4>
+          <h4 class="modal-title">LISTADO DE ASIGNATURAS POR MATERIA</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         
