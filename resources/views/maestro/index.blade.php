@@ -31,12 +31,12 @@
               <div class="card">
                 <div class="card-header">
                   <button class="btn btn-success">
-                     <a data-toggle="modal" data-target=".bd-example-modal-lg">Nuevo Maestro</a>
+                     <a data-toggle="modal" data-target=".bd-example-modal-lg">Nuevo Docente</a>
                   </button>
                       
                   
                   <div class="text-center">
-                    <h1 class="card-title">Listado de maestros</h1>
+                    <h1 class="card-title">Listado de docentes</h1>
                   </div>
                   <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3" ></i></a>                  
                   <div class="heading-elements">
@@ -52,18 +52,20 @@
                     <table class="table table-striped table-bordered dom-jQuery-events">
                       <thead>
                         <tr>                          
-                          <th with="50px">Nombre maestro</th>
-                          <th>Apellido maestro</th>
-                          <th>Numero documento</th>                                              
+                          <th with="50px">Nombre Docente</th>                          
+                          <th>Numero documento</th> 
+                          <th>Teléfono</th>                                             
+                          <th>Correo</th>
                           <th with="">Acción</th>
                         </tr>
                       </thead>
                       <tbody>
                       @foreach($maestro as $maestros)
                             <tr>                                
-                                <td>{{ $maestros->PrimerNombreMaes }}</td>
-                                <td>{{ $maestros->PrimerApellidoMaes }}</td>
+                                <td>{{ $maestros->PrimerNombreMaes }} {{ $maestros->PrimerApellidoMaes }}</td>                                
                                 <td>{{ $maestros->NumeroDocumento }}</td>                                                                
+                                <td>{{ $maestros->Telefono }}</td>
+                                <td>{{ $maestros->Correo }}</td>
                                 <td>                                       
                                   <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarMaestro({{$maestros->IdMaestro}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['maestro', $maestros->IdMaestro], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
@@ -75,9 +77,10 @@
                       </tbody>
                       <tfoot>
                         <tr>                        
-                          <th>Nombre maestro</th>
-                          <th>Apellido maestro</th>
+                          <th>Nombre Docente</th>                          
                           <th>Numero documento</th>                                                     
+                          <th>Teléfono</th>                                             
+                          <th>Correo</th>
                           <th>Acción</th>
                         </tr>
                       </tfoot>
@@ -97,7 +100,7 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">Registro de maestro</h2>
+                  <h2 class="card-title">REGISTRO DE DOCENTE</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   
@@ -288,8 +291,8 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Listado de asignaturas *</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">LISTADO DE ASIGNATURAS</h4>
+          <button type="button" class="btn btn-secondary" onclick="CerrarModal('listaAsignaturas')">&times;</button>
         </div>
         
         <!-- Modal body -->
@@ -328,8 +331,8 @@
         
         <!-- Modal footer -->
         <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="SelectAsig2()" data-dismiss="modal">Agregar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="SelectAsig2()">Agregar</button>
+          <button type="button" class="btn btn-secondary" onclick="CerrarModal('listaAsignaturas')">Cerrar</button>
         </div>
         
       </div>

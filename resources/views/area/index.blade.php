@@ -32,7 +32,7 @@
               <div class="card">
                 <div class="card-header">
                   <button class="btn btn-success">
-                     <a data-toggle="modal" data-target=".bd-example-modal-lg">Nueva area</a>
+                     <a data-toggle="modal" data-target=".bd-example-modal-lg">Nueva Área</a>
                   </button>
                       
                   
@@ -53,7 +53,7 @@
                     <table class="table table-striped table-bordered dom-jQuery-events">
                       <thead>
                         <tr>                          
-                          <th>Nombre area</th>        
+                          <th>Nombre Área</th>        
                           <th>Descripción</th>                  
                           <th with="300px">Acción</th>
                         </tr>
@@ -75,7 +75,7 @@
                       </tbody>
                       <tfoot>
                         <tr>                        
-                          <th>Nombre area</th>                  
+                          <th>Nombre Área</th>                  
                           <th>Descripción</th>                          
                           <th>Acción</th>
                         </tr>
@@ -95,7 +95,7 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">Registro de area</h2>
+                  <h2 class="card-title">REGISTRO DE AREA</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   
@@ -145,7 +145,7 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Listado de materias por area</h4>
+          <h4 class="modal-title">LISTADO DE MATERIAS POR AREA</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         

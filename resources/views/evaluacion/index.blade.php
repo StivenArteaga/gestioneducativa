@@ -96,7 +96,7 @@
                       <div class="card-header">                                                      
                         
                         <div class="text-center">
-                          <h1 class="card-title">Evaluación de alumnos por asignatura</h1>
+                          <h1 class="card-title">EVALUACIÓN DE ALUMNOS POR ASIGNATURAS</h1>
                         </div>
                         <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3" ></i></a>                  
                         <div class="heading-elements">
@@ -192,7 +192,7 @@
       
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Listado de logros por asignatura y periodo</h4>          
+          <h4 class="modal-title">LISTADO DE LOGROS POR ASIGNATURA Y PERIODO</h4>          
           <button type="button" class="close" data-dismiss="modal">&times;</button>          
         </div>
         <div style="">
@@ -276,7 +276,7 @@ function ListAlum(id,idAsignatura){
                         "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+4+")' style='height:35px;' >Evaluar</button>"+
                 "</td>"+   
                 "<td>"+  
-                        "<button class='btn btn-info' style='height:35px;' title='Descargar boletín'><i class='fas fa-file-download'></i></button>"+
+                        "<button class='btn btn-info' style='height:35px;' title='Descargar boletín' ><i class='fas fa-file-download'></i></button>"+
                         "<button class='btn btn-warning' style='height:35px;' title='Asignar logros' data-toggle='modal' data-target='#listadoLogro' onclick='listalogro("+idAsignatura+','+alumnos.IdAlumno+")' ><i class='fas fa-star-half-alt'></i></button>"+
                 "</td>"+            
                "<tr>";

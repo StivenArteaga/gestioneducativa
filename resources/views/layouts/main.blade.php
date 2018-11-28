@@ -27,13 +27,17 @@
   <!-- BEGIN Page Level CSS-->
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/app-assets/css/core/menu/menu-types/vertical-menu.css') }}" />  
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/app-assets/css/core/colors/palette-gradient.css') }}" />  
+  <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/app-assets/vendors/css/charts/jquery-jvectormap-2.0.3.css') }}" />  
+  <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/app-assets/vendors/css/charts/morris.css') }}" /> 
+  <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/app-assets/fonts/simple-line-icons/style.css') }}" />   
+  <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/app-assets/css/core/colors/palette-gradient.css') }}" />
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/app-assets/vendors/css/cryptocoins/cryptocoins.css') }}" />
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/app-assets/css/pages/under-maintenance.css') }}" />  
   <!-- END Page Level CSS-->
   <!-- BEGIN Custom CSS-->
   <link rel="stylesheet" type="text/css" href="{{ URL::asset('Admin/assets/css/style.css') }}" />
   <!-- END Custom CSS-->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">      
 </head>
 <body class="vertical-layout vertical-menu 2-columns menu-expanded fixed-navbar" data-open="click" data-menu="vertical-menu" data-col="2-columns">
   <!-- fixed-top-->
@@ -43,9 +47,9 @@
         <ul class="nav navbar-nav flex-row">
           <li class="nav-item mobile-menu d-md-none mr-auto"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu font-large-1"></i></a></li>
           <li class="nav-item">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="{{ route('main') }}">
                 <!--<img class="brand-logo" alt="modern admin logo" src="../../../app-assets/images/logo/logo.png">-->
-              <h3 class="brand-text">Gestión académica</h3>
+              <h3 class="brand-text">Gestión Académica</h3>
             </a>
           </li>
           <li class="nav-item d-md-none">
@@ -58,11 +62,11 @@
           <ul class="nav navbar-nav mr-auto float-left">
             <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
             <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i class="ficon ft-maximize"></i></a></li>
-            <li class="dropdown nav-item mega-dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Contactanos</a>
+            <li class="dropdown nav-item mega-dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Contáctanos</a>
               <ul class="mega-dropdown-menu dropdown-menu row">                               
                 
                 <li class="col-md-12">
-                  <h6 class="dropdown-menu-header text-uppercase mb-1"><i class="la la-envelope-o"></i> Contactanos</h6>
+                  <h6 class="dropdown-menu-header text-uppercase mb-1"><i class="la la-envelope-o"></i> Contáctanos</h6>
                   <form class="form form-horizontal">
                     <div class="form-body">
                       <div class="form-group row">
@@ -160,6 +164,12 @@
             <li><a class="menu-item" href="{{ url('observador') }}" data-i18n="nav.dash.ecommerce">Gestionar Observador</a></li>                        
           </ul>
         </li>
+        <!--Inasistencia-->
+        <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-calendar-times-o"></i><span class="menu-title" data-i18n="nav.dash.main">Inasistencias</span></a>
+          <ul class="menu-content">
+            <li><a class="menu-item" href="{{ route('inasistencias') }}" data-i18n="nav.dash.ecommerce">Gestionar Inasistencia</a></li>
+          </ul>
+        </li>
         @endif
 
         @if(Auth::user()->IdTipoUsuario == 4)
@@ -201,7 +211,7 @@
           <ul class="menu-content">             
             <li><a class="menu-item" href="{{ route('aulas') }}" data-i18n="nav.dash.ecommerce">Gestionar Aula</a></li>            
               <li><a class="menu-item" href="{{ route('grados') }}" data-i18n="nav.templates.horz.classic">Gestionar Grados</a>
-              <li><a class="menu-item" href="{{ route('tgrupos') }}" data-i18n="nav.templates.horz.classic">Gestionar Tipo Grupo</a>
+              <li><a class="menu-item" href="{{ route('tgrupos') }}" data-i18n="nav.templates.horz.classic">Gestionar Asignaturas Grupo</a>
               <li><a class="menu-item" href="{{ route('grupos') }}" data-i18n="nav.dash.ecommerce">Gestionar Grupo</a></li>
           </ul>
         </li>
@@ -213,7 +223,7 @@
           <ul class="menu-content">
             <li><a class="menu-item" href="{{ route('jornadas') }}" data-i18n="nav.templates.horz.classic">Gestionar Jornadas</a>
               <li><a class="menu-item" href="{{ route('sedes') }}" data-i18n="nav.templates.horz.classic">Gestionar Sedes</a>
-              <li><a class="menu-item" href="{{ route('calificaciones') }}" data-i18n="nav.templates.horz.classic">Gestionar Calificaciones</a>
+              <li><a class="menu-item" href="{{ route('calificaciones') }}" data-i18n="nav.templates.horz.classic">Configurar Calificaciones</a>
           </ul>
         </li>
 
@@ -237,10 +247,8 @@
   </div>
   <!--Contenido-->
   <div class="app-content content">
-    <div class="content-wrapper">
-      <div class="content-header row">
-      </div>
-      <div class="content-body">
+    <div class="content-wrapper">      
+      <div class="content-body">        
         @yield('content')        
       </div>
     </div>
@@ -248,8 +256,8 @@
   <!-- Pie de pagina-->
   <footer class="footer footer-static footer-light navbar-border navbar-shadow">
     <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">
-      <span class="float-md-left d-block d-md-inline-block">Gestión academica &copy; 2018</span>
-      <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">Hand-crafted & Made with <i class="ft-heart pink"></i></span>
+      <span class="float-md-left d-block d-md-inline-block">Gestión Académica &copy; 2018</span>
+      <span class="float-md-right d-block d-md-inline-blockd-none d-lg-block">Una plataforma creada con <i class="ft-heart pink"></i></span>
     </p>
   </footer>
   
@@ -270,16 +278,24 @@
 
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/vendors/js/tables/jsgrid/jsgrid.min.js') }}"></script>
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/vendors/js/tables/jsgrid/griddata.js') }}"></script>  
+  
   <!-- BEGIN PAGE VENDOR JS-->  
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/vendors/js/charts/chart.min.js') }}"></script>  
+  <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/vendors/js/charts/raphael-min.js') }}"></script>
+  <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/vendors/js/charts/morris.min.js') }}"></script>
+  <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/vendors/js/charts/jvector/jquery-jvectormap-2.0.3.min.js') }}"></script>  
+  <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/vendors/js/charts/jvector/jquery-jvectormap-world-mill.js') }}"></script>
+  <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/data/jvector/visitor-data.js') }}"></script>   
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/vendors/js/charts/echarts/echarts.js') }}"></script>
   <!-- END PAGE VENDOR JS-->
   <!-- BEGIN MODERN JS-->  
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/core/app-menu.js') }}"></script>  
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/core/app.js') }}"></script>  
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/scripts/customizer.js') }}"></script>
+  <!--Chart-->
+  <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/scripts/pages/dashboard-sales.js') }}"></script>          
   <!-- END MODERN JS-->  
-  <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/scripts/tables/datatables/datatable-advanced.js') }}"></script>  
+  {{-- <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/scripts/tables/datatables/datatable-advanced.js') }}"></script>   --}}
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/scripts/navs/navs.js') }}"></script>
   <!-- BEGIN PAGE LEVEL JS-->  
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/scripts/pages/dashboard-crypto.js') }}"></script>

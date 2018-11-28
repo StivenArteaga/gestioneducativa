@@ -14,6 +14,6 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return View('layouts.main');
+        return View('estadistica.principal');
     }
 }

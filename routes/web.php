@@ -153,26 +153,30 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('tgrupo', 'TipoGrupoController');
 
-    /**
-     * observador del alumno
-     */
 
-     Route::get('observador', 'ObservadorController@index');
-     Route::get('observador/notas/{id}','ObservadorController@cargarTablaNotas');
+    Route::get('observador', 'ObservadorController@index');
+    Route::get('observador/notas/{id}','ObservadorController@cargarTablaNotas');
 
+    Route::get('calificaciones', 'CalificacionController@index')->name('calificaciones');
+    Route::get('editcalificacion/{id}','CalificacionController@edit');
+    Route::resource('calificacion', 'CalificacionController');
 
-     Route::get('calificaciones', 'CalificacionController@index')->name('calificaciones');
+    Route::get('observaciones', 'ObservadorController@observaciones')->name('observaciones');
+    Route::get('observaciones/create', 'ObservadorController@create');
+    Route::post('observaciones/store', 'ObservadorController@store');
+    Route::get('observaciones/{id}/edit', 'ObservadorController@edit');
+    Route::post('observaciones/update/{id}', 'ObservadorController@update');
+    Route::resource('observacion','ObservadorController');
 
+    /*Reportes */
+    Route::get('BoletinAlumno/{request}', 'ReporteController@BoletinAlumno');
 
-     Route::get('editcalificacion/{id}','CalificacionController@edit');
-
-     Route::resource('calificacion', 'CalificacionController');
-     Route::get('observaciones', 'ObservadorController@observaciones');
-     Route::get('observaciones/create', 'ObservadorController@create');
-     Route::post('observaciones/store', 'ObservadorController@store');
-     Route::get('observaciones/{id}/edit', 'ObservadorController@edit');
-     Route::post('observaciones/update/{id}', 'ObservadorController@update');
-
+    //Inasistencia
+    Route::get('inasistencias','InasistenciaController@index')->name('inasistencias');
+    Route::get('inasistencia/grupo/{Id}', 'InasistenciaController@grupos');
+    Route::get('inasistencia/grado/{Id}/{IdA}','InasistenciaController@alumnos');
+    Route::get('inasistenciasalumnos/{asignatura}/{alumno}','InasistenciaController@add');
+    Route::resource('inasistencia','InasistenciaController');
      /**
       * Coordinador
       */

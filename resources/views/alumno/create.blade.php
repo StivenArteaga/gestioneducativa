@@ -223,9 +223,9 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput1">Ars *</label>
+            <label class="col-md-3 label-control" for="projectinput1">Codigo Familia En Acción *</label>
             <div class="col-md-9">
-                {!! Form::text('Ars', null, ['id'=>'ArsAlum','placeholder'=>'Ingrese su ars', 'class'=> 'form-control vallel']) !!}
+                {!! Form::text('Ars', null, ['id'=>'ArsAlum','placeholder'=>'Ingrese su ars', 'class'=> 'form-control valalfanumericoespace']) !!}
             </div>
         </div>
         <div class="form-group row">
@@ -243,7 +243,7 @@
         <div class="form-group row">
             <label class="col-md-3 label-control" for="projectinput3">Estrato *</label>
             <div class="col-md-9">
-                {!! Form::text('Estrato', null, ['id'=>'EstraroAlum','placeholder'=>'Ingrese en numero de su estrato', 'class'=> 'form-control valnum']) !!}
+                {!! Form::text('Estrato', null, ['id'=>'EstraroAlum','placeholder'=>'Ingrese en numero de su estrato', 'class'=> 'form-control valnumestrato']) !!}
             </div>
         </div>
         <div class="form-group row">
@@ -386,7 +386,7 @@
             <div class="col-md-9">
                 <select class="form-control m-bot15" id="IdTipoAcudiente" name="IdTipoAcudiente">
                   @if($tipoacudiente->count())
-                      <option class="hidden">Selecciona una opción</option>
+                      <option class="hidden" value="">Selecciona una opción</option>
                     @foreach($tipoacudiente as $tipoacudientes)
                         <option value="{{ $tipoacudientes->IdTipoAcudiente }}">{{ $tipoacudientes->NombreTipoAcudiente }}</option>
                     @endforeach
@@ -429,7 +429,7 @@
             <div class="col-md-9">
                 <select class="form-control m-bot15" id="IdParentescoAcu" name="IdParentesco">
                   @if($parentescos->count())
-                      <option class="hidden">Selecciona una opción</option>
+                      <option class="hidden" value="">Selecciona una opción</option>
                     @foreach($parentescos as $parentesco)
                         <option value="{{ $parentesco->IdParentesco }}">{{ $parentesco->NombreTipoParentesco }}</option>
                     @endforeach
@@ -478,7 +478,7 @@
             <div class="col-md-9">
                 <select class="form-control m-bot15" id="IdTipoDocumentoAcu" name="IdTipoDocumento">
                   @if ($tipodocumentos->count())
-                      <option class="hidden">Selecciona una opción</option>
+                      <option class="hidden" value="">Selecciona una opción</option>
                     @foreach($tipodocumentos as $tipodocumento)
                         <option value="{{ $tipodocumento->IdTipoDocumento }}">{{ $tipodocumento->NombreTipoDocumento }}</option>
                     @endforeach
@@ -497,7 +497,7 @@
             <div class="col-md-9">
                 <select class="form-control m-bot15" id="IdDepartamentoExpAcu" name="IdDepartamento">
                   @if ($departamentos->count())
-                      <option class="hidden">Selecciona una opción</option>
+                      <option class="hidden" value="">Selecciona una opción</option>
                     @foreach($departamentos as $departamento)
                         <option value="{{ $departamento->IdDepartamento }}">{{ $departamento->NombreDepartamento }}</option>
                     @endforeach
@@ -510,7 +510,7 @@
             <div class="col-md-9">
                 <select class="form-control m-bot15" id="IdMunicipioExpedicionAcu" name="IdMunicipioExpedicion">
                   @if ($municipios->count())
-                      <option class="hidden">Selecciona una opción</option>
+                      <option class="hidden" value="">Selecciona una opción</option>
                     @foreach($municipios as $municipio)
                         <option value="{{ $municipio->IdMunicipio }}">{{ $municipio->NombreMunicipio }}</option>
                     @endforeach

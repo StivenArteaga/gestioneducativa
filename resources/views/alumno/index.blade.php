@@ -31,7 +31,7 @@
                 <div class="card-header">
                   {{-- @if(Auth::user()->IdTipoUsuario == 1 || Auth::user()->IdTipoUsuario == 3) --}}
                   <button class="btn btn-success">
-                     <a data-toggle="modal" data-target=".bd-example-modal-lg" onclick="AsignaNumerAuto()">Nuevo alumno</a>
+                     <a data-toggle="modal" data-target=".bd-example-modal-lg" onclick="AsignaNumerAuto()">Nuevo Alumno</a>
                   </button>
                   {{-- @endif --}}
                   
@@ -55,8 +55,8 @@
                           <th>Nombre</th>
                           <th>Apellido</th>
                           <th>Documento</th>
-                          <th>Telefono</th>
-                          <th>E-Mail</th>
+                          <th>Teléfono</th>                          
+                          <th>Grado</th>
                           <th with="300px">Acción</th>
                         </tr>
                       </thead>
@@ -66,8 +66,8 @@
                                 <td>{{ $alumno->PrimerNombre }}</td>
                                 <td>{{ $alumno->PrimerApellido }}</td>
                                 <td>{{ $alumno->NumeroDocumento }}</td>
-                                <td>{{ $alumno->Telefono }}</td>
-                                <td>{{ $alumno->Correo }}</td>
+                                <td>{{ $alumno->Telefono }}</td>                                
+                                <td>{{ $alumno->NombreGrado }}</td>
                                 <td>                                       
                                 <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='Mostrar({{$alumno->IdAlumno}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['alumno', $alumno->IdAlumno], 'name'=>"formularioEliminar" , 'onsubmit'=>'return confirmarEliminar()' , 'method' => 'DELETE' ,'style'=> 'display:inline' ]) !!}                                                            
@@ -82,8 +82,8 @@
                           <th>Nombre</th>
                           <th>Apellido</th>
                           <th>Documento</th>
-                          <th>Telefono</th>
-                          <th>E-Mail</th>
+                          <th>Teléfono</th>                          
+                          <th>Grado</th>
                           <th>Acción</th>
                         </tr>
                       </tfoot>
@@ -104,7 +104,7 @@
       
               <div class="card">
                 <div class="card-header">
-                  <h2 class="card-title">Registro de alumno</h2>
+                  <h2 class="card-title">REGISTRO DE ALUMNO</h2>
                 </div>
                 <div class="card-content">
                   <div class="card-body">                    
@@ -142,8 +142,8 @@
     
       <!-- Modal Header -->
       <div class="modal-header">
-          <h4 class="form-section modal-title"><i class="la la-user"></i> Información Segundo Acudiente</h4>                                                              
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="form-section modal-title"><i class="la la-user"></i> INFORMACIÓN SEGUNDO ACUDIENTE</h4>                                                              
+        <button type="button" class="btn btn-secondary" onclick="CerrarModal('SegundoAcudiente')">Cerrar</button>
       </div>
       
       <!-- Modal body -->
@@ -156,7 +156,7 @@
                   <div class="col-md-9">                                                        
                     <select class="form-control m-bot15" id="IdTipoAcudiente2" name="IdTipoAcudiente2">
                     @if($tipoacudiente->count())
-                            <option class="hidden">Selecciona una opción</option>
+                            <option class="hidden" value="">Selecciona una opción</option>
                         @foreach($tipoacudiente as $tipoacudientes)
                             <option value="{{ $tipoacudientes->IdTipoAcudiente }}">{{ $tipoacudientes->NombreTipoAcudiente }}</option>
                         @endforeach
@@ -199,7 +199,7 @@
                   <div class="col-md-9">                                                        
                     <select class="form-control m-bot15" id="IdParentescoAcu2" name="IdParentesco2">
                     @if($parentescos->count())
-                            <option class="hidden">Selecciona una opción</option>
+                            <option class="hidden" value="">Selecciona una opción</option>
                         @foreach($parentescos as $parentesco)
                             <option value="{{ $parentesco->IdParentesco }}">{{ $parentesco->NombreTipoParentesco }}</option>
                         @endforeach
@@ -248,7 +248,7 @@
                   <div class="col-md-9">                                                        
                     <select class="form-control m-bot15" id="IdTipoDocumentoAcu2" name="IdTipoDocumento2">
                     @if ($tipodocumentos->count())
-                            <option class="hidden">Selecciona una opción</option>
+                            <option class="hidden" value="">Selecciona una opción</option>
                         @foreach($tipodocumentos as $tipodocumento)
                             <option value="{{ $tipodocumento->IdTipoDocumento }}">{{ $tipodocumento->NombreTipoDocumento }}</option>
                         @endforeach
@@ -267,7 +267,7 @@
                   <div class="col-md-9">                                                        
                     <select class="form-control m-bot15" id="IdDepartamentoExpAcu2" name="IdDepartamento2">
                     @if ($departamentos->count())
-                            <option class="hidden">Selecciona una opción</option>
+                            <option class="hidden" value="">Selecciona una opción</option>
                         @foreach($departamentos as $departamento)
                             <option value="{{ $departamento->IdDepartamento }}">{{ $departamento->NombreDepartamento }}</option>
                         @endforeach
@@ -280,7 +280,7 @@
                   <div class="col-md-9">                                                        
                     <select class="form-control m-bot15" id="IdMunicipioExpedicionAcu2" name="IdMunicipioExpedicion2">
                     @if ($municipios->count())
-                            <option class="hidden">Selecciona una opción</option>
+                            <option class="hidden" value="">Selecciona una opción</option>
                         @foreach($municipios as $municipio)
                             <option value="{{ $municipio->IdMunicipio }}">{{ $municipio->NombreMunicipio }}</option>
                         @endforeach
@@ -299,8 +299,8 @@
       </div>  
       
       <div class="modal-footer">            
-          <button type="button" class="btn btn-primary" onclick="SelectForm()" data-dismiss="modal">Agregar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="SelectForm()" data-dismiss="modal" style="overflow-y: scroll;">Agregar</button>
+          <button type="button" class="btn btn-secondary" onclick="CerrarModal('SegundoAcudiente')">Cerrar</button>
         </div>
     </div>
   </div>
@@ -341,6 +341,19 @@ $('.valpesos').on('input', function (e) {
   if (!/^[$-9-.-0]*$/i.test(this.value)) {
         this.value = this.value.replace(/[^$-9-.-0]+/ig,"");
     }
+});
+
+$('.valnumestrato').on('input', function (e) {
+    if (!/^[1-6]*$/i.test(this.value)) {
+        this.value = this.value.replace(/[^1-6]+/ig,"");       
+    }
+}); 
+
+$("#EstraroAlum").change(function(){
+ if($("#EstraroAlum").val().length > 1){
+     alert('La longitud del estrato no puede ser tan extensa. Verifica el estrato');
+     $("#EstraroAlum").val("");
+ }
 });
 
 
@@ -464,6 +477,7 @@ function GuardarAlumno(){
               customClass: 'animated tada',
               text: data.message
             });
+            location.reload();
         }else{
           if(data.status == "warning"){
             swal({
@@ -485,5 +499,7 @@ function GuardarAlumno(){
         }
     });
 }
+
+
     </script>
 @endsection

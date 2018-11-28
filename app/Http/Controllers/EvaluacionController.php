@@ -11,15 +11,11 @@ use App\Evaluacion;
 use App\Logro;
 use App\Maestro;
 use App\DetalleLogroEvaluacion;
+use App\Inasistencia;
 use Exception;
 
 class EvaluacionController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+{    
     public function index()
     {
         $grados = Grado::where('EstadoGrado', true)->get();
@@ -51,18 +47,20 @@ class EvaluacionController extends Controller
     }
 
     public function listalumasig($id, $idAsignatura)
-    {                
+    {
         $alumnos = Alumno::join('informacionesacademicas', 'alumnos.IdAlumno', '=', 'informacionesacademicas.IdAlumno')
                          ->join('matriculas', 'alumnos.IdAlumno', '=', 'matriculas.IdAlumno')
                          ->join('grados', 'matriculas.IdGrado', '=', 'grados.IdGrado')
                          ->join('grupos', 'grados.IdGrado', '=', 'grupos.IdGrado')                         
                          ->where('grupos.IdGrupo', '=', $id)
-                         ->where('alumnos.EstadoAlumno', true)
+                         ->where('matriculas.IdEstadoMatricula','=', 2)
+                         ->where('alumnos.EstadoAlumno','=', true)
+                         ->where('grupos.EstadoGrupo','=', true)
                          ->select('alumnos.*', 'informacionesacademicas.Numerolista')
                          ->getQuery()
                          ->distinct()
                          ->get(['informacionesacademicas.IdAlumno']);
-
+        
         $evaluaciones = Evaluacion::join('alumnos', 'evaluaciones.IdAlumno', '=', 'alumnos.IdAlumno')
                                   ->join('matriculas', 'alumnos.IdAlumno', '=', 'matriculas.IdAlumno')
                                   ->join('grados', 'matriculas.IdGrado', '=', 'grados.IdGrado')
@@ -70,14 +68,14 @@ class EvaluacionController extends Controller
                                   ->join('asignaturas', 'evaluaciones.IdAsignatura','=', 'asignaturas.IdAsignatura')
                                   ->where('grupos.IdGrupo', '=', $id)
                                   ->where('evaluaciones.IdAsignatura', '=', $idAsignatura)
-                                  ->where('alumnos.EstadoAlumno', true)
+                                  ->where('alumnos.EstadoAlumno', '=',true)
                                   ->select('evaluaciones.*')
                                   ->getQuery()
                                   ->get();
                                   
 
-        $notas = Calificacion::where('EstadoNota', true)->get();
-        $grados = Grado::where('EstadoGrado', true)->get();
+        $notas = Calificacion::where('EstadoNota', '=',true)->get();
+        $grados = Grado::where('EstadoGrado','=', true)->get();
         
         /*return view('evaluacion.index', compact('alumnos', 'notas', 'grados'));*/
         return response()->json(['alumnos'=>$alumnos,'notas'=> $notas,'evaluaciones'=>$evaluaciones]);
@@ -90,9 +88,11 @@ class EvaluacionController extends Controller
                 dd($request, $mi_array->idAsignatura);   */
                 if ($request != null) {
                     $mi_array = json_decode($request);
-                    $evaluacionalumno = Evaluacion::where('IdAlumno', '=', $mi_array->IdAlumno )->get()->toArray();            
+                    $evaluacionalumno = Evaluacion::where('IdAlumno', '=', $mi_array->IdAlumno )
+                                                  ->where('IdAsignatura', '=', $mi_array->IdAsignatura)
+                                                  ->get()->toArray();            
                     
-                    if ($evaluacionalumno == []) {                   
+                    if ($evaluacionalumno == []) {                                           
                         if ($mi_array->IdPeriodo == 1) {  
 
                             $gevaluacion = new Evaluacion();
@@ -102,13 +102,23 @@ class EvaluacionController extends Controller
                             $gevaluacion->NotaFinal = $mi_array->NotaFinal;
                             $gevaluacion->save();
 
+                            $asistencia = Inasistencia::where('IdAlumno', '=', $mi_array->IdAlumno)
+                                                      ->where('IdAsignatura','=', $mi_array->IdAsignatura)
+                                                      ->where('IdPeriodo','=', $mi_array->IdPeriodo)
+                                                      ->select('inasistencias.*')
+                                                      ->first();
+                            if($asistencia != null){
+                                $asistencia->CantidadInasistencia = "0";
+                            }
+
                             return response()->json(['status'=>'success','message' => 'Alumno evaluado correctamente']);        
                         } else {
                             return response()->json(['status'=>'error','message' => 'No puedes evaluar a un alumno sin haber evaluado los periodos anteriores']);        
                         }                
                     } else {
                         
-                        foreach ($evaluacionalumno as $key => $value) {                
+                        foreach ($evaluacionalumno as $key => $value) {
+                                         
                             if ($value['IdPeriodo'] == $mi_array->IdPeriodo) {
                                     $aevaluacion = Evaluacion::where('IdAlumno', '=', $mi_array->IdAlumno)
                                                             ->where('IdPeriodo', '=', $mi_array->IdPeriodo)
@@ -117,12 +127,23 @@ class EvaluacionController extends Controller
                                     $aevaluacion->NotaFinal = $mi_array->NotaFinal;
                                     $aevaluacion->save();
 
+                                    $asistencia = Inasistencia::where('IdAlumno', '=', $mi_array->IdAlumno)
+                                                      ->where('IdAsignatura','=', $mi_array->IdAsignatura)
+                                                      ->where('IdPeriodo','=', $mi_array->IdPeriodo)
+                                                      ->select('inasistencias.*')
+                                                      ->first();
+                                    if($asistencia != null){
+                                        $asistencia->CantidadInasistencia = "0";
+                                    }
+
                                     return response()->json(['status'=>'success','message' => 'La calificación del periodo del alumno fue actualizada correctamente']);        
                             } 
                         }    
                         
+                        
                         $periodo = Evaluacion::where('IdAlumno', '=', $mi_array->IdAlumno)
-                                                ->get();
+                                             ->where('IdAsignatura','=', $mi_array->IdAsignatura)
+                                             ->get();
                         
                         if (count($periodo) <= 1) {                            
                             $ultper;
@@ -138,6 +159,15 @@ class EvaluacionController extends Controller
                                 $nevaluacion->IdAsignatura = $mi_array->IdAsignatura;
                                 $nevaluacion->NotaFinal = $mi_array->NotaFinal;
                                 $nevaluacion->save();
+
+                                $asistencia = Inasistencia::where('IdAlumno', '=', $mi_array->IdAlumno)
+                                                      ->where('IdAsignatura','=', $mi_array->IdAsignatura)
+                                                      ->where('IdPeriodo','=', $mi_array->IdPeriodo)
+                                                      ->select('inasistencias.*')
+                                                      ->first();
+                                if($asistencia != null){
+                                    $asistencia->CantidadInasistencia = "0";
+                                }
                 
                                 return response()->json(['status'=>'success','message' => 'Alumno evaluado correctamente']);        
                             }else{
@@ -155,6 +185,15 @@ class EvaluacionController extends Controller
                                 $nevaluacion->IdAsignatura = $mi_array->IdAsignatura;
                                 $nevaluacion->NotaFinal = $mi_array->NotaFinal;
                                 $nevaluacion->save();
+
+                                $asistencia = Inasistencia::where('IdAlumno', '=', $mi_array->IdAlumno)
+                                                      ->where('IdAsignatura','=', $mi_array->IdAsignatura)
+                                                      ->where('IdPeriodo','=', $mi_array->IdPeriodo)
+                                                      ->select('inasistencias.*')
+                                                      ->first();
+                                if($asistencia != null){
+                                    $asistencia->CantidadInasistencia = "0";
+                                }
                 
                                 return response()->json(['status'=>'success','message' => 'Alumno evaluado correctamente']);        
                             }else{
@@ -341,64 +380,4 @@ class EvaluacionController extends Controller
         }
     }
 
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
