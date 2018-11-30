@@ -71,19 +71,24 @@ class CalificacionController extends Controller
     
     public function destroy($id)
     {
-        $calificacion = Calificacion::findOrfail($id);
-       if ($calificacion != null) {
-            if ($calificacion->EstadoNota == true) {
+        if ($request->ajax()) {
+            $calificacion = Calificacion::findOrFail($id);
+            if ($calificacion != null) {
+                if ($calificacion->EstadoNota == true) {
+                    $calificacion->EstadoNota = false;
+                    $calificacion->save();
+                }else {
+                    $calificacion->EstadoNota = true;
+                    $calificacion->save();
+                }
+            }else {
                 $calificacion->EstadoNota = false;
                 $calificacion->save();
-            }else {
-                $calificacion->EstadoNota = true;
-                $calificacion->save();
             }
-       }else {
-        $calificacion->EstadoNota = false;
-        $calificacion->save();
-       }
-        return redirect()->route('calificacion.index')->with('success','El calificación fue eliminada con éxito ');
+            
+            return response()->json([
+                'message' => 'La calificación '. $calificacion->NombreNota.' Ha sido eliminada exitosamente!'
+            ]);
+        }
     }
 }

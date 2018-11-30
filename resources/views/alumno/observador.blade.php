@@ -13,6 +13,10 @@
                 <a class="nav-link" id="v-pills-observaciones-tab" data-toggle="pill" href="#v-pills-observaciones" role="tab" aria-controls="v-pills-observaciones" aria-selected="flase" style="color: #fff">Mis Observaciones</a>
             </li>
 
+            {{-- <li class="nav-item">
+                <a class="nav-link" id="v-pills-inasistencias-tab" data-toggle="pill" href="#v-pills-inasistencias" role="tab" aria-controls="v-pills-inasistencias" aria-selected="flase" style="color: #fff">Mis Inasistencias</a>
+            </li> --}}
+
             <li class="nav-item">
                 <a class="nav-link" id="v-pills-perfil-tab" data-toggle="pill" href="#v-pills-perfil" role="tab" aria-controls="v-pills-perfil" aria-selected="false" style="color: #fff">Mi perfil</a>
             </li>
@@ -43,8 +47,7 @@
                     </div>
                 </div>
             </div>
-
-            <!--Formularios de Regional y Centro de Formación-->
+            
             <div class="tab-pane fade show" id="v-pills-observaciones" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <!--Panel de sección-->
                 <div class="card border-secondary text-center">
@@ -61,7 +64,6 @@
                 </div>
             </div>
 
-            <!--Formularios de Regional y Centro de Formación-->
             <div class="tab-pane fade show" id="v-pills-perfil" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <!--Panel de sección-->
                 <div class="card border-secondary">

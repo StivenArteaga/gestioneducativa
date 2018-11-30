@@ -64,7 +64,7 @@
                                 <td>                                       
                                   <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarGrado({{$grado->IdGrado}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['grado', $grado->IdGrado], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
+                                  <button type="submit" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}               
                                 </td>
                             </tr>

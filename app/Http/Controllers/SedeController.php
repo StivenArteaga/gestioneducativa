@@ -117,19 +117,24 @@ class SedeController extends Controller
      */
     public function destroy($id)
     {
-        $sedes = Sede::findOrfail($id);
-       if ($sedes != null) {
-            if ($sedes->EstadoSede == true) {
+        if ($request->ajax()) {
+            $sedes = Sede::findOrFail($id);
+            if ($sedes != null) {
+                if ($sedes->EstadoSede == true) {
+                    $sedes->EstadoSede = false;
+                    $sedes->save();
+                }else {
+                    $sedes->EstadoSede = true;
+                    $sedes->save();
+                }
+            }else {
                 $sedes->EstadoSede = false;
                 $sedes->save();
-            }else {
-                $sedes->EstadoSede = true;
-                $sedes->save();
             }
-       }else {
-        $sedes->EstadoSede = false;
-        $sedes->save();
-       }
-        return redirect()->route('sede.index')->with('success','La sede fue eliminada con exito ');
+            
+            return response()->json([
+                'message' => 'La sede '.$sedes->NombreSede.' ha sido eliminada exitosamente!'
+            ]);
+        }
     }
 }

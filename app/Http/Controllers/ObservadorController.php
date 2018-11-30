@@ -20,7 +20,7 @@ class ObservadorController extends Controller
 
     public function observaciones()
     {
-        $observaciones = Observacion::select('observaciones.*', 'coordinadores.*', 'alumnos.*')
+        $observaciones = Observacion::select('observaciones.*', 'coordinadores.PrimerNombre as nombre', 'coordinadores.PrimerApellido as apellido', 'alumnos.*')
         ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
         ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
         ->get();
@@ -29,25 +29,48 @@ class ObservadorController extends Controller
     
     public function index()
     {
-        
-        $id = Auth::user()->IdUsers;
-        $alumno = Alumno::select('alumnos.*', 'tipodocumentos.NombreTipoDocumento', 'municipios.NombreMunicipio', 'generos.NombreGenero')
-        ->join('tipodocumentos', 'tipodocumentos.IdTipoDocumento', 'alumnos.IdTipoDocumento')
-        ->join('municipios', 'municipios.IdMunicipio', 'alumnos.IdMunicipioExpedido')
-        ->join('generos', 'generos.IdGenero', 'alumnos.IdGenero')
-        ->join('users', 'users.IdUsers','alumnos.Usuario')
-        ->where('alumnos.Usuario', $id)
-        ->first();
+        if(Auth::user()->IdTipoUsuario == 6) {
+            $id = Alumno::select('alumnos.IdAlumno')->join('detallealumnosacudientes', 'alumnos.IdAlumno', 'detallealumnosacudientes.IdAlumno')->join('acudientes', 'acudientes.IdAcudiente', 'detallealumnosacudientes.IdAcudiente')->first();
 
-        $observaciones = Observacion::where('alumnos.Usuario', $id)
-        ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
-        ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
-        ->join('users', 'users.IdUsers','alumnos.Usuario')
-        ->select('coordinadores.*', 'observaciones.descripcion')->get();
-        
-        $periodos = Periodo::pluck('NumeroPeriodo', 'IdPeriodo');
+            $alumno = Alumno::select('alumnos.*', 'tipodocumentos.NombreTipoDocumento', 'municipios.NombreMunicipio', 'generos.NombreGenero')
+            ->join('tipodocumentos', 'tipodocumentos.IdTipoDocumento', 'alumnos.IdTipoDocumento')
+            ->join('municipios', 'municipios.IdMunicipio', 'alumnos.IdMunicipioExpedido')
+            ->join('generos', 'generos.IdGenero', 'alumnos.IdGenero')
+            ->where('alumnos.IdAlumno', $id->IdAlumno)
+            ->first();
+            // dd($id);
+            $observaciones = Observacion::where('alumnos.Usuario', $id)
+            ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
+            ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
+            ->join('users', 'users.IdUsers','alumnos.Usuario')
+            ->select('coordinadores.*', 'observaciones.descripcion')->get();
+            
+            $periodos = Periodo::pluck('NumeroPeriodo', 'IdPeriodo');
 
-        return view('alumno.observador', compact('alumno','periodos', 'observaciones'));
+            return view('alumno.observador', compact('alumno','periodos', 'observaciones'));
+        } else if(Auth::user()->IdTipoUsuario == 5) {
+
+            $id = Auth::user()->IdUsers;
+            $alumno = Alumno::select('alumnos.*', 'tipodocumentos.NombreTipoDocumento', 'municipios.NombreMunicipio', 'generos.NombreGenero')
+            ->join('tipodocumentos', 'tipodocumentos.IdTipoDocumento', 'alumnos.IdTipoDocumento')
+            ->join('municipios', 'municipios.IdMunicipio', 'alumnos.IdMunicipioExpedido')
+            ->join('generos', 'generos.IdGenero', 'alumnos.IdGenero')
+            ->join('users', 'users.IdUsers','alumnos.Usuario')
+            ->where('alumnos.Usuario', $id)
+            ->first();
+    
+            $observaciones = Observacion::where('alumnos.Usuario', $id)
+            ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
+            ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
+            ->join('users', 'users.IdUsers','alumnos.Usuario')
+            ->select('coordinadores.*', 'observaciones.descripcion')->get();
+            
+            $periodos = Periodo::pluck('NumeroPeriodo', 'IdPeriodo');
+    
+            return view('alumno.observador', compact('alumno','periodos', 'observaciones'));
+        } else {
+            return redirect('/');
+        }
     }
 
     public function cargarTablaNotas($valor){
@@ -80,7 +103,7 @@ class ObservadorController extends Controller
         ->first();
 
         if($coordinador == null){
-            return redirect()->route('observacion.index')->with('error','Este usuario no tiene permisos para realizar esta acción. Rol requerido "Coordinador"');            
+            return redirect('observaciones')->with('error','Este usuario no tiene permisos para realizar esta acción. Rol requerido "Coordinador"');      
         }else{
             $this->validate($request, [
                 'IdAlumno' => 'required',

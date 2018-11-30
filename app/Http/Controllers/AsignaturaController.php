@@ -137,19 +137,24 @@ class AsignaturaController extends Controller
      */
     public function destroy($id)
     {
-        $asignatura = Asignatura::findOrfail($id);
-       if ($asignatura != null) {
-            if ($asignatura->EstadoAsignatura== true) {
+        if ($request->ajax()) {
+            $asignatura = Asignatura::findOrFail($id);
+            if ($asignatura != null) {
+                if ($asignatura->EstadoAsignatura == true) {
+                    $asignatura->EstadoAsignatura = false;
+                    $asignatura->save();
+                }else {
+                    $asignatura->EstadoAsignatura = true;
+                    $asignatura->save();
+                }
+            }else {
                 $asignatura->EstadoAsignatura = false;
                 $asignatura->save();
-            }else {
-                $asignatura->EstadoAsignatura = true;
-                $asignatura->save();
             }
-       }else {
-        $asignatura->EstadoAsignatura = false;
-        $asignatura->save();
-       }
-        return redirect()->route('asignatura.index')->with('success','La asignatura fue eliminada con exito ');
+            
+            return response()->json([
+                'message' => 'La asignatura '. $asignatura->NombreAsignatura.' Ha sido eliminada exitosamente!'
+            ]);
+        }
     }
 }

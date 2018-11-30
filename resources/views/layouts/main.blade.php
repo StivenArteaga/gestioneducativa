@@ -141,6 +141,9 @@
               @if(Auth::user()->IdTipoUsuario == 3)
                 <li><a class="menu-item" href="{{ route('matriculas') }}" data-i18n="nav.dash.crypto">Gestionar Matrícula</a></li>            
               @endif
+              @if(Auth::user()->IdTipoUsuario == 2)
+                <li><a class="menu-item" href="{{ url('observaciones') }}" data-i18n="nav.dash.crypto">Gestionar Observaciones</a></li>            
+              @endif
             </ul>
           </li>
         @endif
@@ -221,6 +224,7 @@
         <!--Configuracion-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-gears"></i><span class="menu-title" data-i18n="nav.dash.main">Configuraciones</span></a>
           <ul class="menu-content">
+              <li><a class="menu-item" href="{{ url('coordinadores') }}" data-i18n="nav.templates.vert.classic_menu">Gestionar Coordinadores</a></li>
             <li><a class="menu-item" href="{{ route('jornadas') }}" data-i18n="nav.templates.horz.classic">Gestionar Jornadas</a>
               <li><a class="menu-item" href="{{ route('sedes') }}" data-i18n="nav.templates.horz.classic">Gestionar Sedes</a>
               <li><a class="menu-item" href="{{ route('calificaciones') }}" data-i18n="nav.templates.horz.classic">Configurar Calificaciones</a>
@@ -307,6 +311,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script>
   <!-- Swwet alert -->  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+  <script src="js/confirmar_eliminar_scripts.js"></script>
   @yield('script')
 </body>
 </html>

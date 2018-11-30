@@ -150,19 +150,24 @@ class LogroController extends Controller
      */
     public function destroy($id)
     {
-       $logro = Logro::findOrfail($id);
-       if ($logro != null) {
-            if ($logro->EstadoLogro == true) {
+        if ($request->ajax()) {
+            $logro = Logro::findOrFail($id);
+            if ($logro != null) {
+                if ($logro->EstadoLogro == true) {
+                    $logro->EstadoLogro = false;
+                    $logro->save();
+                }else {
+                    $logro->EstadoLogro = true;
+                    $logro->save();
+                }
+            }else {
                 $logro->EstadoLogro = false;
                 $logro->save();
-            }else {
-                $logro->EstadoLogro = true;
-                $logro->save();
             }
-       }else {
-        $logro->EstadoLogro = false;
-        $logro->save();
-       }
-        return redirect()->route('logro.index')->with('success','El logro fue eliminado con exito ');
+            
+            return response()->json([
+                'message' => 'El logro '. $logro->DescripcionLogro.' Ha sido eliminado exitosamente!'
+            ]);
+        }
     }
 }

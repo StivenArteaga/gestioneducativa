@@ -66,7 +66,7 @@
                                 <td>                                                                        
                                 <button type="button" class="btn icon-table" data-toggle="modal" data-target="#matricularAlum" onclick="listAlumMatr({{$alumnosmatriculado->IdAlumno}})"><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['matricula', $alumnosmatriculado->IdMatricula], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" class="btn icon-table" ><i class="far fa-trash-alt icon-size"></i></a></button>
+                                  <button type="submit" class="btn icon-table btn-delete" ><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}                                                                                                                                                                                                                                                                                           
                                 </td>
                             </tr>

@@ -96,19 +96,24 @@ class AreaController extends Controller
      */
     public function destroy($id)
     {
-       $area = Area::findOrfail($id);
-       if ($area != null) {
-            if ($area->EstadoArea == true) {
+        if ($request->ajax()) {
+            $area = Area::findOrFail($id);
+            if ($area != null) {
+                if ($area->EstadoArea == true) {
+                    $area->EstadoArea = false;
+                    $area->save();
+                }else {
+                    $area->EstadoArea = true;
+                    $area->save();
+                }
+            }else {
                 $area->EstadoArea = false;
                 $area->save();
-            }else {
-                $area->EstadoArea = true;
-                $area->save();
             }
-       }else {
-        $area->EstadoArea = false;
-        $area->save();
-       }
-        return redirect()->route('area.index')->with('success','El area fue eliminada con exito ');
+            
+            return response()->json([
+                'message' => 'El Area '. $area->NombreArea.' Ha sido eliminada exitosamente!'
+            ]);
+        }
     }
 }

@@ -68,7 +68,7 @@
                                 <td>                                       
                                 <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarAsignatura({{$asignatura->IdAsignatura}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['asignatura', $asignatura->IdAsignatura], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
+                                  <button type="submit" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}   
                                 <button type="button" class="btn icon-table" data-toggle="modal" data-target="#asignaturasLogro" onclick="DetalleAsignatura({{$asignatura->IdAsignatura}})"><i class="fas fa-align-justify"></i></button>           
                                 </td>

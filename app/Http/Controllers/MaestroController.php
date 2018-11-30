@@ -200,20 +200,25 @@ class MaestroController extends Controller
 
     public function destroy($id)
     {
-        $maestro = Maestro::findOrfail($id);
-        if ($maestro != null) {
-             if ($maestro->EstadoMaestro == true) {
-                 $maestro->EstadoMaestro = false;
-                 $maestro->save();
-             }else {
-                 $maestro->EstadoMaestro = true;
-                 $maestro->save();
-             }
-        }else {
-         $maestro->EstadoMaestro = false;
-         $maestro->save();
+        if ($request->ajax()) {
+            $maestro = Maestro::findOrFail($id);
+            if ($maestro != null) {
+                if ($maestro->EstadoMaestro == true) {
+                    $maestro->EstadoMaestro = false;
+                    $maestro->save();
+                }else {
+                    $maestro->EstadoMaestro = true;
+                    $maestro->save();
+                }
+            }else {
+                $maestro->EstadoMaestro = false;
+                $maestro->save();
+            }
+            
+            return response()->json([
+                'message' => 'El Docente '. $maestro->PrimerNombreMaes. ' '.$maestro->PrimerApellidoMaes.' Ha sido eliminado exitosamente!'
+            ]);
         }
-         return redirect()->route('maestro.index')->with('success','El maestro fue eliminado con exito ');
     }
 
 }

@@ -14,29 +14,6 @@ function cargarNotas(value) {
     }
 }
 
-// function confirmarEliminar(false) {
-//     // event.preventDefault();
-//     swal({
-//             title: "Are you sure?",
-//             text: "Once deleted, you will not be able to recover this imaginary file!",
-//             icon: "warning",
-//             buttons: true,
-//             dangerMode: true,
-//         })
-//         .then((willDelete) => {
-//             if (willDelete) {
-//                 event.target.submit();
-//                 document.formularioEliminar.submit();
-//                 swal("Poof! Your imaginary file has been deleted!", {
-//                     icon: "success",
-//                 });
-//             } else {
-//                 swal("Your imaginary file is safe!");
-//             }
-//         });
-//     return false;
-// }
-
 $(document).ready(function() {
     $('.btn-delete').click(function(e) {
         e.preventDefault();
