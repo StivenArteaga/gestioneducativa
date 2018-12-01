@@ -148,7 +148,7 @@ class LogroController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($request->ajax()) {
             $logro = Logro::findOrFail($id);

@@ -133,20 +133,24 @@ class TipoGrupoController extends Controller
 
     
     public function destroy($id)
-    {        
-        $tipogrupo = TipoGrupo::findOrfail($id);
-        if ($tipogrupo != null) {
-             if ($tipogrupo->EstadoTipoGrupo == true) {
-                 $tipogrupo->EstadoTipoGrupo = false;
-                 $tipogrupo->save();
-             }else {
-                 $tipogrupo->EstadoTipoGrupo = true;
-                 $tipogrupo->save();
-             }
-        }else {
-         $tipogrupo->EstadoTipoGrupo = false;
-         $tipogrupo->save();
+    {
+        if($request->ajax()) {
+            $tipogrupo = TipoGrupo::findOrfail($id);
+            if ($tipogrupo != null) {
+                 if ($tipogrupo->EstadoTipoGrupo == true) {
+                     $tipogrupo->EstadoTipoGrupo = false;
+                     $tipogrupo->save();
+                 }else {
+                     $tipogrupo->EstadoTtipogrupoipoGrupo = true;
+                     $tipogrupo->save();
+                 }
+            }else {
+             $tipogrupo->EstadoTipoGrupo = false;
+             $tipogrupo->save();
+            }
+            return response()->json([
+                'message' => 'El Tipo de grupo '.$tipogrupo ->NombreTipoGrupo.' ha sido eliminada exitosamente!'
+            ]);
         }
-         return redirect()->route('tgrupo.index')->with('success','El tipo de grupo fue eliminado con exito ');
     }
 }

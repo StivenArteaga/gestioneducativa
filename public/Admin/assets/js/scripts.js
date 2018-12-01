@@ -3,22 +3,52 @@
 
 })(window);
 
-$(".dpto").change(event => {
+$("#DeparResidAlum").change(event => {
     $.get(`/alumnos/ciudades/${event.target.value}`, function(res, sta) {
-        $("#CiudNaciAlum").empty();
-        $("#CiudNaciAlum").append(`<option hidden value="">Seleccionar Ciudad </option>`);
+        $("#CiudResAlum").empty();
+        $("#CiudResAlum").append(`<option hidden value="">Seleccionar Ciudad </option>`);
         res.forEach(element => {
-            $("#CiudNaciAlum").append(`<option value=${element.IdCiudad}> ${element.NombreCiudad} </option>`);
+            $("#CiudResAlum").append(`<option value=${element.IdCiudad}> ${element.NombreCiudad} </option>`);
         });
     });
 });
 
-$(".dpto").change(event => { 
-    $.get(`/alumnos/municipios/${event.target.value}`, function(res, sta) {
-        $(".mpio").empty();
-        $(".mpio").append(`<option hidden value="">Seleccionar Municipio </option>`);
+$("#IdDepartamentoExpAlum").change(event => {
+    $.get(`/alumnos/ciudades/${event.target.value}`, function(res, sta) {
+        $("#IdMunicipioExpAlum").empty();
+        $("#IdMunicipioExpAlum").append(`<option hidden value="">Seleccionar Ciudad </option>`);
         res.forEach(element => {
-            $(".mpio").append(`<option value=${element.IdMunicipio}> ${element.NombreMunicipio} </option>`);
+            $("#IdMunicipioExpAlum").append(`<option value=${element.IdCiudad}> ${element.NombreCiudad} </option>`);
+        });
+    });
+});
+
+$("#IdDepartamentoExpAcu").change(event => {
+    $.get(`/alumnos/ciudades/${event.target.value}`, function(res, sta) {
+        $("#IdMunicipioExpedicionAcu").empty();
+        $("#IdMunicipioExpedicionAcu").append(`<option hidden value="">Seleccionar Ciudad </option>`);
+        res.forEach(element => {
+            $("#IdMunicipioExpedicionAcu").append(`<option value=${element.IdCiudad}> ${element.NombreCiudad} </option>`);
+        });
+    });
+});
+
+$("#DeparExpAlum").change(event => {
+    $.get(`/alumnos/municipios/${event.target.value}`, function(res, sta) {
+        $("#IdMunicipioExpedido").empty();
+        $("#IdMunicipioExpedido").append(`<option hidden value="">Seleccionar Municipio </option>`);
+        res.forEach(element => {
+            $("#IdMunicipioExpedido").append(`<option value=${element.IdMunicipio}> ${element.NombreMunicipio} </option>`);
+        });
+    });
+});
+
+$("#DeparNacAlum").change(event => {
+    $.get(`/alumnos/municipios/${event.target.value}`, function(res, sta) {
+        $("#CiudNaciAlum").empty();
+        $("#CiudNaciAlum").append(`<option hidden value="">Seleccionar Municipio </option>`);
+        res.forEach(element => {
+            $("#CiudNaciAlum").append(`<option value=${element.IdMunicipio}> ${element.NombreMunicipio} </option>`);
         });
     });
 });
@@ -38,7 +68,7 @@ function MostrarMateria(id) {
 }
 
 function Mostrar(id) {
-    $.get('editalum/editalum/'+id, function(data) {        
+    $.get('editalum/editalum/' + id, function(data) {
         if (data.alumno != null) {
 
             /*Datos personales del alumno*/
@@ -100,7 +130,7 @@ function Mostrar(id) {
             $("#IdMunicipioExpedicionAcu").val(data.acudiente.IdMunicipioExpedicion);
 
             /*Datos segundo acudiente */
-            if(data.acudientedos!= null){
+            if (data.acudientedos != null) {
                 $("#IdTipoAcudiente2").val(data.acudientedos.IdTipoAcudiente);
                 $("#PrimNombAcu2").val(data.acudientedos.PrimerNombreAcu);
                 $("#SeguNombAcu2").val(data.acudientedos.SegundoNombreAcu);
@@ -145,7 +175,7 @@ function Mostrar(id) {
     });
 }
 
-function MostrarArea(id) {    
+function MostrarArea(id) {
     $.get('edit/edit/' + id, function(data) {
         if (data != null) {
             /*Dato del area */
@@ -160,7 +190,7 @@ function MostrarArea(id) {
 
 function MostrarMaestro(id) {
     $.get('updmae/updmae/' + id, function(data) {
-        if (data != null) {            
+        if (data != null) {
             $("#PNombreMaes").val(data.maestros.PrimerNombreMaes);
             $("#SNombreMaes").val(data.maestros.SegundoNombreMaes);
             $("#PApellidoMaes").val(data.maestros.PrimerApellidoMaes);
@@ -295,24 +325,24 @@ function MostrarGrupo(id) {
             $select.trigger('change');
             listarAlum();
 
-           /* $('#TAsign td').each(function() {
-                //console.log(index)
-                var valores = '';
-                valores = $(this).parents("tr").find("td").eq(0).html();
-                //console.log(data.Asignaturas.IdAsignatura,valores );
+            /* $('#TAsign td').each(function() {
+                 //console.log(index)
+                 var valores = '';
+                 valores = $(this).parents("tr").find("td").eq(0).html();
+                 //console.log(data.Asignaturas.IdAsignatura,valores );
 
-                data.Asignaturas.forEach(function(e) {
-                    var parametro = $("input[name='checkAignatura']");
-                    for (let index = 0; index < parametro.length; index++) {
-                        if (e.IdAsignatura == valores) {
-                            $('#checkAignatura_' + e.IdAsignatura).attr('checked', true);
-                            break;
-                        }
-                    }
-                });
+                 data.Asignaturas.forEach(function(e) {
+                     var parametro = $("input[name='checkAignatura']");
+                     for (let index = 0; index < parametro.length; index++) {
+                         if (e.IdAsignatura == valores) {
+                             $('#checkAignatura_' + e.IdAsignatura).attr('checked', true);
+                             break;
+                         }
+                     }
+                 });
 
-            });            
-            SelectAsig();*/
+             });            
+             SelectAsig();*/
             SelectAlum();
         } else {
             alert('Error al cargar los datos, verifica el proceso de editar');
@@ -452,7 +482,7 @@ $("#IdGradoIfAca").change(function() {
             alert('Error al cargar los datos del numero del numero de lista del alumno');
         }
     });
-});  
+});
 
 
 
@@ -588,8 +618,6 @@ function MostrarTipoGrupo(id) {
     });
 }
 
-function CerrarModal(Id){
-    $("#"+Id).hide();
-  }
-
-  
+function CerrarModal(Id) {
+    $("#" + Id).hide();
+}

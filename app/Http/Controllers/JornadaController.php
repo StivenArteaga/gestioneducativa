@@ -143,21 +143,25 @@ class JornadaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $jornada = Jornada::findOrfail($id);
-       if ($jornada != null) {
-            if ($jornada->EstadoJornada == true) {
-                $jornada->EstadoJornada = false;
-                $jornada->save();
-            }else {
-                $jornada->EstadoJornada = true;
-                $jornada->save();
-            }
-       }else {
-        $jornada->EstadoJornada = false;
-        $jornada->save();
-       }
-        return redirect()->route('jornada.index')->with('success','La jornada fue eliminada con exito ');
+        if($request->ajax()) {
+            $jornada = Jornada::findOrfail($id);
+           if ($jornada != null) {
+                if ($jornada->EstadoJornada == true) {
+                    $jornada->EstadoJornada = false;
+                    $jornada->save();
+                }else {
+                    $jornada->EstadoJornada = true;
+                    $jornada->save();
+                }
+           }else {
+            $jornada->EstadoJornada = false;
+            $jornada->save();
+           }
+           return response()->json([
+            'message' => 'La jornada '. $jornada->NombreJornada.' Ha sido eliminada exitosamente!'
+        ]);
+        }
     }
 }

@@ -69,7 +69,7 @@ class CalificacionController extends Controller
     }
 
     
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($request->ajax()) {
             $calificacion = Calificacion::findOrFail($id);

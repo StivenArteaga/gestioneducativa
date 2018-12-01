@@ -334,7 +334,7 @@ class GrupoController extends Controller
             }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($request->ajax()) {
             $grupo = Grupo::findOrFail($id);

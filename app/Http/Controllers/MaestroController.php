@@ -198,7 +198,7 @@ class MaestroController extends Controller
     
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($request->ajax()) {
             $maestro = Maestro::findOrFail($id);
