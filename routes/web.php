@@ -141,7 +141,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('evalalum/evalalum/{id}', 'EvaluacionController@evalalum');
 
-    Route::get('listalog/listalog/{id}/{idalumno}', 'EvaluacionController@listalog');
+    Route::get('listalog/listalog/{id}/{idalumno}/{periodo}', 'EvaluacionController@listalog');
 
     Route::get('savelog/savelog/{resquest}/{id}', 'EvaluacionController@savelog');
 
@@ -169,7 +169,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('observacion','ObservadorController');
 
     /*Reportes */
-    Route::get('BoletinAlumno/{request}', 'ReporteController@BoletinAlumno');
+    Route::get('BoletinAlumno/{Id}/{ida}', 'ReporteController@BoletinAlumno');
+    Route::resource('boletin','ReporteController');
 
     //Inasistencia
     Route::get('inasistencias','InasistenciaController@index')->name('inasistencias');
@@ -177,6 +178,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('inasistencia/grado/{Id}/{IdA}','InasistenciaController@alumnos');
     Route::get('inasistenciasalumnos/{asignatura}/{alumno}','InasistenciaController@add');
     Route::resource('inasistencia','InasistenciaController');
+
+    Route::get('secretarias','SecretariaController@index')->name('secretarias');
+    Route::resource('secretaria','SecretariaController');
      /**
       * Coordinador
       */

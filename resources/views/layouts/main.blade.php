@@ -210,9 +210,9 @@
         <li class=" nav-item"><a href="{{ route('main') }}"><i class="la la-group"></i><span class="menu-title" data-i18n="nav.templates.main">Grupos</span></a>
           <ul class="menu-content">             
             <li><a class="menu-item" href="{{ route('aulas') }}" data-i18n="nav.dash.ecommerce">Gestionar Aula</a></li>            
-              <li><a class="menu-item" href="{{ route('grados') }}" data-i18n="nav.templates.horz.classic">Gestionar Grados</a>
+              <li><a class="menu-item" href="{{ route('grados') }}" data-i18n="nav.templates.horz.classic">Gestionar Grupo</a>
               <li><a class="menu-item" href="{{ route('tgrupos') }}" data-i18n="nav.templates.horz.classic">Gestionar Asignaturas Grupo</a>
-              <li><a class="menu-item" href="{{ route('grupos') }}" data-i18n="nav.dash.ecommerce">Gestionar Grupo</a></li>
+              <li><a class="menu-item" href="{{ route('grupos') }}" data-i18n="nav.dash.ecommerce">Gestionar Grado</a></li>
           </ul>
         </li>
         @endif
@@ -223,7 +223,8 @@
           <ul class="menu-content">
             <li><a class="menu-item" href="{{ route('jornadas') }}" data-i18n="nav.templates.horz.classic">Gestionar Jornadas</a>
               <li><a class="menu-item" href="{{ route('sedes') }}" data-i18n="nav.templates.horz.classic">Gestionar Sedes</a>
-              <li><a class="menu-item" href="{{ route('calificaciones') }}" data-i18n="nav.templates.horz.classic">Configurar Calificaciones</a>
+                <li><a class="menu-item" href="{{ route('secretarias') }}" data-i18n="nav.templates.horz.classic">Gestionar Secretarias</a>
+              <li><a class="menu-item" href="{{ route('calificaciones') }}" data-i18n="nav.templates.horz.classic">Configurar Calificaciones</a>                
           </ul>
         </li>
 

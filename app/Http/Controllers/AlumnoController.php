@@ -126,7 +126,7 @@ class AlumnoController extends Controller
                 return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información personal del alumno. Estos campos son obligatorios para registrar un alumno']);                            
             }else{  
                                                                             
-                if($mi_array->IdEps ==""||$mi_array->IdTipoSangre =="" || $mi_array->CarnetSisben =="" || $mi_array->PuntajeSisben =="" ||$mi_array->Estrato =="")
+                if($mi_array->IdEps ==""||$mi_array->IdTipoSangre =="" ||  $mi_array->PuntajeSisben =="")
                 {                    
                     return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información de salud del alumno. Estos campos son obligatorios para registrar un alumno']);                            
                 }else{                                        
@@ -502,7 +502,7 @@ class AlumnoController extends Controller
                 return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información personal del alumno. Estos campos son obligatorios para registrar un alumno']);                            
             }else{
                 
-                if($mi_array->IdEps ==""||$mi_array->IdTipoSangre =="" || $mi_array->CarnetSisben =="" || $mi_array->PuntajeSisben =="" ||$mi_array->Estrato =="")
+                if($mi_array->IdEps ==""||$mi_array->IdTipoSangre =="" ||  $mi_array->PuntajeSisben =="")
                 {
                     return response()->json(['status'=>'warning','message' => 'Por favor, diligencia los campos que estan marcados con un (*) en la información de salud del alumno. Estos campos son obligatorios para registrar un alumno']);                            
                 }else{

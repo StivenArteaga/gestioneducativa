@@ -55,7 +55,8 @@
                         <tr>                                                    
                           <th>Asignatura</th>      
                           <th>Materia</th>    
-                          <th>Tipo asignatura</th>                                                                       
+                          <th>Tipo asignatura</th>   
+                          <th>Intensidad (Hora)</th>                                                                    
                           <th with="300px">Acción</th>
                         </tr>
                       </thead>
@@ -65,10 +66,11 @@
                                 <td>{{ $asignatura->NombreAsignatura }}</td>                                            
                                 <td>{{ $asignatura->NombreMateria }}</td>
                                 <td>{{ $asignatura->NombreTipoAsignatura }}</td>                                 
+                                <td>{{ $asignatura->Intensidad }}</td>
                                 <td>                                       
-                                <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarAsignatura({{$asignatura->IdAsignatura}})'><i class="far far fa-edit"></i></button>
+                                <button type="button" title="Editar Registro" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarAsignatura({{$asignatura->IdAsignatura}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['asignatura', $asignatura->IdAsignatura], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
+                                  <button type="submit" title="Eliminar Registro" class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}   
                                 <button type="button" class="btn icon-table" data-toggle="modal" data-target="#asignaturasLogro" onclick="DetalleAsignatura({{$asignatura->IdAsignatura}})"><i class="fas fa-align-justify"></i></button>           
                                 </td>
@@ -80,6 +82,7 @@
                           <th>Asignatura</th>      
                           <th>Materia</th>    
                           <th>Tipo asignatura</th>                                                                        
+                          <th>Intensidad (Hora)</th>                                                                    
                           <th>Acción</th>
                         </tr>
                       </tfoot>

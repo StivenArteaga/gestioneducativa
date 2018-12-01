@@ -1,0 +1,130 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    text-decoration: none;
+}
+
+body{
+    font-size: 10px;
+    font-family: poppinsRegular;
+}
+
+.header{
+    margin:20px;
+    position: relative;
+}
+
+.logo{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+}
+
+.txt_header{
+    padding-top:2rem;
+    text-align: center;
+}
+
+.txt_header_colegio{
+    font-size: 1.5rem;
+}
+
+.txt_header_place{
+    font-size: 1.3rem;
+}
+
+.txt_header_title{
+    font-size: 1.3rem;
+    margin-top: 2rem;
+}
+
+.border{
+    border: 0.1rem solid black;
+}
+
+.content_boletin{
+    padding-top: 4rem;
+    width: 100%;
+    margin: 2rem;
+}
+
+.fila_1 div{
+    margin: -2px;
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    font-size: 1rem;
+}
+
+.informe{
+    float: right;
+    margin-right: 2rem !important;
+}
+
+.fila_2{
+    width: 100%;
+}
+
+.estudiante{
+    padding: 0.2rem 0.7rem;
+    font-size: 1rem;
+    width: 92.9%;
+    padding-right: 3rem;
+    margin: 0rem -0.1rem;
+}
+
+.fila_3 div, .fila_4 div{
+    margin: -1px -2px;
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    font-size: 1rem;
+    width: 1.25%;
+}
+
+.asignatura{
+    width: 77.2% !important;
+    text-align: center;
+    font-family: poppinsBold;
+}
+
+.asignatura2{
+    width: 77.2% !important;
+    text-align: left;
+    font-family: poppinsBold;
+}
+
+.logros div{
+    margin: -1px -2px;
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    font-size: 1rem;
+}
+#logro{
+    width: 95.7%;
+}
+
+.firma{
+    margin-top:4rem;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+hr{
+    display: block;
+    margin: 5px auto;
+    width: 30%;
+    border:1px solid black;
+}
+
+
+/*Fuentes*/
+@font-face{
+    font-family: poppinsRegular;
+    src: url("../font/Poppins-Regular.ttf")
+}
+
+@font-face{
+    font-family: poppinsBold;
+    src: url("../font/Poppins-Bold.ttf")
+}

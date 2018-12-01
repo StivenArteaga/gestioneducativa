@@ -61,9 +61,9 @@
                             <tr>                                
                                 <td>{{ $sede->NombreSede }}</td>                                   
                                 <td>                                        
-                                <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarSede({{$sede->IdSede}})'><i class="far far fa-edit"></i></button>
+                                <button type="button" title="Editar Registro" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarSede({{$sede->IdSede}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['sede', $sede->IdSede], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
+                                  <button type="submit" title="Eliminar Registro" class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}                                                                                                                                                                                                                                                                                           
                                 </td>
                             </tr>
