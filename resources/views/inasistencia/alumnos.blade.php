@@ -64,8 +64,7 @@
                           <input type="date" class="form-control" id="FechaInasistencia">
                           </td>                 
                           <td>                                       
-                            <a class="btn btn-block btn-success" href="{{ url('inasistenciasalumnos/'.$alumno.'/'.$IdAsignatura) }}"><i class="fas fa-user-plus" ></i> Agregar Inasistencia</a>
-                            <a class="btn btn-block btn-danger" onclick="QuitarInasistencia()"><i class="fas fa-user-minus"></i> Quitar Inasistencia</a>
+                            <a class="btn btn-block btn-success" href="{{ url('inasistenciasalumnos/'.$alumno.'/'.$IdAsignatura) }}"><i class="fas fa-user-plus" ></i> Agregar Inasistencia</a>                            
                           </td>
                           <td>
                             <input type="text" class="form-control col-md-3" id="Inasistencia" value="{{ $alumno->created_at }}" disabled>

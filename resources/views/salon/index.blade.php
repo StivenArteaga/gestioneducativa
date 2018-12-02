@@ -54,7 +54,7 @@
                       <thead>
                         <tr>                          
                           <th>Nombre aula</th>
-                          <td>Sede</td>
+                          <th>Sede</th>
                           <th with="300px">Acción</th>
                         </tr>
                       </thead>
@@ -64,9 +64,9 @@
                                 <td>{{ $aula->NombreSalon }}</td>
                                 <td>{{ $aula->NombreSede }}</td>                                
                                 <td>                                       
-                                  <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarAula({{$aula->IdSalon}})'><i class="far far fa-edit"></i></button>
+                                  <button type="button" title="Editar Registro" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarAula({{$aula->IdSalon}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['aula', $aula->IdSalon], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
+                                  <button type="submit" title="Eliminar Registro" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}               
                                 </td>
                             </tr>
@@ -75,7 +75,7 @@
                       <tfoot>
                         <tr>                        
                           <th>Nombre aula</th>
-                          <td>Sede</td>
+                          <th>Sede</th>
                           <th>Acción</th>
                         </tr>
                       </tfoot>

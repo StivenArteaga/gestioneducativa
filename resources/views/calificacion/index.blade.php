@@ -62,9 +62,9 @@
                             <tr>                                
                                 <td>{{ $calificacion->NombreNota }}</td>                                
                                 <td>                                       
-                                  <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarCalificacion({{$calificacion->IdNota}})'><i class="far far fa-edit"></i></button>
+                                  <button type="button" title="Editar Registro" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarCalificacion({{$calificacion->IdNota}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['calificacion', $calificacion->IdNota], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
+                                  <button type="submit" title="Eliminar Registro" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}               
                                 </td>
                             </tr>
@@ -98,9 +98,9 @@
                 {!! Form::open(['route' => 'calificacion.store', 'method' => 'POST']) !!}    
                     <form class="form form-horizontal row-separator" id="form">
                         <div class="form-body">
-                            <h4 class="form-section"><i class="la la-user"></i> Información de grado</h4>                                                              
+                            <h4 class="form-section"><i class="la la-user"></i> Información de calificación</h4>                                                              
                                 <div class="form-group row">
-                                    <label class="col-md-3 label-control" for="projectinput1">Nombre del grado *</label>
+                                    <label class="col-md-3 label-control" for="projectinput1">Nombre de la calificación *</label>
                                         <div class="col-md-9">                                            
                                             <input type="text" class="hidden">
                                                 {!! Form::text('NombreNota', null, ['id'=>'NombreNota','placeholder'=>'Ingrese el nombre de la calificación', 'class'=> 'form-control']) !!}

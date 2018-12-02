@@ -115,10 +115,10 @@
                               <tr>                          
                                 <th with="30px">N° lista</th>                                                  
                                 <th>Nombre</th>
-                                <th with="700px">1° Periodo</th>
-                                <th with="700px">2° Periodo</th>
-                                <th with="700px">3° Periodo</th>
-                                <th with="700px">4° Periodo</th>
+                                <th with="700px">1° Periodo  <input type="checkbox" id="chekPeriodoUno" title="Al seleccionar este icono podras consultar los logros de este periodo"></th>
+                                <th with="700px">2° Periodo  <input type="checkbox" id="chekPeriodoDos" title="Al seleccionar este icono podras consultar los logros de este periodo"></th>
+                                <th with="700px">3° Periodo  <input type="checkbox" id="chekPeriodoTres" title="Al seleccionar este icono podras consultar los logros de este periodo"></th>
+                                <th with="700px">4° Periodo  <input type="checkbox" id="chekPeriodoCuatro" title="Al seleccionar este icono podras consultar los logros de este periodo"></th>
                                 <th with="300px">Acción</th>
                               </tr>                              
                             </thead>
@@ -153,8 +153,8 @@
                                         </select> 
                                         <button class='btn btn-success' id='notaFinal' onclick='evalAumno(idAsignatura,alumnos.IdAlumno,4)' style='height:35px;' >Evaluar</button>
                                   </td>   
-                                  <td>  
-                                          <button class='btn btn-info' style='height:35px;' title='Descargar boletín'><i class='fas fa-file-download'></i></button>
+                                  <td>                                            
+                                          <a class='' href="{{ url('') }}" style='height:35px;' title='Descargar boletín'><i class='fas fa-file-download'></i></a>
                                           <button class='btn btn-warning' style='height:35px;' title='Asignar logros'><i class='fas fa-star-half-alt'></i></button>
                                   </td>            
                                 </tr>   
@@ -244,18 +244,16 @@
       
 function ListAlum(id,idAsignatura){  
     
-    $.get('listalumasig/listalumasig/'+id+'/'+idAsignatura, function(data){
-
-        if (data != null) {                  
-            
-            var valor5 = ''
-            data.alumnos.forEach(alumnos => {
+    $.get('listalumasig/listalumasig/'+id+'/'+idAsignatura, function(data){      
+        if (data != null) {                              
+            var valor5 = ''            
+            data.alumnos.forEach(alumnos => {              
                 valor5 += "<tr id='auto[]'>"+    
                 "<td class='hidden'>" + alumnos.IdAlumno + "</td>"+                                                                    
                "<td>" + alumnos.Numerolista + "</td>"+                                     
                "<td>" + alumnos.PrimerNombre +" "+ alumnos.SegundoNombre+" "+alumnos.PrimerApellido+" "+alumnos.SegundoApellido+"</td>"+                              
                "<td class='numero'>" + 
-                        "<select name='IdNota[]' id='IdNotaPeri1[]' class='form-control asigarnota' style='height:25px;'>"+
+                        "<select name='IdNota[]' id='IdNotaPeri1[]' class='form-control asigarnota asigarnotacolumna asigarnotafila' style='height:25px;'>"+
                             "<option disabled='disabled' selected>Selecciona una opción...</option>"+                            
                         "</select>" +
                         "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+1+")' style='height:35px;' >Evaluar</button>"+
@@ -276,10 +274,10 @@ function ListAlum(id,idAsignatura){
                         "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+4+")' style='height:35px;' >Evaluar</button>"+
                 "</td>"+   
                 "<td>"+  
-                        "<button class='btn btn-info' style='height:35px;' title='Descargar boletín' ><i class='fas fa-file-download'></i></button>"+
-                        "<button class='btn btn-warning' style='height:35px;' title='Asignar logros' data-toggle='modal' data-target='#listadoLogro' onclick='listalogro("+idAsignatura+','+alumnos.IdAlumno+")' ><i class='fas fa-star-half-alt'></i></button>"+
+                        "<a class='btn btn-info' onclick='DownloadBoletin("+alumnos.IdAlumno+","+idAsignatura+")' style='height:35px;' title='Descargar boletín' ><i class='fas fa-file-download'></i></a>"+
+                        "<button class='btn btn-warning' style='height:35px;' title='Asignar logros' onclick='listalogro("+idAsignatura+','+alumnos.IdAlumno+")' ><i class='fas fa-star-half-alt'></i></button>"+
                 "</td>"+            
-               "<tr>";
+               "<tr>";     
             });          
 
             $("#TblListAlumEval").html(valor5);                                        
@@ -292,14 +290,13 @@ function ListAlum(id,idAsignatura){
                     }                    
                 });                                                                                                                  
             });            
-                     
-/*
-            console.log(data.evaluaciones);
-            $.each(data.evaluaciones, function(index, value){                      
-                var selected = new Array();                                     
-                 $("#TblListAlumEval select").each(function(val){                          
-                    selected.push($(this).parent().parent().find('td').eq(0).html());   
-                    if(intent.indexOf(value.IdAlumno) == -1){
+                                            
+            $("#TblListAlumEval select").each(function(val){                         
+              var selected = new Array(); 
+              selected.push($(this).parent().parent().find('td').eq(0).html());
+              console.log(selected, data.evaluaciones);
+              $.each(data.evaluaciones, function(index, value){                                                                           
+                if(selected.indexOf(value.IdAlumno) == -1){
                             switch (value.IdPeriodo) {
                                 case 1:                                
                                       $('select[id*=IdNotaPeri1]').val(value.NotaFinal);
@@ -314,11 +311,9 @@ function ListAlum(id,idAsignatura){
                                       $('select[id*=IdNotaPeri4]').val(value.NotaFinal);                                         
                                     break;                            
                             }                            
-                        }else{
-
-                        }
-                });                                                                  
-            });*/
+                  }
+              });                       
+            });                                                                              
 
             $(".asigarnota").on('change', function(){
                 $("#notaFinal").val(this.value);               
@@ -344,20 +339,67 @@ function ListAlum(id,idAsignatura){
 
 function listalogro(IdAsignatura, IdAlumno)
 {
-  $.get("listalog/listalog/"+IdAsignatura+'/'+IdAlumno, function(data, eval){
+  var a = Number($('#chekPeriodoUno').is(':checked'));
+  var b = Number($('#chekPeriodoDos').is(':checked'));
+  var c = Number($('#chekPeriodoTres').is(':checked'));
+  var d = Number($('#chekPeriodoCuatro').is(':checked'));
+  var periodo =0;
+  if((a+b+c+d)>1 || (a+b+c+d)==0){    
+    swal({
+         type:'error',
+         title: 'Upss',
+         animation: true,
+         customClass: 'animated tada',
+        text: "Para consultar o asignar los logros de las evaluaciones, verifica tener un solo periodo seleccionado!"
+      }); 
+  }else{
+    if (a==1) {
+      periodo = 1;
+    } else {
+      if(b == 1){
+        periodo =2;
+      }else{
+        if(c == 1){
+          periodo = 3;
+        }else{
+          periodo = 4;
+        }
+      }
+    }
+    $("#listadoLogro").modal("show");
+      $.get("listalog/listalog/"+IdAsignatura+'/'+IdAlumno+'/'+periodo, function(data, eval){
       if(data != null){
 
         if(data.status == "success"){
           var valor8 = ''
           var i=0;
-            data.logros.forEach(data => {              
-              valor8 += "<tr>"+    
-               "<td class='hidden'>"+ data.IdLogro+ "</td>"+               
-               "<td class='hidden'>"+ data.IdEvaluacion+ "</td>"+     
-               "<td class='hidden'>"+ data.EstadoLogro+ "</td>"+
-               "<td>" + "<input type='checkbox' name='chekLogro' id='chekLogro_"+data.IdLogro+"' class='form-check-input check'></input>" + "</td>" +  
-               "<td>" + data.DescripcionLogro + "</td>"+                              
-               "<tr>";                                             
+          var array = [];
+
+            data.logros.forEach(data => {                 
+              if(array.length > 0){
+                array.forEach(element => {
+                  if(data.IdLogro == element){
+                      return true;
+                  }else{
+                      valor8 += "<tr>"+    
+                  "<td class='hidden'>"+ data.IdLogro+ "</td>"+               
+                  "<td class='hidden'>"+ data.IdEvaluacion+ "</td>"+     
+                  "<td class='hidden'>"+ data.EstadoLogro+ "</td>"+
+                  "<td>" + "<input type='checkbox' name='chekLogro' id='chekLogro_"+data.IdLogro+"' class='form-check-input check'></input>" + "</td>" +  
+                  "<td>" + data.DescripcionLogro + "</td>"+                              
+                  "<tr>";            
+                  }
+                });
+              }else{
+                  valor8 += "<tr>"+    
+                "<td class='hidden'>"+ data.IdLogro+ "</td>"+               
+                "<td class='hidden'>"+ data.IdEvaluacion+ "</td>"+     
+                "<td class='hidden'>"+ data.EstadoLogro+ "</td>"+
+                "<td>" + "<input type='checkbox' name='chekLogro' id='chekLogro_"+data.IdLogro+"' class='form-check-input check'></input>" + "</td>" +  
+                "<td>" + data.DescripcionLogro + "</td>"+                              
+                "<tr>";            
+              }                                    
+              array = [data.IdLogro];                            
             })
             
             $("#IdBodyLogroEvaluacion").html(valor8); 
@@ -399,7 +441,7 @@ function listalogro(IdAsignatura, IdAlumno)
               });                                                           
 
               var valor8 = ''
-          var i=0;
+              var i=0;
             data.logros.forEach(data => {              
               valor8 += "<tr>"+    
                "<td class='hidden'>"+ data.IdLogro+ "</td>"+               
@@ -411,18 +453,17 @@ function listalogro(IdAsignatura, IdAlumno)
             $("#IdBodyLogroEvaluacion").html(valor8);             
         }        
       }else{
-        alert('Error al cargar los logros que estan asociada a esta asignatura o periodo. Ho no tiene registros asociados');
+          alert('Error al cargar los logros que estan asociada a esta asignatura o periodo. Ho no tiene registros asociados');
       }
-  });
+      });
+  }
 }
 
-function SelectLogro(){
-  debugger;    
+function SelectLogro(){   
     SelectLogros();
 } 
 
 function SelectLogros(){
-  debugger;
   var IdEvaluacion;
   var selectedAsig = new Array();                              
   $("#IdBodyLogroEvaluacion input:checkbox:checked").each(function() {                
@@ -477,6 +518,38 @@ function SelectLogros(){
     }
 
     
+}
+
+function  DownloadBoletin(alumno, asignatura) {
+  var a = Number($('#chekPeriodoUno').is(':checked'));
+  var b = Number($('#chekPeriodoDos').is(':checked'));
+  var c = Number($('#chekPeriodoTres').is(':checked'));
+  var d = Number($('#chekPeriodoCuatro').is(':checked'));
+  var periodo =0;
+  if((a+b+c+d)>1 || (a+b+c+d)==0){    
+    swal({
+         type:'error',
+         title: 'Upss',
+         animation: true,
+         customClass: 'animated tada',
+        text: "Para descargar un boletín necesita seleccionar un periodo, verifica tener un solo periodo seleccionado!"
+      }); 
+  }else{    
+    if (a==1) {
+      periodo = 1;
+    } else {
+      if(b == 1){
+        periodo =2;
+      }else{
+        if(c == 1){
+          periodo = 3;
+        }else{
+          periodo = 4;
+        }
+      }
+    }
+    location.href = "BoletinAlumno/"+alumno+'/'+asignatura+'/'+periodo;    
+  }
 }
 
   </script>  

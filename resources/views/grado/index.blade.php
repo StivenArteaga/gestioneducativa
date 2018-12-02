@@ -32,12 +32,12 @@
               <div class="card">
                 <div class="card-header">
                   <button class="btn btn-success">
-                     <a data-toggle="modal" data-target=".bd-example-modal-lg">Nuevo Grado</a>
+                     <a data-toggle="modal" data-target=".bd-example-modal-lg">Nuevo Grupo</a>
                   </button>
                       
                   
                   <div class="text-center">
-                    <h1 class="card-title">Listado de grados</h1>
+                    <h1 class="card-title">Listado de grupos</h1>
                   </div>
                   <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3" ></i></a>                  
                   <div class="heading-elements">
@@ -53,7 +53,7 @@
                     <table class="table table-striped table-bordered dom-jQuery-events">
                       <thead>
                         <tr>                          
-                          <th>Nombre grado</th>                          
+                          <th>Nombre Grupo</th>                          
                           <th with="300px">Acción</th>
                         </tr>
                       </thead>
@@ -62,9 +62,9 @@
                             <tr>                                
                                 <td>{{ $grado->NombreGrado }}</td>                                
                                 <td>                                       
-                                  <button type="button" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarGrado({{$grado->IdGrado}})'><i class="far far fa-edit"></i></button>
+                                  <button type="button" title="Editar Registro" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarGrado({{$grado->IdGrado}})'><i class="far far fa-edit"></i></button>
                                 {!! Form::open([ 'url'=>['grado', $grado->IdGrado], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
+                                  <button type="submit" title="Eliminar Registro" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}               
                                 </td>
                             </tr>
@@ -72,7 +72,7 @@
                       </tbody>
                       <tfoot>
                         <tr>                        
-                          <th>Nombre grado</th>
+                          <th>Nombre Grupo</th>
                           <th>Acción</th>
                         </tr>
                       </tfoot>
@@ -91,19 +91,19 @@
       
         <div class="card">
             <div class="card-header">
-                  <h2 class="card-title">REGISTRO DE GRADO</h2>
+                  <h2 class="card-title">REGISTRO DE GRUPO</h2>
                 </div>
              <div class="card-content">
                 <div class="card-body">   
                 {!! Form::open(['route' => 'grado.store', 'method' => 'POST']) !!}    
                     <form class="form form-horizontal row-separator" id="form">
                         <div class="form-body">
-                            <h4 class="form-section"><i class="la la-user"></i> Información de grado</h4>                                                              
+                            <h4 class="form-section"><i class="la la-user"></i> Información de grupo</h4>                                                              
                                 <div class="form-group row">
-                                    <label class="col-md-3 label-control" for="projectinput1">Nombre del grado *</label>
+                                    <label class="col-md-3 label-control" for="projectinput1">Nombre del grupo *</label>
                                         <div class="col-md-9">                                            
                                             <input type="text" class="hidden">
-                                                {!! Form::text('NombreGrado', null, ['id'=>'NombreGrado','placeholder'=>'Ingrese el nombre del grado', 'class'=> 'form-control']) !!}
+                                                {!! Form::text('NombreGrado', null, ['id'=>'NombreGrado','placeholder'=>'Ingrese el nombre del grupo', 'class'=> 'form-control']) !!}
                                                 {!! Form::text('IdGrado', null, ['id'=>'IdGrado', 'class'=> 'hidden']) !!}
                                                 {!! Form::text('EstadoGrado', 1, ['class'=>'hidden']) !!}
                                             </div>

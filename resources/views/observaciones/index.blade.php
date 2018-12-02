@@ -39,7 +39,7 @@
                                     <td>{{ $observacion->PrimerNombre. ' '.$observacion->PrimerApellido }}</td>
                                     <td>{{ $observacion->descripcion }}</td>
                                     <td>
-                                        <a href="{{ url('observaciones/'.$observacion->IdObservacion.'/edit') }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                                        <a title="Editar Registro" href="{{ url('observaciones/'.$observacion->IdObservacion.'/edit') }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach

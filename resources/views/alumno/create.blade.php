@@ -203,13 +203,13 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput1">Codigo Familia En Acción *</label>
+            <label class="col-md-3 label-control" for="projectinput1">Codigo Familia En Acción </label>
             <div class="col-md-9">
                 {!! Form::text('Ars', null, ['id'=>'ArsAlum','placeholder'=>'Ingrese su ars', 'class'=> 'form-control valalfanumericoespace']) !!}
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput2">Numero de ficha del sisben *</label>
+            <label class="col-md-3 label-control" for="projectinput2">Numero de ficha del sisben </label>
             <div class="col-md-9">
                 {!! Form::text('CarnetSisben', null, ['id'=>'NumCarnetAlum','placeholder'=>'Ingrese el numero de su carnet del sisben', 'class'=> 'form-control valnum']) !!}
             </div>
@@ -221,7 +221,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput3">Estrato *</label>
+            <label class="col-md-3 label-control" for="projectinput3">Estrato </label>
             <div class="col-md-9">
                 {!! Form::text('Estrato', null, ['id'=>'EstraroAlum','placeholder'=>'Ingrese en numero de su estrato', 'class'=> 'form-control valnumestrato']) !!}
             </div>
@@ -495,7 +495,7 @@
     <div class="form-body">
         <h4 class="form-section"><i class="la la-user"></i> Información académica</h4>
         <div class="form-group row">
-            <label class="col-md-3 label-control" for="projectinput6">Grado *</label>
+            <label class="col-md-3 label-control" for="projectinput6">Grupo *</label>
             <div class="col-md-9">
                 <select class="form-control m-bot15" id="IdGradoIfAca" name="IdGrado">
                   @if($grados->count())

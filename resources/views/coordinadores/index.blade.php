@@ -48,11 +48,11 @@
                                     <td>{{ $coordinador->Telefono }}</td>
                                     <td>{{ $coordinador->NombreCiudad }}</td>
                                     <td>
-                                        <a href="{{ url('coordinadores/'.$coordinador->IdCoordinador.'/edit') }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
+                                        <a title="Editar Registro" href="{{ url('coordinadores/'.$coordinador->IdCoordinador.'/edit') }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
 
                                         {{ Form::open([ 'url'=>['coordinadores', $coordinador->IdCoordinador], 'name'=>"formularioEliminar" , 'onsubmit'=>'return confirmarEliminar()' , 'method' => 'DELETE' ,'style'=> 'display:inline' ]) }}
 
-                                            <button type="submit" class="btn btn-default btn-delete" ><i class="far fa-trash-alt fa-lg"></i></a></button>
+                                            <button title="Eliminar Registro" type="submit" class="btn btn-default btn-delete" ><i class="far fa-trash-alt fa-lg"></i></a></button>
                                             
                                         {{ Form::close() }}
                                     </td>
