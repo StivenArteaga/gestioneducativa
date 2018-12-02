@@ -8,7 +8,8 @@ use App\Http\Requests\CreateCoordinadorRequest;
 use App\Http\Requests\UpdateCoordinadorRequest;
 use App\TipoDocumento;
 use App\Genero;
-use App\Ciudad;
+use App\Municipio;
+use App\Sede;
 use App\User;
 use App\TipoSangre;
 
@@ -17,11 +18,12 @@ class CoordinadorController extends Controller
     
     public function index()
     {
-        $coordinadores = Coordinador::select('coordinadores.*', 'tipodocumentos.*', 'tiposangres.*','generos.*', 'ciudades.*')
+        $coordinadores = Coordinador::select('coordinadores.*', 'tipodocumentos.*', 'tiposangres.*','generos.*', 'municipios.*', 'sedes.*')
         ->join('tipodocumentos', 'tipodocumentos.IdTipoDocumento', 'coordinadores.IdTipoDocumento')
         ->join('generos', 'generos.IdGenero', 'coordinadores.IdGenero')
         ->join('tiposangres', 'tiposangres.IdTipoSangre', 'coordinadores.IdTipoSangre')
-        ->join('ciudades', 'ciudades.IdCiudad', 'coordinadores.IdCiudad')
+        ->join('municipios', 'municipios.IdMunicipio', 'coordinadores.IdMunicipio')
+        ->join('sedes', 'sedes.IdSede', 'coordinadores.IdSede')
         ->where('Estado', true)
         ->get();
 
@@ -33,10 +35,11 @@ class CoordinadorController extends Controller
     {
         $tipodocumentos = TipoDocumento::pluck('NombreTipoDocumento', 'IdTipoDocumento');
         $generos = Genero::pluck('NombreGenero', 'IdGenero');
-        $ciudades = Ciudad::pluck('NombreCiudad', 'IdCiudad');
+        $ciudades = Municipio::pluck('NombreMunicipio', 'IdMunicipio');
+        $sedes = Sede::pluck('NombreSede', 'IdSede');
         $tiposangres = TipoSangre::pluck('NombreTipoSangre', 'IdTipoSangre');
 
-        return view('coordinadores.create', compact('tipodocumentos', 'generos', 'ciudades', 'tiposangres'));
+        return view('coordinadores.create', compact('tipodocumentos', 'generos', 'ciudades', 'sedes', 'tiposangres'));
     }
 
     /**
@@ -68,7 +71,8 @@ class CoordinadorController extends Controller
         $coordinador->Correo = $request->get('Correo');
         $coordinador->Direccion = $request->get('Direccion');
         $coordinador->Telefono = $request->get('Telefono');
-        $coordinador->IdCiudad = $request->get('IdCiudad');
+        $coordinador->IdMunicipio = $request->get('IdMunicipio');
+        $coordinador->IdSede = $request->get('IdSede');
         $coordinador->IdUser = $user->IdUsers;
         $coordinador->save();
         
@@ -97,10 +101,11 @@ class CoordinadorController extends Controller
         $coordinador = Coordinador::findOrFail($id);
         $tipodocumentos = TipoDocumento::pluck('NombreTipoDocumento', 'IdTipoDocumento');
         $generos = Genero::pluck('NombreGenero', 'IdGenero');
-        $ciudades = Ciudad::pluck('NombreCiudad', 'IdCiudad');
+        $ciudades = Municipio::pluck('NombreMunicipio', 'IdMunicipio');
+        $sedes = Sede::pluck('NombreSede', 'IdSede');
         $tiposangres = TipoSangre::pluck('NombreTipoSangre', 'IdTipoSangre');
 
-        return view('coordinadores/edit', compact('coordinador', 'tipodocumentos', 'generos', 'ciudades', 'tiposangres'));
+        return view('coordinadores/edit', compact('coordinador', 'tipodocumentos', 'generos', 'ciudades', 'sedes', 'tiposangres'));
     }
 
     /**

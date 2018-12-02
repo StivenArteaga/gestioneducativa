@@ -13,9 +13,9 @@
                 <a class="nav-link" id="v-pills-observaciones-tab" data-toggle="pill" href="#v-pills-observaciones" role="tab" aria-controls="v-pills-observaciones" aria-selected="flase" style="color: #fff">Mis Observaciones</a>
             </li>
 
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link" id="v-pills-inasistencias-tab" data-toggle="pill" href="#v-pills-inasistencias" role="tab" aria-controls="v-pills-inasistencias" aria-selected="flase" style="color: #fff">Mis Inasistencias</a>
-            </li> --}}
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link" id="v-pills-perfil-tab" data-toggle="pill" href="#v-pills-perfil" role="tab" aria-controls="v-pills-perfil" aria-selected="false" style="color: #fff">Mi perfil</a>
@@ -39,6 +39,7 @@
                                     <tr>
                                         <th>Asignatura</th>
                                         <th>Nota</th>
+                                        {{-- <th>Inasistencias</th> --}}
                                     </tr>
                                 </thead>
                             </table>
@@ -63,6 +64,28 @@
                     </div>
                 </div>
             </div>
+
+              <!--Formularios de Regional y Centro de Formación-->
+              <div class="tab-pane fade show " id="v-pills-inasistencias" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                    <!--Panel de sección-->
+                    <div class="card border-secondary text-center">
+                        <h4 class="card-header text-dark">Inasitencias</h4>
+                        <div class="card-body">
+                            <div class="row">
+                                {{ Form::select('periodo',$periodos, null,['class'=>'form-control col-6 mb-1', 'onchange' => 'cargarInasistencias(this.value)', 'placeholder'=>'Seleccione un periodo' ]) }}
+                                <table class="table table-bordered mt-2 display" id="inasistencias" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Asignatura</th>
+                                            <th>Cantidad de Inasistencia</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <!--Fin de los formularios-->
+                        </div>
+                    </div>
+                </div>
 
             <div class="tab-pane fade show" id="v-pills-perfil" role="tabpanel" aria-labelledby="v-pills-home-tab">
                 <!--Panel de sección-->
@@ -152,5 +175,5 @@
 @endsection
 
 @section('script')
-    <script type="text/javascript" src="js/alumno_scripts.js"></script>
+    <script type="text/javascript" src="js/confirmar_eliminar_scripts.js"></script>
 @endsection

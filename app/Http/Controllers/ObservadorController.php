@@ -38,7 +38,7 @@ class ObservadorController extends Controller
             ->join('generos', 'generos.IdGenero', 'alumnos.IdGenero')
             ->where('alumnos.IdAlumno', $id->IdAlumno)
             ->first();
-            // dd($id);
+
             $observaciones = Observacion::where('alumnos.Usuario', $id)
             ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
             ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
@@ -58,7 +58,7 @@ class ObservadorController extends Controller
             ->join('users', 'users.IdUsers','alumnos.Usuario')
             ->where('alumnos.Usuario', $id)
             ->first();
-    
+
             $observaciones = Observacion::where('alumnos.Usuario', $id)
             ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
             ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
@@ -83,8 +83,22 @@ class ObservadorController extends Controller
         ->join('notas','notas.IdNota','evaluaciones.NotaFinal')
         ->join('users', 'users.IdUsers','alumnos.Usuario')
         ->select('notas.NombreNota','periodos.NumeroPeriodo','materias.NombreMateria')->get();
-      
           return response()->json(["data" => $notas]);
+    }
+
+    public function inasistenciasTabla($valor){
+        $id = Auth::user()->IdUsers;
+        $inasistencias = Evaluacion::where('periodos.IdPeriodo',$valor)->where('alumnos.Usuario', $id)
+        ->where('inasistencias.IdPeriodo', $valor)
+        ->join('alumnos', 'alumnos.IdAlumno','Evaluaciones.IdAlumno')
+        ->join('periodos','periodos.IdPeriodo','evaluaciones.IdPeriodo')
+        ->join('asignaturas','asignaturas.IdAsignatura','Evaluaciones.IdAsignatura')
+        ->join('materias','materias.IdMateria','asignaturas.IdMateria')
+        ->join('notas','notas.IdNota','evaluaciones.NotaFinal')
+        ->join('users', 'users.IdUsers','alumnos.Usuario')
+        ->join('inasistencias','inasistencias.IdAsignatura','asignaturas.IdAsignatura')
+        ->select('inasistencias.CantidadInasistencia','notas.NombreNota','periodos.NumeroPeriodo','materias.NombreMateria')->get();
+        return response()->json(["data" => $inasistencias]);
     }
 
     public function create()
@@ -101,7 +115,6 @@ class ObservadorController extends Controller
         ->join('users', 'users.IdUsers', 'coordinadores.IdUser')
         ->select('coordinadores.IdCoordinador')
         ->first();
-
         if($coordinador == null){
             return redirect('observaciones')->with('error','Este usuario no tiene permisos para realizar esta acción. Rol requerido "Coordinador"');      
         }else{

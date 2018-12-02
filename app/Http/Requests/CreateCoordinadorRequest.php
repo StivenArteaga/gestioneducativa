@@ -30,7 +30,7 @@ class CreateCoordinadorRequest extends FormRequest
             'SegundoApellido' => 'nullable',
             'NumeroDocumento' => 'required|max:20|unique:coordinadores',
             'FechaNacimiento' => 'required|date',
-            'Correo' => 'required|email|string|max:100',
+            'Correo' => 'required|email|string|max:100|unique:coordinadores',
             'Direccion' => 'nullable|string|max:100',
             'Telefono' => 'required|max:20'
         ];
@@ -49,6 +49,7 @@ class CreateCoordinadorRequest extends FormRequest
             'FechaNacimiento.date' => 'El campo Fecha de Nacimiento debe ser una fecha valida.',
             'Correo.required' => 'El campo Correo Electrónico es obligatorio.',
             'Correo.email' => 'El campo Correo Electrónico debe ser un correo valido.',
+            'Correo.unique' => 'El correo ingresado ya se encuentra registrado.',
             'Direccion.max' => 'El campo Dirección debe contener máximo 100 caracteres.',
             'Telefono' => 'El campo Teléfono es obligatorio.'
         ];

@@ -30,6 +30,7 @@
                                     <th>Dirección</th>
                                     <th>Teléfono</th>
                                     <th>Ciudad</th>
+                                    <th>Sede</th>
                                     <th colspan="2">Acciones</th>
                                 </tr>
                             </thead>
@@ -46,7 +47,8 @@
                                     <td>{{ $coordinador->Correo }}</td>
                                     <td>{{ $coordinador->Direccion }}</td>
                                     <td>{{ $coordinador->Telefono }}</td>
-                                    <td>{{ $coordinador->NombreCiudad }}</td>
+                                    <td>{{ $coordinador->NombreMunicipio }}</td>
+                                    <td>{{ $coordinador->NombreSede }}</td>
                                     <td>
                                         <a title="Editar Registro" href="{{ url('coordinadores/'.$coordinador->IdCoordinador.'/edit') }}" class="btn btn-secondary"><i class="fa fa-edit"></i></a>
 

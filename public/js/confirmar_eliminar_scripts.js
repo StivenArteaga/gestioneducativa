@@ -5,7 +5,8 @@ function cargarNotas(value) {
             "ajax": "observador/notas/" + value,
             "columns": [
                 { "data": "NombreMateria" },
-                { "data": "NombreNota" }
+                { "data": "NombreNota" },
+                // { "data": "CantidadInasistencia" }
             ]
         });
         table.destroy();
@@ -13,6 +14,23 @@ function cargarNotas(value) {
         swal('mensaje', 'seleccione un valor, valido', 'warning')
     }
 }
+
+function cargarInasistencias(value) {
+    if (value != "") {
+        var table = $('#inasistencias').DataTable({
+            "ajax": "observador/inasistencias/" + value,
+            "columns": [
+                { "data": "NombreMateria" },
+                { "data": "CantidadInasistencia" }
+            ]
+        });
+        table.destroy();
+    } else {
+        swal('mensaje', 'seleccione un valor, valido', 'warning')
+    }
+}
+
+
 
 $(document).ready(function() {
     $('.btn-delete').click(function(e) {
