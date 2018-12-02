@@ -11,4 +11,6 @@ class Secretaria extends Model
     protected $fillable =['PrimerNombreSecretaria', 'SegundoNombreSecretaria','PrimerApellidoSecretaria','SegundoApellidoSecretaria',
                           'IdTipoDocumento', 'NumeroDocumentoSecretaria','CorreoSecretaria','DireccionSecretaria','TelefonoSecretaria',
                           'EstadoSecretaria','IdUserSecretaria', 'IdSede'];
-}
+
+    public $timestamps = false;
+} 

@@ -65,8 +65,8 @@
                                 <td>{{ $area->DescripcionArea }}</td>
                                 <td>                                       
                                 <button type="button" title="Editar Registro" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg" onclick='MostrarArea({{$area->IdArea}})'><i class="far far fa-edit"></i></button>
-                                {!! Form::open([ 'url'=>['area', $area->IdArea], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                                  <button type="submit" title="Eliminar Registro" class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
+                                {!! Form::open([ 'url'=>['area', $area->IdArea], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}
+                                  <button type="submit" title="Eliminar Registro" class="btn icon-table btn-delete"><i class="far fa-trash-alt icon-size"></i></a></button>
                                 {!! Form::close() !!}                                                                                                   
                                   <button type="submit" class="btn icon-table" data-toggle="modal" data-target="#materiasArea" onclick="DetalleArea({{$area->IdArea}})"><i class="fas fa-align-justify"></i></button>
                                 </td>
@@ -180,6 +180,4 @@
       </div>
     </div>
   </div>
-
-
 @endsection

@@ -23,51 +23,58 @@
         <div class="content_boletin">
             <div class="fila_1">
             <div class="year border">Año: {{ $año }} </div>
-                <div class="jornada border">Jornada: {{ $respuesta->NombreJornada }}</div>
-                <div class="grado border">Grado: Noveno</div>
-                <div class="informe border">Informe: Segundo</div>
+                <div class="jornada border">Jornada: {{ $cuerpo->NombreJornada }}</div>
+            <div class="grado border">Grado: {{ $cuerpo->Grado }}</div>
+            <div class="informe border">Informe: {{ $cuerpo->Periodo }}</div>
             </div>
             <div class="fila_2">
-                <div class="estudiante border">Estudiante:Juliana Andrea Deantonio Castaño</div>
+                @if($cuerpo->SegundoNombreAlumno == null)
+                    <div class="estudiante border">Estudiante:{{ $cuerpo->PrimerNombreAlumno.' '. $cuerpo->PrimerApellidoAlumno.' '.$cuerpo->SegundoApellidoAlumno }}</div>                    
+                @else
+                    <div class="estudiante border">Estudiante:{{ $cuerpo->PrimerNombreAlumno.' '.$cuerpo->SegundoNombreAlumno.' '. $cuerpo->PrimerApellidoAlumno.' '.$cuerpo->SegundoApellidoAlumno }}</div>
+                @endif
             </div>
             
             <div class="fila_3">
-                <div class="asignatura border">AREAS/ASIGNATURAS</div>
-                <div class="val border">VAL</div>
+                <div class="asignatura border">MATERIAS/ASIGNATURAS</div>                
                 <div class="p1 border">P1</div>
                 <div class="p2 border">P2</div>
                 <div class="p3 border">P3</div>
                 <div class="p4 border">P4</div>
                 <div class="aus border">AUS</div>
             </div>
-            <!-- ASIGNATURA -->
+            @foreach ($seleccionado as $item)
+                 <!-- ASIGNATURA -->
             <div class="fila_4">
-                <div class="asignatura2 border">CIENCIAS NATURALES Y EDUCACIÓN AMBIENTAL</div>
-                <div class="val border">4.7</div>
-                <div class="p1 border">3</div>
-                <div class="p2 border">3.2</div>
-                <div class="p3 border">2.9</div>
-                <div class="p4 border">4.5</div>
-                <div class="aus border">3</div>
-            </div>
-            <!-- MATERIA -->
-            <div class="fila_4">
-                    <div class="asignatura2 border">Ciencias naturales</div>
-                    <div class="val border">4.7</div>
+                    <div class="asignatura2 border">{{ strtoupper($item->NombreMateria) }}</div>                    
                     <div class="p1 border">3</div>
                     <div class="p2 border">3.2</div>
                     <div class="p3 border">2.9</div>
                     <div class="p4 border">4.5</div>
                     <div class="aus border">3</div>
                 </div>
-            <!-- LOGRO -->
-            <div class="logros">
-                <div id="logro" class="border">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatibus non amet, a explicabo veritatis natus fugiat exercitationem, dolor nemo quidem ducimus minima dolorem atque! Excepturi earum itaque enim tenetur tempora!</div>
-            </div>
+                <!-- MATERIA -->
+                <div class="fila_4">
+                        <div class="asignatura2 border">{{ strtoupper($item->NombreAsignatura) }}</div>                        
+                        <div class="p1 border">3</div>
+                        <div class="p2 border">3.2</div>
+                        <div class="p3 border">2.9</div>
+                        <div class="p4 border">4.5</div>
+                        <div class="aus border">3</div>
+                    </div>
+                <!-- LOGRO -->
+                <div class="logros">
+                    <div id="logro" class="border">{{ $item->DescripcionLogro }}</div>
+                </div>
+            @endforeach           
             <div class="firma">
                 <h1><hr></h1>
-                <h2>Nombre coordinador</h2>
-                <h2>Cargo</h2>
+                @if ($cuerpo->SegundoNombreCoordinador == null)
+                    <h2>{{ strtoupper($cuerpo->PrimerNombreCoordinador.' '.$cuerpo->PrimerApellidoCoordinador.' '.$cuerpo->SegundoApellidoCoordinador) }}</h2>
+                @else
+                <h2>{{ strtoupper($cuerpo->PrimerNombreCoordinador.' '.$cuerpo->SegundoNombreCoordinador.' '.$cuerpo->PrimerApellidoCoordinador.' '.$cuerpo->SegundoApellidoCoordinador) }}</h2>
+                @endif                
+                <h2>Coordinador</h2>
             </div>
         </div>
 

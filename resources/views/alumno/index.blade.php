@@ -310,7 +310,6 @@
 
 
 @section('script')
-<script src="js/alumno_scripts.js"></script>
     <script>
 
 $('.valletras').on('input', function (e) {

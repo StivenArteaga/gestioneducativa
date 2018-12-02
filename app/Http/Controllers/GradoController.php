@@ -107,21 +107,26 @@ class GradoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $grado = Grado::findOrFail($id);
-       if ($grado != null) {
-            if ($grado->EstadoGrado == true) {
+        if ($request->ajax()) {
+            $grado = Grado::findOrFail($id);
+            if ($grado != null) {
+                if ($grado->EstadoGrado == true) {
+                    $grado->EstadoGrado = false;
+                    $grado->save();
+                }else {
+                    $grado->EstadoGrado = true;
+                    $grado->save();
+                }
+            }else {
                 $grado->EstadoGrado = false;
                 $grado->save();
-            }else {
-                $grado->EstadoGrado = true;
-                $grado->save();
             }
-       }else {
-        $grado->EstadoGrado = false;
-        $grado->save();
-       }
-        return redirect()->route('grado.index')->with('success','El grado fue eliminado con exito ');
+            
+            return response()->json([
+                'message' => 'El grado '. $grado->NombreGrado.' Ha sido eliminado exitosamente!'
+            ]);
+        }
     }
 }

@@ -35,7 +35,7 @@
                             <tbody>
                                 @foreach ($observaciones as $observacion)    
                                 <tr>
-                                    <td>{{ $observacion->Nombres }}</td>
+                                    <td>{{ $observacion->nombre.' '.$observacion->apellido   }}</td>
                                     <td>{{ $observacion->PrimerNombre. ' '.$observacion->PrimerApellido }}</td>
                                     <td>{{ $observacion->descripcion }}</td>
                                     <td>

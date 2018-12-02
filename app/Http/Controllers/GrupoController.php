@@ -334,21 +334,26 @@ class GrupoController extends Controller
             }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-       $grupo = Grupo::findOrfail($id);
-       if ($grupo != null) {
-            if ($grupo->EstadoGrupo == true) {
+        if ($request->ajax()) {
+            $grupo = Grupo::findOrFail($id);
+            if ($grupo != null) {
+                if ($grupo->EstadoGrupo == true) {
+                    $grupo->EstadoGrupo = false;
+                    $grupo->save();
+                }else {
+                    $grupo->EstadoGrupo = true;
+                    $grupo->save();
+                }
+            }else {
                 $grupo->EstadoGrupo = false;
                 $grupo->save();
-            }else {
-                $grupo->EstadoGrupo = true;
-                $grupo->save();
             }
-       }else {
-        $grupo->EstadoGrupo = false;
-        $grupo->save();
-       }
-        return redirect()->route('grupo.index')->with('success','El grupo fue eliminado con exito ');
+            
+            return response()->json([
+                'message' => 'El grupo Ha sido eliminado exitosamente!'
+            ]);
+        }
     }
 }

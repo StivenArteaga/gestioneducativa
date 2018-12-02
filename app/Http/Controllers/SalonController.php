@@ -133,21 +133,26 @@ class SalonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $aula = Salon::findOrfail($id);
-       if ($aula != null) {
-            if ($aula->EstadoSalon == true) {
+        if ($request->ajax()) {
+            $aula = Salon::findOrFail($id);
+            if ($aula != null) {
+                if ($aula->EstadoSalon == true) {
+                    $aula->EstadoSalon = false;
+                    $aula->save();
+                }else {
+                    $aula->EstadoSalon = true;
+                    $aula->save();
+                }
+            }else {
                 $aula->EstadoSalon = false;
                 $aula->save();
-            }else {
-                $aula->EstadoSalon = true;
-                $aula->save();
             }
-       }else {
-        $aula->EstadoSalon = false;
-        $aula->save();
-       }
-        return redirect()->route('aula.index')->with('success','El aula fue eliminada con exito ');
+            
+            return response()->json([
+                'message' => 'El aula '.$aula->NombreSalon.' ha sido eliminada exitosamente!'
+            ]);
+        }
     }
 }

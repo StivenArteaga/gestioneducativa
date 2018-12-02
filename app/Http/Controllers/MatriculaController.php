@@ -133,21 +133,26 @@ class MatriculaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $matricula = Matricula::findOrfail($id);
-       if ($matricula != null) {
-            if ($matricula->IdEstadoMatricula == 2) {
-                $matricula->IdEstadoMatricula = 1;
-                $matricula->save();
+        if ($request->ajax()) {
+            $matricula = Matricula::findOrFail($id);
+            if ($matricula != null) {
+                if ($matricula->IdEstadoMatricula == 2) {
+                    $matricula->IdEstadoMatricula = 1;
+                    $matricula->save();
+                }else {
+                    $matricula->IdEstadoMatricula = 1;
+                    $matricula->save();
+                }
             }else {
                 $matricula->IdEstadoMatricula = 1;
                 $matricula->save();
             }
-       }else {
-        $matricula->IdEstadoMatricula = 1;
-        $matricula->save();
-       }
-        return redirect()->route('matricula.index')->with('success','La matricula del alumno fue eliminada con exito ');
+            
+            return response()->json([
+                'message' => 'La matricula ha sido eliminada exitosamente!'
+            ]);
+        }
     }
 }

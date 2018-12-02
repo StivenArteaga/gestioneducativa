@@ -123,21 +123,26 @@ class MateriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-       $materia = Materia::findOrfail($id);
-       if ($materia != null) {
-            if ($materia->EstadoMateria == true) {
+        if ($request->ajax()) {
+            $materia = Materia::findOrFail($id);
+            if ($materia != null) {
+                if ($materia->EstadoMateria == true) {
+                    $materia->EstadoMateria = false;
+                    $materia->save();
+                }else {
+                    $materia->EstadoMateria = true;
+                    $materia->save();
+                }
+            }else {
                 $materia->EstadoMateria = false;
                 $materia->save();
-            }else {
-                $materia->EstadoMateria = true;
-                $materia->save();
             }
-       }else {
-        $materia->EstadoMateria = false;
-        $materia->save();
-       }
-        return redirect()->route('materias.index')->with('success','La materia fue eliminada con exito ');
+            
+            return response()->json([
+                'message' => 'La materia '. $materia->NombreMateria.' Ha sido eliminada exitosamente!'
+            ]);
+        }
     }
 }

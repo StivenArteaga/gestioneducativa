@@ -94,21 +94,26 @@ class AreaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-       $area = Area::findOrfail($id);
-       if ($area != null) {
-            if ($area->EstadoArea == true) {
+        if ($request->ajax()) {
+            $area = Area::findOrFail($id);
+            if ($area != null) {
+                if ($area->EstadoArea == true) {
+                    $area->EstadoArea = false;
+                    $area->save();
+                }else {
+                    $area->EstadoArea = true;
+                    $area->save();
+                }
+            }else {
                 $area->EstadoArea = false;
                 $area->save();
-            }else {
-                $area->EstadoArea = true;
-                $area->save();
             }
-       }else {
-        $area->EstadoArea = false;
-        $area->save();
-       }
-        return redirect()->route('area.index')->with('success','El area fue eliminada con exito ');
+            
+            return response()->json([
+                'message' => 'El Area '. $area->NombreArea.' Ha sido eliminada exitosamente!'
+            ]);
+        }
     }
 }

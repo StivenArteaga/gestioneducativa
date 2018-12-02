@@ -14,6 +14,6 @@ class Ciudad extends Model
 
     public static function ciudades($id) 
     {
-        return Ciudad::where('IdCiudad', $id)->get();        
+        return Ciudad::where('IdCiudad', $id)->get();
     }
 }

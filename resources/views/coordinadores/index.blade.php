@@ -67,25 +67,3 @@
     </div>
 </div>    
 @endsection
-
-@section('script')
-    <script>
-        $(document).ready(function() {
-            $('.btn-delete').click(function(e) {
-                e.preventDefault();
-                if (!confirm("¿Esta seguro que desea eliminar este registro?")) {
-                    return false;
-                }
-
-                let row = $(this).parents('tr');
-                let form = $(this).parents('form');
-                let url = form.attr('action');
-
-                $.post(url, form.serialize(), function(result) {
-                    row.fadeOut();
-                    swal('mensaje', '' + result.message + '', 'success');
-            });
-        });
-    })
-    </script>
-@endsection

@@ -60,52 +60,7 @@
       <div class="navbar-container content">
         <div class="collapse navbar-collapse" id="navbar-mobile">
           <ul class="nav navbar-nav mr-auto float-left">
-            <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>
-            <li class="nav-item d-none d-md-block"><a class="nav-link nav-link-expand" href="#"><i class="ficon ft-maximize"></i></a></li>
-            <li class="dropdown nav-item mega-dropdown"><a class="dropdown-toggle nav-link" href="#" data-toggle="dropdown">Contáctanos</a>
-              <ul class="mega-dropdown-menu dropdown-menu row">                               
-                
-                <li class="col-md-12">
-                  <h6 class="dropdown-menu-header text-uppercase mb-1"><i class="la la-envelope-o"></i> Contáctanos</h6>
-                  <form class="form form-horizontal">
-                    <div class="form-body">
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label" for="inputName1">Nombre</label>
-                        <div class="col-sm-9">
-                          <div class="position-relative has-icon-left">
-                            <input class="form-control" type="text" id="inputName1" placeholder="John Doe">
-                            <div class="form-control-position pl-1"><i class="la la-user"></i></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label" for="inputEmail1">Correo</label>
-                        <div class="col-sm-9">
-                          <div class="position-relative has-icon-left">
-                            <input class="form-control" type="email" id="inputEmail1" placeholder="john@example.com">
-                            <div class="form-control-position pl-1"><i class="la la-envelope-o"></i></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="form-group row">
-                        <label class="col-sm-3 form-control-label" for="inputMessage1">Mensaje</label>
-                        <div class="col-sm-9">
-                          <div class="position-relative has-icon-left">
-                            <textarea class="form-control" id="inputMessage1" rows="2" placeholder="Simple Textarea"></textarea>
-                            <div class="form-control-position pl-1"><i class="la la-commenting-o"></i></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-12 mb-1">
-                          <button class="btn btn-info float-right" type="button"><i class="la la-paper-plane-o"></i> Enviar </button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </li>
-              </ul>
-            </li>           
+            <li class="nav-item d-none d-md-block"><a class="nav-link nav-menu-main menu-toggle hidden-xs" href="#"><i class="ft-menu"></i></a></li>                                  
           </ul>
           <ul class="nav navbar-nav float-right">
               <li class="nav-item">
@@ -140,6 +95,9 @@
               <li><a class="menu-item" href="{{ route('alumno') }}" data-i18n="nav.dash.ecommerce">Gestionar Alumno</a></li>
               @if(Auth::user()->IdTipoUsuario == 3)
                 <li><a class="menu-item" href="{{ route('matriculas') }}" data-i18n="nav.dash.crypto">Gestionar Matrícula</a></li>            
+              @endif
+              @if(Auth::user()->IdTipoUsuario == 2)
+                <li><a class="menu-item" href="{{ url('observaciones') }}" data-i18n="nav.dash.crypto">Gestionar Observaciones</a></li>            
               @endif
             </ul>
           </li>
@@ -221,6 +179,7 @@
         <!--Configuracion-->
         <li class="nav-item"><a href="{{ route('main') }}"><i class="la la-gears"></i><span class="menu-title" data-i18n="nav.dash.main">Configuraciones</span></a>
           <ul class="menu-content">
+              <li><a class="menu-item" href="{{ url('coordinadores') }}" data-i18n="nav.templates.vert.classic_menu">Gestionar Coordinadores</a></li>
             <li><a class="menu-item" href="{{ route('jornadas') }}" data-i18n="nav.templates.horz.classic">Gestionar Jornadas</a>
               <li><a class="menu-item" href="{{ route('sedes') }}" data-i18n="nav.templates.horz.classic">Gestionar Sedes</a>
                 <li><a class="menu-item" href="{{ route('secretarias') }}" data-i18n="nav.templates.horz.classic">Gestionar Secretarias</a>
@@ -308,6 +267,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script>
   <!-- Swwet alert -->  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+  <script src="js/confirmar_eliminar_scripts.js"></script>
   @yield('script')
 </body>
 </html>

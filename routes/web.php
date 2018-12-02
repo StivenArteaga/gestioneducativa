@@ -161,15 +161,14 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('editcalificacion/{id}','CalificacionController@edit');
     Route::resource('calificacion', 'CalificacionController');
 
-    Route::get('observaciones', 'ObservadorController@observaciones')->name('observaciones');
+    Route::get('observaciones', 'ObservadorController@observaciones');
     Route::get('observaciones/create', 'ObservadorController@create');
     Route::post('observaciones/store', 'ObservadorController@store');
     Route::get('observaciones/{id}/edit', 'ObservadorController@edit');
     Route::post('observaciones/update/{id}', 'ObservadorController@update');
-    Route::resource('observacion','ObservadorController');
 
     /*Reportes */
-    Route::get('BoletinAlumno/{Id}/{ida}', 'ReporteController@BoletinAlumno');
+    Route::get('BoletinAlumno/{Id}/{ida}/{periodo}', 'ReporteController@BoletinAlumno');
     Route::resource('boletin','ReporteController');
 
     //Inasistencia

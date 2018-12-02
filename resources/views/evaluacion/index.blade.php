@@ -246,7 +246,7 @@ function ListAlum(id,idAsignatura){
     
     $.get('listalumasig/listalumasig/'+id+'/'+idAsignatura, function(data){      
         if (data != null) {                              
-            var valor5 = ''
+            var valor5 = ''            
             data.alumnos.forEach(alumnos => {              
                 valor5 += "<tr id='auto[]'>"+    
                 "<td class='hidden'>" + alumnos.IdAlumno + "</td>"+                                                                    
@@ -274,10 +274,10 @@ function ListAlum(id,idAsignatura){
                         "<button class='btn btn-success' id='notaFinal' onclick='evalAumno("+idAsignatura+","+alumnos.IdAlumno+","+4+")' style='height:35px;' >Evaluar</button>"+
                 "</td>"+   
                 "<td>"+  
-                        "<a class='btn btn-info' href='BoletinAlumno/"+alumnos.IdAlumno+"/"+idAsignatura+"' style='height:35px;' title='Descargar boletín' ><i class='fas fa-file-download'></i></a>"+
+                        "<a class='btn btn-info' onclick='DownloadBoletin("+alumnos.IdAlumno+","+idAsignatura+")' style='height:35px;' title='Descargar boletín' ><i class='fas fa-file-download'></i></a>"+
                         "<button class='btn btn-warning' style='height:35px;' title='Asignar logros' onclick='listalogro("+idAsignatura+','+alumnos.IdAlumno+")' ><i class='fas fa-star-half-alt'></i></button>"+
                 "</td>"+            
-               "<tr>";
+               "<tr>";     
             });          
 
             $("#TblListAlumEval").html(valor5);                                        
@@ -344,7 +344,7 @@ function listalogro(IdAsignatura, IdAlumno)
   var c = Number($('#chekPeriodoTres').is(':checked'));
   var d = Number($('#chekPeriodoCuatro').is(':checked'));
   var periodo =0;
-  if((a+b+c+d)>1){    
+  if((a+b+c+d)>1 || (a+b+c+d)==0){    
     swal({
          type:'error',
          title: 'Upss',
@@ -362,7 +362,7 @@ function listalogro(IdAsignatura, IdAlumno)
         if(c == 1){
           periodo = 3;
         }else{
-          periodo == 4;
+          periodo = 4;
         }
       }
     }
@@ -518,6 +518,38 @@ function SelectLogros(){
     }
 
     
+}
+
+function  DownloadBoletin(alumno, asignatura) {
+  var a = Number($('#chekPeriodoUno').is(':checked'));
+  var b = Number($('#chekPeriodoDos').is(':checked'));
+  var c = Number($('#chekPeriodoTres').is(':checked'));
+  var d = Number($('#chekPeriodoCuatro').is(':checked'));
+  var periodo =0;
+  if((a+b+c+d)>1 || (a+b+c+d)==0){    
+    swal({
+         type:'error',
+         title: 'Upss',
+         animation: true,
+         customClass: 'animated tada',
+        text: "Para descargar un boletín necesita seleccionar un periodo, verifica tener un solo periodo seleccionado!"
+      }); 
+  }else{    
+    if (a==1) {
+      periodo = 1;
+    } else {
+      if(b == 1){
+        periodo =2;
+      }else{
+        if(c == 1){
+          periodo = 3;
+        }else{
+          periodo = 4;
+        }
+      }
+    }
+    location.href = "BoletinAlumno/"+alumno+'/'+asignatura+'/'+periodo;    
+  }
 }
 
   </script>  
