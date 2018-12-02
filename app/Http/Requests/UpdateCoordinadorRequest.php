@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCoordinadorRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class UpdateCoordinadorRequest extends FormRequest
             'SegundoNombre' => 'nullable',
             'PrimerApellido' => 'required',
             'SegundoApellido' => 'nullable',
-            'NumeroDocumento' => 'required|max:20',
+            'NumeroDocumento' => 'required|max:20', Rule::unique('alumnos')->ignore($this->id, 'IdAlumno'),
             'FechaNacimiento' => 'required|date',
             'Correo' => 'required|email|string|max:100',
             'Direccion' => 'nullable|string|max:100',

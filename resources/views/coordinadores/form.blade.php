@@ -83,8 +83,15 @@
 </div>
 
 <div class="form-group col-md-4 col-lg-4">
-    {{ Form::label('IdCiudad', 'Ciudad') }}
-    {{ Form::select('IdCiudad', $ciudades, null, ['class' => 'form-control']) }}
-    {{ $errors->has('IdCiudad') ? '' : '' }}
-    <strong class="text-danger">{{ $errors->first('IdCiudad') }}</strong>
+    {{ Form::label('IdMunicipio', 'Ciudad') }}
+    {{ Form::select('IdMunicipio', $ciudades, null, ['class' => 'form-control']) }}
+    {{ $errors->has('IdMunicipio') ? '' : '' }}
+    <strong class="text-danger">{{ $errors->first('IdMunicipio') }}</strong>
 </div>
+
+<div class="form-group col-md-4 col-lg-4">
+        {{ Form::label('IdSede', 'Sede') }}
+        {{ Form::select('IdSede', $sedes, null, ['class' => 'form-control']) }}
+        {{ $errors->has('IdSede') ? '' : '' }}
+        <strong class="text-danger">{{ $errors->first('IdSede') }}</strong>
+    </div>

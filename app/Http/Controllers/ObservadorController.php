@@ -38,7 +38,7 @@ class ObservadorController extends Controller
             ->join('generos', 'generos.IdGenero', 'alumnos.IdGenero')
             ->where('alumnos.IdAlumno', $id->IdAlumno)
             ->first();
-            // dd($id);
+
             $observaciones = Observacion::where('alumnos.Usuario', $id)
             ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
             ->join('alumnos', 'alumnos.IdAlumno', 'observaciones.IdAlumno')
@@ -58,10 +58,6 @@ class ObservadorController extends Controller
             ->join('users', 'users.IdUsers','alumnos.Usuario')
             ->where('alumnos.Usuario', $id)
             ->first();
-
-            // dd($id);
-            
-            // dd($alumno);
 
             $observaciones = Observacion::where('alumnos.Usuario', $id)
             ->join('coordinadores', 'coordinadores.IdCoordinador', 'observaciones.IdCoordinador')
@@ -102,7 +98,6 @@ class ObservadorController extends Controller
         ->join('users', 'users.IdUsers','alumnos.Usuario')
         ->join('inasistencias','inasistencias.IdAsignatura','asignaturas.IdAsignatura')
         ->select('inasistencias.CantidadInasistencia','notas.NombreNota','periodos.NumeroPeriodo','materias.NombreMateria')->get();
-        // dd($inasistencias);
         return response()->json(["data" => $inasistencias]);
     }
 
@@ -120,7 +115,6 @@ class ObservadorController extends Controller
         ->join('users', 'users.IdUsers', 'coordinadores.IdUser')
         ->select('coordinadores.IdCoordinador')
         ->first();
-
         if($coordinador == null){
             return redirect('observaciones')->with('error','Este usuario no tiene permisos para realizar esta acción. Rol requerido "Coordinador"');      
         }else{
