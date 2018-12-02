@@ -67,7 +67,7 @@ class ReporteController extends Controller
                    ->leftjoin('inasistencias as ina','p.IdPeriodo','=','ina.IdPeriodo')
                    ->join('salones as s', 'g.IdSalon','=','s.IdSalon')
                    ->join('sedes as se','s.IdSede','=','se.IdSede')
-                   ->leftjoin('coordinadores as co','co.IdSede','=','se.IdSede')
+                   ->leftjoin('coordinadores as co','co.IdSede','=','se.IdSede')                   
                    ->where('evaluaciones.IdAlumno','=', (int)$IdAlumno)
                    ->where('evaluaciones.IdPeriodo','=', (int)$periodo)
                    ->select('j.NombreJornada as NombreJornada' ,'gr.NombreGrado as Grado',  'p.NumeroPeriodo as Periodo',
@@ -76,18 +76,45 @@ class ReporteController extends Controller
                    'al.SegundoApellido as SegundoApellidoAlumno','m.NombreMateria', 'a.NombreAsignatura',
                     'l.DescripcionLogro', 'n.NombreNota', 'ina.CantidadInasistencia', 'co.PrimerNombre as PrimerNombreCoordinador',
                     'co.SegundoNombre as SegundoNombreCoordinador','co.PrimerApellido as PrimerApellidoCoordinador',
-                    'co.SegundoApellido as SegundoApellidoCoordinador')
-                   ->orderBy('evaluaciones.IdPeriodo', 'ASC')->get();   
-             
-        $cuerpo =  $seleccionado->last();        
-        $fecha_actual = Carbon::now();
-        $year = $fecha_actual->format('Y');
-        
-        if(count($todo)>0 && count($seleccionado)>0){
-            $pdf = \PDF::loadview('reportes.boletin.boletinalumno',['todo'=>$todo,'año'=>$year,'cuerpo'=>$cuerpo,'seleccionado'=>$seleccionado]);
-            return $pdf->download('boletin.pdf');
-        }else{
-            return redirect()->route('evaluaciones')->with('error','Antes de descargar el boletín, verifica haber evaluado al alumno y haber asignado sus logros');
-        }
-    }
+                    'co.SegundoApellido as SegundoApellidoCoordinador','a.IdAsignatura')
+                   ->orderBy('evaluaciones.IdPeriodo', 'ASC')->get(); 
+                   $collection=collect([]);
+                   $logrosCollection=collect([]);
+                   $logrosCollect=collect([]);
+                   $logros=collect([]);
+
+                   foreach ($seleccionado as $key => $value) {
+                        $collection->push(['materia'=>$value['NombreMateria'],'asignatura'=>$value['NombreAsignatura'],'IdAsignatura'=>$value['IdAsignatura']]);
+                 }
+
+                   foreach ($collection as $key => $value) {
+                       $logros->push([
+                        'materia'=>$value['materia'],'asignatura'=>$value['asignatura'],'IdAsignatura'=>$value['IdAsignatura'],
+                           'logro'=>
+                           Logro::select('DescripcionLogro')->where('logros.IdAsignatura',$value['IdAsignatura'])->where('EstadoLogro',true)->where('evaluaciones.IdPeriodo',(int)$periodo)
+                           ->join('detallelogrosevaluaciones','detallelogrosevaluaciones.IdLogro','logros.IdLogro')
+                           ->join('evaluaciones','evaluaciones.IdEvaluacion','detallelogrosevaluaciones.IdEvaluacion')
+                           ->distinct()
+                           ->get()
+                           ]);
+                }
+                
+                $logrosUnicos=$logros->unique();
+                   $data=$logrosCollection->unique();
+                    $cuerpo =  $seleccionado->last();        
+                    $fecha_actual = Carbon::now();
+                    $year = $fecha_actual->format('Y');
+                    
+                    if(count($todo)>0 && count($seleccionado)>0){
+                        $pdf = \PDF::loadview('reportes.boletin.boletinalumno',['todo'=>$todo,'año'=>$year,'cuerpo'=>$cuerpo,'seleccionado'=>$seleccionado,'logrosUnicos'=>$logrosUnicos]);
+                        return $pdf->stream('boletin.pdf');
+                    }else{
+                        return redirect()->route('evaluaciones')->with('error','Antes de descargar el boletín, verifica haber evaluado al alumno y haber asignado sus logros');
+                    }
+                }
+
+                // @foreach ($logrosUnicos as $key => $value )
+                // @foreach($value['logro'] as $value)
+                // @endforeach
+                // @endforeach
 }

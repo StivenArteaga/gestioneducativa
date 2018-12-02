@@ -262,7 +262,7 @@
   <!-- END PAGE LEVEL JS-->  
   <script type="text/javascript" src="{{ URL::asset('Admin/app-assets/js/scripts/tables/jsgrid/jsgrid.js') }}"></script>
 
-  <script type="text/javascript" src="{{ URL::asset('Admin/assets/js/scripts.js') }}"></script>
+  <script type="text/javascript" src="{{ URL::asset('Admin/assets/js/fefescripts.js') }}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script>
   <!-- Swwet alert -->  

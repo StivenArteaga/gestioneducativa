@@ -179,6 +179,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('inasistencia','InasistenciaController');
 
     Route::get('secretarias','SecretariaController@index')->name('secretarias');
+    Route::get('secretaria/{id}/edit', 'SecretariaController@edit');
     Route::resource('secretaria','SecretariaController');
      /**
       * Coordinador

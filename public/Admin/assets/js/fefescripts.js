@@ -621,3 +621,23 @@ function MostrarTipoGrupo(id) {
 function CerrarModal(Id) {
     $("#" + Id).hide();
 }
+
+function editSecretaria(id) {
+    $.get('secretaria/'+id+'/edit', function(data){
+        if(data != null){
+            $("#IdSede").val(data.IdSede);
+            $("#PrimerNombreSecretaria").val(data.PrimerNombreSecretaria);
+            $("#IdSecretaria").val(data.IdSecretaria);
+            $("#SegundoNombreSecretaria").val(data.SegundoNombreSecretaria);
+            $("#PrimerApellidoSecretaria").val(data.PrimerApellidoSecretaria);
+            $("#SegundoApellidoSecretaria").val(data.SegundoApellidoSecretaria);
+            $("#IdTipoDocumento").val(data.IdTipoDocumento);
+            $("#NumeroDocumentoSecretaria").val(data.NumeroDocumentoSecretaria);
+            $("#DireccionSecretaria").val(data.DireccionSecretaria);
+            $("#CorreoSecretaria").val(data.CorreoSecretaria);
+            $("#TelefonoSecretaria").val(data.TelefonoSecretaria);
+        }else{
+          swal('Upss!','Se presento un problema al momento de cargar los datos de la secretaria. Actualice su navegador y vuelva a intentarlo','error');
+        }
+    })
+ }

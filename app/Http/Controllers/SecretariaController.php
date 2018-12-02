@@ -18,7 +18,7 @@ class SecretariaController extends Controller
 
         switch ($usuario['IdTipoUsuario']) {
             case '1':
-                        $secretaria = Secretaria::join('sedes','secretarias.IdSede','=','sedes.IdSede')->where('EstadoSecretaria','=', true)->select('secretarias.*')->get();
+                        $secretaria = Secretaria::join('sedes','secretarias.IdSede','=','sedes.IdSede')->where('EstadoSecretaria','=', true)->select('secretarias.*', 'sedes.*')->get();
                         $sedes = Sede::where('EstadoSede','=', true)->select('sedes.*')->get();
                         $tipodocumentos = TipoDocumento::where('EstadoTipoDocumento','=', true)->select('tipodocumentos.*')->get();
                         return view('secretaria.index', compact('secretaria','sedes', 'tipodocumentos'));
@@ -38,7 +38,7 @@ class SecretariaController extends Controller
             'SegundoApellidoSecretaria'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
             'IdTipoDocumento'=>'required|int',
             'NumeroDocumentoSecretaria'=>'required|string',
-            'CorreoSecretaria'=>'required|string',
+            'CorreoSecretaria'=>'required|email',
             'DireccionSecretaria'=>'required|string',
             'TelefonoSecretaria'=>'required|string',
             'EstadoSecretaria'=>'required|int',
@@ -54,24 +54,80 @@ class SecretariaController extends Controller
             $usuario->IdTipoUsuario = 3;
             $usuario->EstadoUsuario = true;
             $usuario->save();
-            
-            Secretaria::create($request->all());
+                        
+            $secretaria = new Secretaria();
+            $secretaria->PrimerNombreSecretaria = $request['PrimerNombreSecretaria'];
+            $secretaria->SegundoNombreSecretaria = $request['SegundoNombreSecretaria'];
+            $secretaria->PrimerApellidoSecretaria = $request['PrimerApellidoSecretaria'];
+            $secretaria->SegundoApellidoSecretaria = $request['SegundoApellidoSecretaria'];
+            $secretaria->IdTipoDocumento = $request['IdTipoDocumento'];
+            $secretaria->NumeroDocumentoSecretaria = $request['NumeroDocumentoSecretaria'];
+            $secretaria->CorreoSecretaria = $request['CorreoSecretaria'];
+            $secretaria->DireccionSecretaria = $request['DireccionSecretaria'];
+            $secretaria->TelefonoSecretaria = $request['TelefonoSecretaria'];
+            $secretaria->EstadoSecretaria = $request['EstadoSecretaria'];
+            $secretaria->IdSede = $request['IdSede'];
+            $secretaria->IdUserSecretaria = $usuario->IdUsers;
+            $secretaria->save();
+
             return redirect()->route('secretaria.index')->with('success','La secretaria se registro correctamente');    
         }
     }
 
-    public function edit($id)
-    {
-        //
+    public function edit ($id){
+        $secretaria = Secretaria::findOrFail($id);
+        return response()->json($secretaria);
     }
 
     public function update(Request $request, $id)
-    {
-        //
+    {        
+        $materias = request()->validate([
+            'PrimerNombreSecretaria'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+            'PrimerApellidoSecretaria'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+            'SegundoApellidoSecretaria'=>'required|max:50|regex:/^[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+(\s*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]*)*[a-zA-Z-ZñÑáéíóúÁÉÍÓÚ]+$/',            
+            'IdTipoDocumento'=>'required|int',
+            'NumeroDocumentoSecretaria'=>'required|string|max:50|unique:secretarias,NumeroDocumentoSecretaria,'.$id.',IdSecretaria,EstadoSecretaria,'.true,
+            'CorreoSecretaria'=>'required|email|unique:secretarias,CorreoSecretaria,'.$id.',IdSecretaria,EstadoSecretaria,'.true,
+            'DireccionSecretaria'=>'required|string',
+            'TelefonoSecretaria'=>'required|string',
+            'EstadoSecretaria'=>'required|int',
+            'IdSede'=>'required|int'
+        ]);
+
+
+        $secretaria = Secretaria::find($id);
+        $secretaria->PrimerNombreSecretaria = $request['PrimerNombreSecretaria'];
+        $secretaria->SegundoNombreSecretaria = $request['SegundoNombreSecretaria'];
+        $secretaria->PrimerApellidoSecretaria = $request['PrimerApellidoSecretaria'];
+        $secretaria->SegundoApellidoSecretaria = $request['SegundoApellidoSecretaria'];
+        $secretaria->IdTipoDocumento = $request['IdTipoDocumento'];
+        $secretaria->NumeroDocumentoSecretaria = $request['NumeroDocumentoSecretaria'];
+        $secretaria->CorreoSecretaria = $request['CorreoSecretaria'];
+        $secretaria->DireccionSecretaria = $request['DireccionSecretaria'];
+        $secretaria->TelefonoSecretaria = $request['TelefonoSecretaria'];
+        $secretaria->EstadoSecretaria = $request['EstadoSecretaria'];
+        $secretaria->IdSede = $request['IdSede'];
+        $secretaria->save();
+        return redirect()->route('secretaria.index')->with('success','La secretaria se actualizo correctamente');    
     }
 
     public function destroy($id)
-    {
-        //
+    {        
+            $secretaria = Secretaria::findOrFail($id);
+            if ($secretaria != null) {
+                if ($secretaria->EstadoSecretaria == true) {
+                    $secretaria->EstadoSecretaria = false;
+                    $secretaria->save();
+                }else {
+                    $secretaria->EstadoSecretaria = true;
+                    $secretaria->save();
+                }
+            }else {
+                $secretaria->EstadoSecretaria = false;
+                $secretaria->save();
+            }
+            
+            return redirect()->route('secretaria.index')->with('success','La secretaria se ha eliminado correctamente');    
+        
     }
 }

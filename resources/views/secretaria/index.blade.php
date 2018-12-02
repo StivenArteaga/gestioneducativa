@@ -69,9 +69,9 @@
                           <td>{{ $secretaria->CorreoSecretaria }}</td>
                           <td>{{ $secretaria->NombreSede }}</td>                    
                           <td>                                       
-                            <button type="button" title="Editar Registro" class="btn icon-table" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="far far fa-edit"></i></button>
+                            <button type="button" title="Editar Registro" class="btn icon-table" onclick="editSecretaria({{ $secretaria->IdSecretaria }})" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="far far fa-edit"></i></button>
                           {!! Form::open([ 'url'=>['secretaria', $secretaria->IdSecretaria], 'method' => 'DELETE','style'=> 'display:inline' ]) !!}                                                            
-                            <button type="submit" title="Eliminar Registro" class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
+                            <button type="submit" title="Eliminar Registro"  class="btn icon-table"><i class="far fa-trash-alt icon-size"></i></a></button>
                           {!! Form::close() !!}               
                           </td>
                       </tr>
@@ -215,4 +215,10 @@
   </div>
 
 
+@endsection
+
+@section('script')
+ <script>
+    
+ </script>   
 @endsection
